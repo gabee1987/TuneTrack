@@ -1,26 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  PanResponder,
   Animated,
+  PanResponder,
+  Alert,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
+import { playSpotifyURI } from "@/services/spotifyService";
 
 export default function QrResultScreen() {
   const router = useRouter();
-  const { qrData } = useLocalSearchParams(); // 'qrData' is a string if passed as param
-  const [isPlaying, setIsPlaying] = useState(true);
+  const params = useLocalSearchParams();
+  // Ensure qrData is a string
+  const qrData = Array.isArray(params.qrData)
+    ? params.qrData[0]
+    : params.qrData || "";
 
-  // Basic swipe handling
   const pan = new Animated.ValueXY();
   const panResponder = PanResponder.create({
     onMoveShouldSetPanResponder: () => true,
     onPanResponderRelease: (_, gestureState) => {
       if (gestureState.dx > 50) {
-        // On swipe, go back to the camera screen
         router.back();
       } else {
         Animated.spring(pan, {
@@ -31,26 +34,19 @@ export default function QrResultScreen() {
     },
   });
 
-  const handlePausePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleBack = () => {
-    router.back();
-  };
+  useEffect(() => {
+    if (qrData) {
+      playSpotifyURI(qrData);
+    } else {
+      Alert.alert("Error", "No Spotify URI found in QR Code.");
+    }
+  }, [qrData]);
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Text style={styles.backButtonText}>Vissza</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.pauseIconContainer}
-        onPress={handlePausePlay}
-      >
-        <Text style={styles.pauseIcon}>{isPlaying ? "⏸" : "▶"}</Text>
-      </TouchableOpacity>
-
       <Animated.View
         style={[
           styles.swipeButton,
@@ -62,7 +58,6 @@ export default function QrResultScreen() {
           Húzd félre a következő kártya beolvasásához
         </Text>
       </Animated.View>
-
       <Text style={styles.qrDataText}>QR Code Data: {qrData}</Text>
     </View>
   );
@@ -84,16 +79,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     zIndex: 10,
   },
-  backButtonText: {
-    color: "#fff",
-  },
-  pauseIconContainer: {
-    marginTop: 100,
-  },
-  pauseIcon: {
-    fontSize: 64,
-    color: "#fff",
-  },
+  backButtonText: { color: "#fff" },
   swipeButton: {
     position: "absolute",
     bottom: 80,
@@ -102,9 +88,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 15,
   },
-  swipeButtonText: {
-    fontWeight: "bold",
-  },
+  swipeButtonText: { fontWeight: "bold" },
   qrDataText: {
     position: "absolute",
     bottom: 150,
