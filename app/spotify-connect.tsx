@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import * as AuthSession from "expo-auth-session";
@@ -9,10 +15,14 @@ import Constants from "expo-constants";
 
 // Read environment variables
 const CLIENT_ID = Constants.expoConfig?.extra?.spotifyClientId;
+
+// Generate the correct Redirect URI dynamically
 const REDIRECT_URI = AuthSession.makeRedirectUri({
   scheme: "tunetrack",
   path: "redirect",
-  preferLocalhost: true, // Ensures it works in Expo Go
+  native: "tunetrack://redirect",
+  preferLocalhost: false, // Don't use localhost for native deep linking
+  // useProxy: Constants.appOwnership === "expo", // Use Expo Go proxy only in Expo
 });
 
 const TOKEN_KEY = "SPOTIFY_TOKEN_DATA";
@@ -26,6 +36,8 @@ const discovery = {
 export default function SpotifyConnectScreen() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  console.log("Using REDIRECT_URI:", REDIRECT_URI); // Debugging
 
   // Use `useAuthRequest` to handle authentication
   const [request, response, promptAsync] = AuthSession.useAuthRequest(
@@ -75,6 +87,10 @@ export default function SpotifyConnectScreen() {
     checkTokenOnLoad();
   }, []);
 
+  const testDeepLink = () => {
+    Linking.openURL("tunetrack://redirect");
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
@@ -87,11 +103,15 @@ export default function SpotifyConnectScreen() {
       </Text>
 
       {!isLoggedIn ? (
-        <AppButton
-          title="Csatlakozás a Spotify-hoz"
-          onPress={handleSpotifyLogin}
-          // disabled={!request} // Prevents clicking if request is not ready
-        />
+        <View>
+          <AppButton
+            title="Csatlakozás a Spotify-hoz"
+            onPress={handleSpotifyLogin}
+            // disabled={!request} // Prevents clicking if request is not ready
+          />
+
+          <AppButton title="Test Deep Link" onPress={testDeepLink} />
+        </View>
       ) : (
         <AppButton
           title="Már be vagy jelentkezve. Kattints ide a folytatáshoz."

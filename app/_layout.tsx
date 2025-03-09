@@ -1,12 +1,11 @@
 import AnimatedBackground from "@/components/AnimatedBackground";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import React from "react";
-import { useEffect } from "react";
-import { View } from "react-native";
+import React, { useEffect } from "react";
+import { Linking, View } from "react-native";
 import "react-native-reanimated";
 
-// Prevent the splash screen from auto-hiding
+// Prevent splash screen from hiding automatically
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -14,13 +13,27 @@ export default function RootLayout() {
     SplashScreen.hideAsync();
   }, []);
 
+  useEffect(() => {
+    const handleDeepLink = (event: { url: string }) => {
+      console.log("Deep link detected:", event.url);
+    };
+
+    // Event listener pattern
+    const subscription = Linking.addEventListener("url", handleDeepLink);
+
+    // Cleanup function (removes listener on component unmount)
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
       <AnimatedBackground />
       <Stack
         screenOptions={{
-          headerShown: false, // Hides the default top navbar
-          contentStyle: { backgroundColor: "transparent" }, // Ensures screens are transparent
+          headerShown: false,
+          contentStyle: { backgroundColor: "transparent" },
         }}
       >
         <Stack.Screen name="index" />

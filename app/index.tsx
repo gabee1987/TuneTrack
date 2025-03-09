@@ -31,7 +31,10 @@ export default function MainScreen() {
   };
 
   const handleSettingsPress = () => {
-    router.push("/settings?isSpotifyConnected=" + isSpotifyConnected);
+    router.push({
+      pathname: "/settings",
+      params: { isSpotifyConnected: isSpotifyConnected.toString() },
+    });
   };
 
   return (
