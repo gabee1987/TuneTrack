@@ -9,16 +9,17 @@ import {
   Alert,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { playSpotifyURI } from "@/services/spotifyService";
+import { playSpotifyTrack } from "@/services/spotifyPlaybackService";
 
 export default function QrResultScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  // Ensure qrData is a string
+  // Ensure qrData is a string (if multiple values, use the first one)
   const qrData = Array.isArray(params.qrData)
     ? params.qrData[0]
     : params.qrData || "";
 
+  // Set up pan responder for swipe gesture
   const pan = new Animated.ValueXY();
   const panResponder = PanResponder.create({
     onMoveShouldSetPanResponder: () => true,
@@ -36,11 +37,26 @@ export default function QrResultScreen() {
 
   useEffect(() => {
     if (qrData) {
-      playSpotifyURI(qrData);
+      if (qrData.startsWith("spotify:track:")) {
+        playSpotifyTrack(qrData);
+      } else if (qrData.includes("open.spotify.com/track/")) {
+        const trackId = extractTrackIdFromUrl(qrData);
+        if (trackId) {
+          playSpotifyTrack(`spotify:track:${trackId}`);
+        }
+      } else {
+        Alert.alert("QR Code", "Not recognized as a Spotify track URI");
+      }
     } else {
       Alert.alert("Error", "No Spotify URI found in QR Code.");
     }
   }, [qrData]);
+
+  function extractTrackIdFromUrl(url: string): string | null {
+    // e.g. "https://open.spotify.com/track/1IuThZbnH9S4hy9W9swG1p?si=..."
+    const match = url.match(/\/track\/([A-Za-z0-9]+)/);
+    return match ? match[1] : null;
+  }
 
   return (
     <View style={styles.container}>

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "TuneTrack",
-    "slug": "TuneTrack",
+    "slug": "tunetrack",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -18,8 +18,11 @@
       },
       "permissions": [
         "CAMERA",
-        "RECORD_AUDIO"
-      ]
+        "RECORD_AUDIO",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.gabee1987.tunetrack"
     },
     "web": {
       "bundler": "metro",
@@ -49,6 +52,10 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "spotifyClientId": "YOUR_SPOTIFY_CLIENT_ID",
+      "spotifyRedirectUri": "tunetrack://redirect"
     }
   }
 }

@@ -1,22 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import { useRouter } from "expo-router";
 import AppButton from "@/components/AppButton";
+import { getStoredSpotifyToken } from "@/services/spotifyAuthService";
 
 export default function MainScreen() {
   const router = useRouter();
-  const [isSpotifyConnected, setIsSpotifyConnected] = useState(false);
+  const [isSpotifyConnected, setIsSpotifyConnected] = useState<boolean>(false);
+
+  useEffect(() => {
+    checkSpotifyConnection();
+  }, []);
+
+  async function checkSpotifyConnection() {
+    const token = await getStoredSpotifyToken();
+    setIsSpotifyConnected(!!token);
+  }
 
   const handleReadRules = () => {
     console.log("Read rules pressed");
   };
 
   const handleSpotifyConnect = () => {
-    router.push({
-      pathname: "/spotify-connect",
-      params: { onConnect: "true" },
-    });
+    router.push("/spotify-connect");
   };
 
   const handleStartGame = () => {
@@ -24,7 +31,7 @@ export default function MainScreen() {
   };
 
   const handleSettingsPress = () => {
-    router.push("/settings?isSpotifyConnected=true");
+    router.push("/settings?isSpotifyConnected=" + isSpotifyConnected);
   };
 
   return (
