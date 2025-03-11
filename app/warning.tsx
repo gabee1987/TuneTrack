@@ -1,8 +1,9 @@
 // src/screens/WarnNetworkScreen.tsx
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import AnimatedBackground from "../components/AnimatedBackground";
 import { useRouter } from "expo-router";
+import { ThemedText } from "@/components/ThemedText";
 
 const WarnNetworkScreen = () => {
   const router = useRouter();
@@ -20,18 +21,20 @@ const WarnNetworkScreen = () => {
     <View style={styles.container}>
       <AnimatedBackground />
       <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-        <Text style={styles.backButtonText}>Vissza</Text>
+        <ThemedText style={styles.backButtonText}>Vissza</ThemedText>
       </TouchableOpacity>
-      <Text style={styles.warningTitle}>FIGYELEM!</Text>
-      <Text style={styles.warningText}>
-        A TuneQuest alkalmazás internet kapcsolatot igényel, hogy zenét
+      <ThemedText type="title" style={styles.warningTitle}>
+        FIGYELEM!
+      </ThemedText>
+      <ThemedText style={styles.warningText}>
+        A Tunetrack alkalmazás internet kapcsolatot igényel, hogy zenét
         streameljen az eszközödre. Bizonyosodj meg róla, hogy biztonságos Wi-Fi
         kapcsolatot használsz, hogy elkerüld a plusz költségek felszámítását a
         szolgáltatód részéről.
-      </Text>
+      </ThemedText>
 
       <TouchableOpacity style={styles.okButton} onPress={handleOk}>
-        <Text style={styles.okButtonText}>Értem</Text>
+        <ThemedText style={styles.okButtonText}>Értem</ThemedText>
       </TouchableOpacity>
     </View>
   );

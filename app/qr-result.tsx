@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Animated,
@@ -10,6 +9,7 @@ import {
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { playSpotifyTrack } from "@/services/spotifyPlaybackService";
+import { ThemedText } from "@/components/ThemedText";
 
 export default function QrResultScreen() {
   const router = useRouter();
@@ -61,7 +61,7 @@ export default function QrResultScreen() {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Text style={styles.backButtonText}>Vissza</Text>
+        <ThemedText style={styles.backButtonText}>Vissza</ThemedText>
       </TouchableOpacity>
       <Animated.View
         style={[
@@ -70,11 +70,11 @@ export default function QrResultScreen() {
         ]}
         {...panResponder.panHandlers}
       >
-        <Text style={styles.swipeButtonText}>
+        <ThemedText style={styles.swipeButtonText}>
           Húzd félre a következő kártya beolvasásához
-        </Text>
+        </ThemedText>
       </Animated.View>
-      <Text style={styles.qrDataText}>QR Code Data: {qrData}</Text>
+      <ThemedText style={styles.qrDataText}>QR Code Data: {qrData}</ThemedText>
     </View>
   );
 }

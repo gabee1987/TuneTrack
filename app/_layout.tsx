@@ -1,47 +1,74 @@
 import AnimatedBackground from "@/components/AnimatedBackground";
-import { Stack } from "expo-router";
+import { storeSpotifyTokenFromUrl } from "@/services/spotifyAuthService";
+import { router, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Linking, View } from "react-native";
 import "react-native-reanimated";
+import { useFonts } from "expo-font";
+import {
+  Poppins_400Regular,
+  Poppins_600SemiBold,
+  Poppins_700Bold,
+} from "@expo-google-fonts/poppins";
+import { ThemeProvider } from "@/themes/ThemeProvider";
 
-// Prevent splash screen from hiding automatically
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  useEffect(() => {
-    SplashScreen.hideAsync();
-  }, []);
+  const [fontsLoaded] = useFonts({
+    PoppinsRegular: Poppins_400Regular,
+    PoppinsSemiBold: Poppins_600SemiBold,
+    PoppinsBold: Poppins_700Bold,
+  });
+
+  // Add a state to track splash screen visibility
+  const [appReady, setAppReady] = useState(false);
 
   useEffect(() => {
-    const handleDeepLink = (event: { url: string }) => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+      setAppReady(true); // Mark the app as ready after fonts load
+    }
+  }, [fontsLoaded]);
+
+  useEffect(() => {
+    const handleDeepLink = async (event: { url: string }) => {
       console.log("Deep link detected:", event.url);
+      if (event.url.includes("access_token=")) {
+        await storeSpotifyTokenFromUrl(event.url);
+        router.replace("/");
+      }
     };
 
-    // Event listener pattern
     const subscription = Linking.addEventListener("url", handleDeepLink);
-
-    // Cleanup function (removes listener on component unmount)
-    return () => {
-      subscription.remove();
-    };
+    return () => subscription.remove();
   }, []);
+
+  // Only render UI when fonts are loaded
+  if (!appReady) {
+    return null;
+  }
 
   return (
-    <View style={{ flex: 1 }}>
-      <AnimatedBackground />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: "transparent" },
-        }}
-      >
-        <Stack.Screen name="index" />
-        <Stack.Screen name="spotify-connect" />
-        <Stack.Screen name="settings" />
-        <Stack.Screen name="camera" />
-        <Stack.Screen name="qr-result" />
-      </Stack>
-    </View>
+    <ThemeProvider>
+      <View style={{ flex: 1 }}>
+        <AnimatedBackground />
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: "transparent" },
+          }}
+        >
+          <Stack.Screen name="index" />
+          <Stack.Screen name="spotify-connect" />
+          <Stack.Screen name="settings" />
+          <Stack.Screen name="camera" />
+          <Stack.Screen name="qr-result" />
+          <Stack.Screen name="warning" />
+          <Stack.Screen name="game-rules" />
+        </Stack>
+      </View>
+    </ThemeProvider>
   );
 }

@@ -1,9 +1,10 @@
 // app/settings/spotify-mode.tsx
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import BackButton from "@/components/BackButton";
 import AppButton from "@/components/AppButton";
+import { ThemedText } from "@/components/ThemedText";
 
 export default function SpotifyModeScreen() {
   const router = useRouter();
@@ -25,12 +26,14 @@ export default function SpotifyModeScreen() {
   return (
     <View style={styles.container}>
       <BackButton onPress={handleBack} />
-      <Text style={styles.title}>Spotify Premium?</Text>
-      <Text style={styles.subtitle}>
+      <ThemedText type="title" style={styles.title}>
+        Spotify Premium?
+      </ThemedText>
+      <ThemedText type="default" style={styles.subtitle}>
         Válaszd a Spotify Free-t, ha nincs fizetős Spotify fiókod. Más esetben a
         még jobb élmény érdekében válaszd a Spotify Premium-ot. További
         tájékoztatásért lépj be a spotify.com-ra
-      </Text>
+      </ThemedText>
 
       <AppButton
         title="Spotify Free"

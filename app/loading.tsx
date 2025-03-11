@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { View, StyleSheet, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
+import { ThemedText } from "@/components/ThemedText";
 
 export default function LoadingScreen() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function LoadingScreen() {
   return (
     <View style={styles.container}>
       <ActivityIndicator size="large" color="#fff" />
-      <Text style={styles.logoText}>TuneTrack</Text>
+      <ThemedText style={styles.logoText}>TuneTrack</ThemedText>
     </View>
   );
 }

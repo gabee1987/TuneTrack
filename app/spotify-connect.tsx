@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Linking,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity, Linking } from "react-native";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import * as AuthSession from "expo-auth-session";
 import { SPOTIFY_SCOPES } from "@/constants/spotifyScopes";
 import AppButton from "@/components/AppButton";
 import Constants from "expo-constants";
+import { ThemedText } from "@/components/ThemedText";
 
 // Read environment variables
 const CLIENT_ID = Constants.expoConfig?.extra?.spotifyClientId;
@@ -94,13 +89,13 @@ export default function SpotifyConnectScreen() {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Text style={styles.backButtonText}>Vissza</Text>
+        <ThemedText style={styles.backButtonText}>Vissza</ThemedText>
       </TouchableOpacity>
-      <Text style={styles.title}>Csatlakozás a Spotify-hoz</Text>
-      <Text style={styles.subtitle}>
+      <ThemedText style={styles.title}>Csatlakozás a Spotify-hoz</ThemedText>
+      <ThemedText style={styles.subtitle}>
         A továbblépés előtt telepítsd fel a Spotify Alkalmazás legfrissebb
         változatát erre az eszközre.
-      </Text>
+      </ThemedText>
 
       {!isLoggedIn ? (
         <View>

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import { useRouter } from "expo-router";
 import AppButton from "@/components/AppButton";
 import { getStoredSpotifyToken } from "@/services/spotifyAuthService";
+import { ThemedText } from "@/components/ThemedText";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function MainScreen() {
   const router = useRouter();
-  const [isSpotifyConnected, setIsSpotifyConnected] = useState<boolean>(false);
+  const [isSpotifyConnected, setIsSpotifyConnected] = useState(false);
 
   useEffect(() => {
     checkSpotifyConnection();
@@ -19,7 +21,7 @@ export default function MainScreen() {
   }
 
   const handleReadRules = () => {
-    console.log("Read rules pressed");
+    router.push("/game-rules");
   };
 
   const handleSpotifyConnect = () => {
@@ -27,7 +29,7 @@ export default function MainScreen() {
   };
 
   const handleStartGame = () => {
-    router.push("/warning");
+    router.push("/camera");
   };
 
   const handleSettingsPress = () => {
@@ -39,32 +41,38 @@ export default function MainScreen() {
 
   return (
     <View style={styles.container}>
-      <AnimatedBackground />
-
-      <View style={styles.topRow}>
-        <TouchableOpacity style={styles.infoButton}>
-          <Text style={styles.buttonText}>i</Text>
-        </TouchableOpacity>
-        <View style={styles.logoContainer}>
-          <Text style={styles.logoText}>TuneTrack</Text>
-        </View>
+      <View style={styles.statusBar}>
         <TouchableOpacity
           style={styles.settingsButton}
           onPress={handleSettingsPress}
         >
-          <Text style={styles.buttonText}>⚙</Text>
+          <Ionicons name="settings-outline" size={28} color="white" />
         </TouchableOpacity>
+      </View>
+
+      <View style={styles.topRow}>
+        <View style={styles.logoContainer}>
+          <ThemedText type="title" style={styles.logoText}>
+            TuneTrack
+          </ThemedText>
+        </View>
       </View>
 
       <View style={styles.bottomContainer}>
         <AppButton
+          style={styles.menuButton}
           title="A játékszabály elolvasása"
           onPress={handleReadRules}
         />
         {isSpotifyConnected ? (
-          <AppButton title="Játék indítása" onPress={handleStartGame} />
+          <AppButton
+            style={styles.menuButton}
+            title="Játék indítása"
+            onPress={handleStartGame}
+          />
         ) : (
           <AppButton
+            style={styles.menuButton}
             title="Csatlakozás a Spotify-hoz"
             onPress={handleSpotifyConnect}
           />
@@ -78,6 +86,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: "relative",
+    alignItems: "center",
+  },
+  statusBar: {
+    width: "100%",
+    padding: 20,
+    flexDirection: "row",
+    justifyContent: "flex-end",
   },
   topRow: {
     flexDirection: "row",
@@ -86,19 +101,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
   },
-  infoButton: {
-    width: 30,
-    height: 30,
-    backgroundColor: "#00000080",
-    borderRadius: 15,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   settingsButton: {
-    width: 30,
-    height: 30,
-    backgroundColor: "#00000080",
-    borderRadius: 15,
+    width: 40,
+    height: 40,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -107,7 +112,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logoText: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
     color: "#fff",
   },
@@ -117,7 +122,9 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
   },
-  buttonText: {
-    color: "#fff",
+  menuButton: {
+    paddingHorizontal: 10,
+    width: "70%",
+    marginBottom: 10,
   },
 });

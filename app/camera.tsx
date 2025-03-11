@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Button, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Button, TouchableOpacity } from "react-native";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useRouter } from "expo-router";
+import { ThemedText } from "@/components/ThemedText";
 
 export default function CameraScreen() {
   const [facing, setFacing] = useState<CameraType>("back"); // Default to back camera
@@ -26,7 +27,7 @@ export default function CameraScreen() {
   if (!permission) {
     return (
       <View style={styles.loadingContainer}>
-        <Text>Loading permissions...</Text>
+        <ThemedText type="default">Loading permissions...</ThemedText>
       </View>
     );
   }
@@ -35,9 +36,9 @@ export default function CameraScreen() {
   if (!permission.granted) {
     return (
       <View style={styles.container}>
-        <Text style={styles.permissionText}>
+        <ThemedText type="default" style={styles.permissionText}>
           We need camera permission to use this feature.
-        </Text>
+        </ThemedText>
         <Button title="Grant Permission" onPress={requestPermission} />
       </View>
     );
@@ -58,7 +59,7 @@ export default function CameraScreen() {
               setFacing((prev) => (prev === "back" ? "front" : "back"))
             }
           >
-            <Text style={styles.toggleButtonText}>Flip Camera</Text>
+            <ThemedText style={styles.toggleButtonText}>Flip Camera</ThemedText>
           </TouchableOpacity>
         </View>
       </CameraView>
