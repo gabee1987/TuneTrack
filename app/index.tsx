@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import AnimatedBackground from "@/components/AnimatedBackground";
 import { useRouter } from "expo-router";
 import AppButton from "@/components/AppButton";
 import { getStoredSpotifyToken } from "@/services/spotifyAuthService";

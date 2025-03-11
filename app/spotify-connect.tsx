@@ -7,6 +7,7 @@ import { SPOTIFY_SCOPES } from "@/constants/spotifyScopes";
 import AppButton from "@/components/AppButton";
 import Constants from "expo-constants";
 import { ThemedText } from "@/components/ThemedText";
+import { Ionicons } from "@expo/vector-icons";
 
 // Read environment variables
 const CLIENT_ID = Constants.expoConfig?.extra?.spotifyClientId;
@@ -86,29 +87,43 @@ export default function SpotifyConnectScreen() {
     Linking.openURL("tunetrack://redirect");
   };
 
+  const handleBack = () => {
+    router.back();
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <ThemedText style={styles.backButtonText}>Vissza</ThemedText>
-      </TouchableOpacity>
-      <ThemedText style={styles.title}>Csatlakozás a Spotify-hoz</ThemedText>
-      <ThemedText style={styles.subtitle}>
+      <View style={styles.statusBar}>
+        <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+          <Ionicons name="close-circle-outline" size={36} color="white" />
+        </TouchableOpacity>
+      </View>
+      <ThemedText type="title" style={styles.title}>
+        Csatlakozás a Spotify-hoz
+      </ThemedText>
+      <ThemedText type="default" style={styles.subtitle}>
         A továbblépés előtt telepítsd fel a Spotify Alkalmazás legfrissebb
         változatát erre az eszközre.
       </ThemedText>
 
       {!isLoggedIn ? (
-        <View>
+        <View style={styles.buttonContainer}>
           <AppButton
+            style={styles.menuButton}
             title="Csatlakozás a Spotify-hoz"
             onPress={handleSpotifyLogin}
             // disabled={!request} // Prevents clicking if request is not ready
           />
 
-          <AppButton title="Test Deep Link" onPress={testDeepLink} />
+          <AppButton
+            style={styles.menuButton}
+            title="Test Deep Link"
+            onPress={testDeepLink}
+          />
         </View>
       ) : (
         <AppButton
+          style={styles.menuButton}
           title="Már be vagy jelentkezve. Kattints ide a folytatáshoz."
           onPress={() => router.back()}
         />
@@ -120,33 +135,38 @@ export default function SpotifyConnectScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#222",
-    paddingTop: 50,
     alignItems: "center",
-    paddingHorizontal: 20,
+  },
+  statusBar: {
+    width: "100%",
+    padding: 20,
+    flexDirection: "row",
+    justifyContent: "flex-end",
   },
   backButton: {
-    position: "absolute",
-    top: 50,
-    right: 20,
-    backgroundColor: "#00000080",
-    padding: 10,
-    borderRadius: 8,
-    zIndex: 10,
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  backButtonText: { color: "#fff" },
   title: {
-    marginTop: 60,
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 26,
+    marginBottom: 30,
     color: "#fff",
-    textAlign: "center",
-    marginBottom: 16,
   },
   subtitle: {
     fontSize: 14,
-    color: "#ccc",
+    color: "#fff",
     textAlign: "center",
     marginBottom: 30,
+  },
+  buttonContainer: {
+    width: "100%",
+    alignItems: "center",
+  },
+  menuButton: {
+    paddingHorizontal: 10,
+    width: "70%",
+    marginBottom: 20,
   },
 });
