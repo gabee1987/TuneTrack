@@ -15,8 +15,8 @@ const CLIENT_ID = Constants.expoConfig?.extra?.spotifyClientId;
 // Generate the redirect URI (must match Spotify Developer Dashboard)
 const REDIRECT_URI = AuthSession.makeRedirectUri({
   scheme: "tunetrack",
-  path: "redirect",
-  native: "tunetrack://redirect",
+  path: "spotify-connect",
+  native: "tunetrack://spotify-connect",
   // useProxy: false,
 });
 
