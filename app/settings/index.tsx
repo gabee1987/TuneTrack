@@ -43,7 +43,7 @@ export default function SettingsScreen() {
       />
       <AppButton
         style={styles.menuButton}
-        title="Változtatás a nyelven"
+        title="Nyelv módosítása"
         onPress={handleLanguageChange}
       />
     </View>

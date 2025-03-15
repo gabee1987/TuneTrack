@@ -5,6 +5,7 @@ import AppButton from "@/components/AppButton";
 import { getStoredSpotifyToken } from "@/services/spotifyAuthService";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
+import AnimatedBlurredBlobs from "@/components/AnimatedBlobs";
 
 export default function MainScreen() {
   const router = useRouter();
@@ -40,6 +41,7 @@ export default function MainScreen() {
 
   return (
     <View style={styles.container}>
+      {/* <AnimatedBlurredBlobs /> */}
       <View style={styles.statusBar}>
         <TouchableOpacity
           style={styles.settingsButton}

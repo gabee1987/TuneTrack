@@ -53,7 +53,6 @@ export default function QrResultScreen() {
   }, [qrData]);
 
   function extractTrackIdFromUrl(url: string): string | null {
-    // e.g. "https://open.spotify.com/track/1IuThZbnH9S4hy9W9swG1p?si=..."
     const match = url.match(/\/track\/([A-Za-z0-9]+)/);
     return match ? match[1] : null;
   }

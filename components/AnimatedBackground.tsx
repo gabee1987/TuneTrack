@@ -22,9 +22,9 @@ const COLOR_SETS = [
 ];
 
 // Configurable constants
-const BUBBLE_COUNT = 2; // Allow fewer bubbles
-const BUBBLE_MIN_SIZE = 400; // Larger circles for a more noticeable effect
-const BUBBLE_MAX_SIZE = 600; // Max size increased for better bokeh effect
+const BUBBLE_COUNT = 3; // Allow fewer bubbles
+const BUBBLE_MIN_SIZE = 300; // Larger circles for a more noticeable effect
+const BUBBLE_MAX_SIZE = 800; // Max size increased for better bokeh effect
 
 export default function AnimatedBackground() {
   // 1) Pick a random color set on mount
@@ -113,7 +113,6 @@ export default function AnimatedBackground() {
   return (
     <View style={styles.container}>
       <Animated.View style={[StyleSheet.absoluteFill, backgroundStyle]} />
-      <BlurView style={StyleSheet.absoluteFill} intensity={50} tint="light" />
       {circlesRef.current.map(({ x, y, size }, i) => (
         <Animated.View
           key={i}
@@ -129,6 +128,7 @@ export default function AnimatedBackground() {
           ]}
         />
       ))}
+      <BlurView style={styles.blurContainer} intensity={80} tint="default" />
     </View>
   );
 }
@@ -141,9 +141,17 @@ const styles = StyleSheet.create({
   circle: {
     position: "absolute",
     backgroundColor: "rgba(255,255,255,0.15)",
-    shadowColor: "#fff",
+    shadowColor: "#000000",
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.9,
+    shadowOpacity: 0.8,
     shadowRadius: 60,
+  },
+  blurContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 1,
   },
 });
