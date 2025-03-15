@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
 import { useRouter } from "expo-router";
 import AppButton from "@/components/AppButton";
 import { getStoredSpotifyToken } from "@/services/spotifyAuthService";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
-import AnimatedBlurredBlobs from "@/components/AnimatedBlobs";
 
 export default function MainScreen() {
   const router = useRouter();
@@ -40,50 +39,53 @@ export default function MainScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      {/* <AnimatedBlurredBlobs /> */}
-      <View style={styles.statusBar}>
-        <TouchableOpacity
-          style={styles.settingsButton}
-          onPress={handleSettingsPress}
-        >
-          <Ionicons name="settings-outline" size={28} color="white" />
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        {/* <AnimatedBlurredBlobs /> */}
+        <View style={styles.statusBar}>
+          <TouchableOpacity
+            style={styles.settingsButton}
+            onPress={handleSettingsPress}
+          >
+            <Ionicons name="settings-outline" size={28} color="white" />
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.topRow}>
         <View style={styles.logoContainer}>
           <ThemedText type="title" style={styles.logoText}>
             TuneTrack
           </ThemedText>
         </View>
-      </View>
 
-      <View style={styles.bottomContainer}>
-        <AppButton
-          style={styles.menuButton}
-          title="A játékszabály elolvasása"
-          onPress={handleReadRules}
-        />
-        {isSpotifyConnected ? (
+        <View style={styles.bottomContainer}>
           <AppButton
             style={styles.menuButton}
-            title="Játék indítása"
-            onPress={handleStartGame}
+            title="A játékszabály elolvasása"
+            onPress={handleReadRules}
           />
-        ) : (
-          <AppButton
-            style={styles.menuButton}
-            title="Csatlakozás a Spotify-hoz"
-            onPress={handleSpotifyConnect}
-          />
-        )}
+          {isSpotifyConnected ? (
+            <AppButton
+              style={styles.menuButton}
+              title="Játék indítása"
+              onPress={handleStartGame}
+            />
+          ) : (
+            <AppButton
+              style={styles.menuButton}
+              title="Csatlakozás a Spotify-hoz"
+              onPress={handleSpotifyConnect}
+            />
+          )}
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     position: "relative",
@@ -95,13 +97,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
   },
-  topRow: {
-    flexDirection: "row",
-    marginTop: 50,
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-  },
   settingsButton: {
     width: 40,
     height: 40,
@@ -111,11 +106,19 @@ const styles = StyleSheet.create({
   logoContainer: {
     flex: 1,
     alignItems: "center",
+    marginTop: 50,
+    height: "100%",
+    width: "100%",
   },
   logoText: {
-    fontSize: 30,
-    fontWeight: "bold",
+    fontSize: 60,
     color: "#fff",
+    textAlign: "center",
+    lineHeight: 60,
+    textShadowColor: "#ff009d",
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 16,
+    width: "100%",
   },
   bottomContainer: {
     position: "absolute",

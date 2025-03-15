@@ -1,25 +1,22 @@
 // app/_layout.tsx
+import React, { useEffect, useState } from "react";
+import { View } from "react-native";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import React, { useEffect, useState } from "react";
-import { View } from "react-native";
-import "react-native-reanimated";
 import { useFonts } from "expo-font";
-import {
-  Poppins_400Regular,
-  Poppins_600SemiBold,
-  Poppins_700Bold,
-} from "@expo-google-fonts/poppins";
 import { ThemeProvider } from "@/themes/ThemeProvider";
+import { theme } from "@/themes/theme";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  // Load local fonts from assets/fonts
   const [fontsLoaded] = useFonts({
-    PoppinsRegular: Poppins_400Regular,
-    PoppinsSemiBold: Poppins_600SemiBold,
-    PoppinsBold: Poppins_700Bold,
+    PoppinsRegular: require("../assets/fonts/Poppins-Regular.ttf"),
+    PoppinsSemiBold: require("../assets/fonts/Poppins-SemiBold.ttf"),
+    PoppinsBold: require("../assets/fonts/Poppins-Bold.ttf"),
+    NeonLux: require("../assets/fonts/Neonlux-Demo.ttf"),
   });
 
   const [appReady, setAppReady] = useState(false);

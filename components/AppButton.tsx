@@ -36,10 +36,20 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: "center",
     justifyContent: "center",
+    // iOS Shadow
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 20,
+    // borderStyle: "solid",
+    // borderWidth: 2,
+    // borderColor: "#ff009d",
+
+    // Android Shadow
+    elevation: 10,
   },
   buttonText: {
     fontSize: 16,
-    fontWeight: "bold",
     color: "#000",
   },
 });

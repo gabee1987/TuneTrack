@@ -124,6 +124,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: "#fff",
     textAlign: "center",
+    textShadowColor: "#3535357d",
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 16,
+    width: "100%",
   },
   statusBar: {
     width: "100%",

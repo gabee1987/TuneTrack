@@ -28,10 +28,21 @@ export default function RuleCard({ title, content }: RuleCardProps) {
 // -- STYLES --
 const styles = StyleSheet.create({
   cardContainer: {
-    backgroundColor: "#ffffff88", // Slightly transparent white
+    backgroundColor: "#ffe0e0", // Slightly transparent white
     borderRadius: 10,
     padding: 15,
     marginBottom: 25,
+    // iOS Shadow
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 14,
+    // borderStyle: "solid",
+    // borderWidth: 2,
+    // borderColor: "#ff009d",
+
+    // Android Shadow
+    elevation: 6,
   },
   cardTitle: {
     fontSize: 18,

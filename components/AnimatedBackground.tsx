@@ -128,7 +128,7 @@ export default function AnimatedBackground() {
           ]}
         />
       ))}
-      <BlurView style={styles.blurContainer} intensity={80} tint="default" />
+      <BlurView style={styles.blurContainer} intensity={30} tint="dark" />
     </View>
   );
 }

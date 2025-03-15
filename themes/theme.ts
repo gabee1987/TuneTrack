@@ -7,9 +7,9 @@ export const theme = {
     },
     fonts: {
       default: "PoppinsRegular",
+      semiBold: "PoppinsSemiBold",
       bold: "PoppinsBold",
-      semiBold: "Poppins_600SemiBold",
-      title: "Poppins_700Bold",
+      title: "NeonLux",
     },
   };
   

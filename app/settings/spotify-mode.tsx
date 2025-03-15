@@ -6,6 +6,7 @@ import BackButton from "@/components/BackButton";
 import AppButton from "@/components/AppButton";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
+import GradientBackground from "@/components/ui/GradientBackground";
 
 export default function SpotifyModeScreen() {
   const router = useRouter();
@@ -26,31 +27,38 @@ export default function SpotifyModeScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.statusBar}>
-        <TouchableOpacity style={styles.closeButton} onPress={handleBack}>
-          <Ionicons name="close-circle-outline" size={36} color="white" />
-        </TouchableOpacity>
-      </View>
+      <GradientBackground>
+        <View style={styles.statusBar}>
+          <TouchableOpacity style={styles.closeButton} onPress={handleBack}>
+            <Ionicons name="close-circle-outline" size={36} color="white" />
+          </TouchableOpacity>
+        </View>
 
-      <ThemedText type="title" style={styles.title}>
-        Spotify Premium?
-      </ThemedText>
-      <ThemedText type="default" style={styles.subtitle}>
-        Válaszd a Spotify Free-t, ha nincs fizetős Spotify fiókod. Más esetben a
-        még jobb élmény érdekében válaszd a Spotify Premium-ot. További
-        tájékoztatásért lépj be a spotify.com-ra
-      </ThemedText>
+        <View style={styles.logoContainer}>
+          <ThemedText type="defaultSemiBold" style={styles.title}>
+            Spotify Premium?
+          </ThemedText>
+        </View>
 
-      <AppButton
-        title="Spotify Free"
-        onPress={handleFree}
-        style={styles.appButton}
-      />
-      <AppButton
-        title="Spotify Premium"
-        onPress={handlePremium}
-        style={styles.appButton}
-      />
+        <ThemedText type="default" style={styles.subtitle}>
+          Válaszd a Spotify Free-t, ha nincs fizetős Spotify fiókod. Más esetben
+          a még jobb élmény érdekében válaszd a Spotify Premium-ot. További
+          tájékoztatásért lépj be a spotify.com-ra
+        </ThemedText>
+
+        <View style={styles.container}>
+          <AppButton
+            title="Spotify Free"
+            onPress={handleFree}
+            style={styles.appButton}
+          />
+          <AppButton
+            title="Spotify Premium"
+            onPress={handlePremium}
+            style={styles.appButton}
+          />
+        </View>
+      </GradientBackground>
     </View>
   );
 }
@@ -58,8 +66,8 @@ export default function SpotifyModeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "transparent",
   },
   statusBar: {
     width: "100%",
@@ -67,10 +75,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
   },
+  logoContainer: {
+    marginBottom: 30,
+    alignItems: "center",
+  },
   title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 20,
+    fontSize: 36,
+    lineHeight: 46,
+    textAlign: "center",
+    color: "#fff",
+    textShadowColor: "#3535357d",
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 16,
   },
   subtitle: {
     marginHorizontal: 30,
