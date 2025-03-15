@@ -61,7 +61,7 @@ export default function GameRulesScreen() {
               "3) Beolvasás: A DJ beolvassa a kártyát a TuneTrack alkalmazással, így megszólal a dal.",
               "4) Elhelyezés: A DJ balján ülő játékos megpróbálja a kártyát pontosan a saját idővonalán a megfelelő helyre tenni (balra, jobbra vagy két kártya közé).",
               "5) Felfordítás és ellenőrzés: Ha jó helyre tetted, megtarthatod a kártyát. Ha nem, eldobod. Kivéve, ha valaki TuneTrack zsetonnal bekiáltotta, hogy rosszul raktad. Ha 10 kártyát helyesen összegyűjtesz, nyertél!",
-              "6) TuneTrack zsetonok: Költs 1 zsetont, ha nem ismered a dalt és átugranád; kiáltsd, hogy „TuneTrack!”, ha szerinted az ellenfél rossz helyre rakta, és lopd el a kártyát; vagy 3 zsetont cserélj be egy automatikus kártyára a pakliból!",
+              // "6) TuneTrack zsetonok: Költs 1 zsetont, ha nem ismered a dalt és átugranád; kiáltsd, hogy „TuneTrack!”, ha szerinted az ellenfél rossz helyre rakta, és lopd el a kártyát; vagy 3 zsetont cserélj be egy automatikus kártyára a pakliból!",
             ]}
           />
 

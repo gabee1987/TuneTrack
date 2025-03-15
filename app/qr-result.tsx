@@ -1,3 +1,4 @@
+// app/qr-result.tsx
 import React, { useEffect } from "react";
 import {
   View,
@@ -10,22 +11,23 @@ import {
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { playSpotifyTrack } from "@/services/spotifyPlaybackService";
 import { ThemedText } from "@/components/ThemedText";
+import { Ionicons } from "@expo/vector-icons";
+import EqualizerAnimation from "@/components/EqualizerAnimation";
 
 export default function QrResultScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  // Ensure qrData is a string (if multiple values, use the first one)
   const qrData = Array.isArray(params.qrData)
     ? params.qrData[0]
     : params.qrData || "";
 
-  // Set up pan responder for swipe gesture
+  // Set up swipe animation for the "next" gesture
   const pan = new Animated.ValueXY();
   const panResponder = PanResponder.create({
     onMoveShouldSetPanResponder: () => true,
     onPanResponderRelease: (_, gestureState) => {
-      if (gestureState.dx > 50) {
-        router.back();
+      if (Math.abs(gestureState.dx) > 50) {
+        router.push("/camera"); // Navigate to Camera screen for next scan
       } else {
         Animated.spring(pan, {
           toValue: { x: 0, y: 0 },
@@ -57,23 +59,37 @@ export default function QrResultScreen() {
     return match ? match[1] : null;
   }
 
+  const handleBack = () => {
+    router.back();
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <ThemedText style={styles.backButtonText}>Vissza</ThemedText>
-      </TouchableOpacity>
+      {/* Top-right back button */}
+      <View style={styles.statusBar}>
+        <TouchableOpacity style={styles.closeButton} onPress={handleBack}>
+          <Ionicons name="close-circle-outline" size={36} color="white" />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.centerContainer}>{/* <EqualizerAnimation /> */}</View>
+
+      {/* Swipe instruction container */}
       <Animated.View
         style={[
-          styles.swipeButton,
-          { transform: [{ translateX: pan.x }, { translateY: pan.y }] },
+          styles.swipeContainer,
+          { transform: pan.getTranslateTransform() },
         ]}
         {...panResponder.panHandlers}
       >
-        <ThemedText style={styles.swipeButtonText}>
-          Húzd félre a következő kártya beolvasásához
-        </ThemedText>
+        <View style={styles.swipeContent}>
+          <Ionicons name="chevron-back" size={28} color="#ffffff" />
+          <ThemedText style={styles.swipeText}>
+            Húzd félre a következő kártya beolvasásához
+          </ThemedText>
+          <Ionicons name="chevron-forward" size={28} color="#ffffff" />
+        </View>
       </Animated.View>
-      <ThemedText style={styles.qrDataText}>QR Code Data: {qrData}</ThemedText>
     </View>
   );
 }
@@ -85,30 +101,43 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     alignItems: "center",
   },
-  backButton: {
+  statusBar: {
     position: "absolute",
-    top: 50,
-    right: 20,
-    backgroundColor: "#00000080",
-    padding: 10,
-    borderRadius: 8,
+    top: 0,
+    right: 0,
+    width: "100%",
+    padding: 20,
+    flexDirection: "row",
+    justifyContent: "flex-end",
     zIndex: 10,
   },
-  backButtonText: { color: "#fff" },
-  swipeButton: {
-    position: "absolute",
-    bottom: 80,
-    backgroundColor: "#fff",
-    borderRadius: 30,
-    paddingHorizontal: 20,
-    paddingVertical: 15,
+  closeButton: {
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  swipeButtonText: { fontWeight: "bold" },
-  qrDataText: {
+  centerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  swipeContainer: {
     position: "absolute",
-    bottom: 150,
-    color: "#fff",
-    textAlign: "center",
-    marginHorizontal: 20,
+    bottom: 60,
+    width: "60%",
+    // backgroundColor: "#fff",
+    // borderRadius: 50,
+    paddingVertical: 15,
+    alignItems: "center",
+  },
+  swipeContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+  },
+  swipeText: {
+    marginHorizontal: 10,
+    color: "#ffffff",
   },
 });
