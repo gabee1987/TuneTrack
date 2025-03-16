@@ -1,23 +1,31 @@
 import React from "react"; // Added explicit import
-import { Link, Stack } from "expo-router";
+import { Link, router, Stack } from "expo-router";
 import { StyleSheet } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { t } from "@/localization/i18n";
+import AppButton from "@/components/AppButton";
 
-export default function NotFoundScreen() {
+function NotFoundScreen() {
+  function goHome() {
+    router.push("/");
+  }
   return (
     <>
-      <Stack.Screen options={{ title: "Oops!" }} />
+      <Stack.Screen />
       <ThemedView style={styles.container}>
-        <ThemedText type="title">This screen doesn't exist.</ThemedText>
+        <ThemedText type="title">{t("not_found_message")}</ThemedText>
         <Link href="/" style={styles.link}>
           <ThemedText type="link">Go to home screen!</ThemedText>
+          <AppButton title={t("not_found_link")} onPress={goHome} />
         </Link>
       </ThemedView>
     </>
   );
 }
+
+export default NotFoundScreen;
 
 const styles = StyleSheet.create({
   container: {

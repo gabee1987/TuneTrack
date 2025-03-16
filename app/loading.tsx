@@ -3,7 +3,7 @@ import { View, StyleSheet, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 
-export default function LoadingScreen() {
+function LoadingScreen() {
   const router = useRouter();
 
   useEffect(() => {
@@ -20,6 +20,8 @@ export default function LoadingScreen() {
     </View>
   );
 }
+
+export default LoadingScreen;
 
 const styles = StyleSheet.create({
   container: {

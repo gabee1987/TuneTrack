@@ -6,11 +6,11 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { ThemeProvider } from "@/themes/ThemeProvider";
-import { theme } from "@/themes/theme";
+import { LanguageProvider } from "@/localization/LanguageContext";
 
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+function RootLayout() {
   // Load local fonts from assets/fonts
   const [fontsLoaded] = useFonts({
     PoppinsRegular: require("../assets/fonts/Poppins-Regular.ttf"),
@@ -34,23 +34,27 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider>
-      <View style={{ flex: 1 }}>
-        <AnimatedBackground />
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: { backgroundColor: "transparent" },
-          }}
-        >
-          <Stack.Screen name="index" />
-          <Stack.Screen name="spotify-connect" />
-          <Stack.Screen name="settings" />
-          <Stack.Screen name="camera" />
-          <Stack.Screen name="qr-result" />
-          <Stack.Screen name="warning" />
-          <Stack.Screen name="game-rules" />
-        </Stack>
-      </View>
+      <LanguageProvider>
+        <View style={{ flex: 1 }}>
+          <AnimatedBackground />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: { backgroundColor: "transparent" },
+            }}
+          >
+            <Stack.Screen name="index" />
+            <Stack.Screen name="spotify-connect" />
+            <Stack.Screen name="settings" />
+            <Stack.Screen name="camera" />
+            <Stack.Screen name="qr-result" />
+            <Stack.Screen name="warning" />
+            <Stack.Screen name="game-rules" />
+          </Stack>
+        </View>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }
+
+export default RootLayout;

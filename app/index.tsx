@@ -5,8 +5,9 @@ import AppButton from "@/components/AppButton";
 import { getStoredSpotifyToken } from "@/services/spotifyAuthService";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
+import { t } from "@/localization/i18n";
 
-export default function MainScreen() {
+function MainScreen() {
   const router = useRouter();
   const [isSpotifyConnected, setIsSpotifyConnected] = useState(false);
 
@@ -60,19 +61,19 @@ export default function MainScreen() {
         <View style={styles.bottomContainer}>
           <AppButton
             style={styles.menuButton}
-            title="A játékszabály elolvasása"
+            title={t("index_read_rules")}
             onPress={handleReadRules}
           />
           {isSpotifyConnected ? (
             <AppButton
               style={styles.menuButton}
-              title="Játék indítása"
+              title={t("index_start_game")}
               onPress={handleStartGame}
             />
           ) : (
             <AppButton
               style={styles.menuButton}
-              title="Csatlakozás a Spotify-hoz"
+              title={t("index_connect_spotify")}
               onPress={handleSpotifyConnect}
             />
           )}
@@ -81,6 +82,8 @@ export default function MainScreen() {
     </SafeAreaView>
   );
 }
+
+export default MainScreen;
 
 const styles = StyleSheet.create({
   safeArea: {

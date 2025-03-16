@@ -8,6 +8,7 @@ import { SPOTIFY_SCOPES } from "@/constants/spotifyScopes";
 import AppButton from "@/components/AppButton";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
+import { t } from "@/localization/i18n";
 
 // Retrieve your client ID from app.config.js via Constants.expoConfig.extra
 const CLIENT_ID = Constants.expoConfig?.extra?.spotifyClientId;
@@ -28,7 +29,7 @@ const discovery = {
   tokenEndpoint: "https://accounts.spotify.com/api/token",
 };
 
-export default function SpotifyConnectScreen() {
+function SpotifyConnectScreen() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -47,8 +48,6 @@ export default function SpotifyConnectScreen() {
   // When the auth response arrives, exchange the code for tokens.
   useEffect(() => {
     // Check if response is successful and has a code.
-    // TypeScript doesn't know that `params` exists for success responses,
-    // so we assert its type as 'any'.
     if (response?.type === "success") {
       const params = (response as any).params; // Type assertion
       if (params?.code) {
@@ -117,31 +116,32 @@ export default function SpotifyConnectScreen() {
         </TouchableOpacity>
       </View>
       <ThemedText type="title" style={styles.title}>
-        Csatlakozás a Spotify-hoz
+        {t("spotify_connect_title")}
       </ThemedText>
       <ThemedText type="default" style={styles.subtitle}>
-        A továbblépés előtt telepítsd fel a Spotify Alkalmazás legfrissebb
-        változatát erre az eszközre.
+        {t("spotify_connect_subtitle")}
       </ThemedText>
 
       {!isLoggedIn ? (
         <View style={styles.buttonContainer}>
           <AppButton
             style={styles.menuButton}
-            title="Csatlakozás a Spotify-hoz"
+            title={t("spotify_connect_connect")}
             onPress={handleSpotifyLogin}
           />
         </View>
       ) : (
         <AppButton
           style={styles.menuButton}
-          title="Már be vagy jelentkezve. Kattints ide a folytatáshoz."
+          title={t("spotify_connect_already")}
           onPress={() => router.back()}
         />
       )}
     </View>
   );
 }
+
+export default SpotifyConnectScreen;
 
 const styles = StyleSheet.create({
   container: { flex: 1, alignItems: "center" },

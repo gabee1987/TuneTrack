@@ -4,8 +4,9 @@ import { View, StyleSheet, TouchableOpacity } from "react-native";
 import AnimatedBackground from "../components/AnimatedBackground";
 import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
+import { t } from "@/localization/i18n";
 
-const WarnNetworkScreen = () => {
+function WarnNetworkScreen() {
   const router = useRouter();
 
   const handleOk = () => {
@@ -24,21 +25,16 @@ const WarnNetworkScreen = () => {
         <ThemedText style={styles.backButtonText}>Vissza</ThemedText>
       </TouchableOpacity>
       <ThemedText type="title" style={styles.warningTitle}>
-        FIGYELEM!
+        {t("warning_title")}
       </ThemedText>
-      <ThemedText style={styles.warningText}>
-        A Tunetrack alkalmazás internet kapcsolatot igényel, hogy zenét
-        streameljen az eszközödre. Bizonyosodj meg róla, hogy biztonságos Wi-Fi
-        kapcsolatot használsz, hogy elkerüld a plusz költségek felszámítását a
-        szolgáltatód részéről.
-      </ThemedText>
+      <ThemedText style={styles.warningText}>{t("warning_text")}</ThemedText>
 
       <TouchableOpacity style={styles.okButton} onPress={handleOk}>
-        <ThemedText style={styles.okButtonText}>Értem</ThemedText>
+        <ThemedText style={styles.okButtonText}>{t("warning_ok")}</ThemedText>
       </TouchableOpacity>
     </View>
   );
-};
+}
 
 export default WarnNetworkScreen;
 

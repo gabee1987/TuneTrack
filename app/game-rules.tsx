@@ -7,8 +7,9 @@ import { router } from "expo-router";
 import GradientBackground from "@/components/ui/GradientBackground";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
+import { t } from "@/localization/i18n";
 
-export default function GameRulesScreen() {
+function GameRulesScreen() {
   const handleBack = () => {
     router.back();
   };
@@ -28,70 +29,69 @@ export default function GameRulesScreen() {
           showsVerticalScrollIndicator={false}
         >
           <ThemedText type="title" style={styles.headerTitle}>
-            TuneTrack Játékszabályok
+            {t("game_rules_header")}
           </ThemedText>
 
           {/* INTRO / BEVEZETŐ */}
           <RuleCard
-            title="Azonnali Partihangulat a TuneTrackkel!"
+            title={t("game_rules_intro_title")}
             content={[
-              "Hallgassatok meg több mint 100 év legnagyobb slágereit! Felváltva tegyétek a dalokat az idővonalatokra időrendi sorrendben, és élvezzétek a közös nosztalgiázást.",
-              "Válasszatok egy nehézségi szintet, vagy akár különböző fokozatokat személyenként, hogy mindenkinek igazán izgalmas legyen a játék!",
+              t("game_rules_intro_content"),
+              t("game_rules_intro_additional"),
             ]}
           />
 
           {/* NEHÉZSÉGI SZINTEK */}
           <RuleCard
-            title="Nehézségi szintek"
+            title={t("game_rules_difficulty_title")}
             content={[
-              "Instant Party: Csak helyezd el a dalokat időrendi sorrendben!",
-              "Original: Igazi muzsikus-fan vagy? Ismerd fel az előadót és a szám címét is!",
-              "Pro: Már fejből vágod a számok címét, előadóját, és a nagyjából mikori kiadását is.",
-              "Expert: Mesteri fokozat – tudnod kell az előadó, a cím és az ÉV pontos kombinációját!",
-              "Kooperatív: Fogjatok össze egy csapatként, és közös idővonalat építsetek!",
+              t("game_rules_difficulty_instant"),
+              t("game_rules_difficulty_original"),
+              t("game_rules_difficulty_pro"),
+              t("game_rules_difficulty_expert"),
+              t("game_rules_difficulty_cooperative"),
             ]}
           />
 
           {/* ORIGINAL JÁTÉKMENET */}
           <RuleCard
-            title="Original – Hogyan zajlik a játék?"
+            title={t("game_rules_original_title")}
             content={[
-              "1) Előkészület: Döntsétek el, egyénileg vagy csapatban játszotok. Minden játékos vagy csapat kap 2 TuneTrack zsetont és 1 zenei kártyát, amit dátum oldalával felfelé maguk elé helyeznek kezdésként.",
-              "2) DJ kiválasztása: Ha Spotify Premiumot használtok, a DJ könnyen elindíthatja a dalokat. Ha Spotify Free vagy más streaming-szolgáltatás van, akkor a DJ vagy sorban mindenki beolvassa a kártyát (vagy megkeresi a dalt).",
-              "3) Beolvasás: A DJ beolvassa a kártyát a TuneTrack alkalmazással, így megszólal a dal.",
-              "4) Elhelyezés: A DJ balján ülő játékos megpróbálja a kártyát pontosan a saját idővonalán a megfelelő helyre tenni (balra, jobbra vagy két kártya közé).",
-              "5) Felfordítás és ellenőrzés: Ha jó helyre tetted, megtarthatod a kártyát. Ha nem, eldobod. Kivéve, ha valaki TuneTrack zsetonnal bekiáltotta, hogy rosszul raktad. Ha 10 kártyát helyesen összegyűjtesz, nyertél!",
-              // "6) TuneTrack zsetonok: Költs 1 zsetont, ha nem ismered a dalt és átugranád; kiáltsd, hogy „TuneTrack!”, ha szerinted az ellenfél rossz helyre rakta, és lopd el a kártyát; vagy 3 zsetont cserélj be egy automatikus kártyára a pakliból!",
+              t("game_rules_original_step1"),
+              t("game_rules_original_step2"),
+              t("game_rules_original_step3"),
+              t("game_rules_original_step4"),
+              t("game_rules_original_step5"),
             ]}
           />
 
           {/* PRO */}
           <RuleCard
-            title="Pro – Miben tér el?"
+            title={t("game_rules_pro_title")}
             content={[
-              "Pro fokozatban továbbra sem kell a pontos évet tudnod, de az előadót és a szám címét muszáj eltalálni. Egyébként a szabályok az Original menetre épülnek.",
-              "Minden Pro játékos 5 TuneTrack zsetonnal indul, és csak akkor tarthatja meg a kártyát, ha a dal előadója és címe is helyes. Ugyanez érvényes a kártyalopásra is.",
-              "Nincs új zseton szerzés a helyes megfejtésért – maradsz a kezdőkészletnél.",
+              t("game_rules_pro_content1"),
+              t("game_rules_pro_content2"),
+              t("game_rules_pro_content3"),
             ]}
           />
 
           {/* EXPERT */}
           <RuleCard
-            title="Expert – A legnehezebb mód"
+            title={t("game_rules_expert_title")}
             content={[
-              "Expert fokozatban nem elég a dal címét és az előadót ismerni: a pontos kiadási évet is tudnod kell! Ezt ráadásul a kártya idővonalra helyezésével együtt kell megnevezned.",
-              "Itt 3 TuneTrack zsetonnal indulsz. Ha nem sikerül kitalálnod a dal címét, előadóját és az ÉVET, akkor nem tarthatod meg a kártyát.",
-              "A zsetonhasználat megegyezik az Original módszerrel, de a lopásnál is pontosan tudnod kell a címet, előadót és az évet.",
+              t("game_rules_expert_content1"),
+              t("game_rules_expert_content2"),
+              t("game_rules_expert_content3"),
             ]}
           />
 
           {/* KOOPERATÍV */}
           <RuleCard
-            title="Kooperatív – Játsszatok Együtt!"
+            title={t("game_rules_cooperative_title")}
             content={[
-              "Ha nem akartok egymás ellen harcolni, válasszátok a kooperatív módot. Egy csapat vagytok, és közösen építitek az idővonalat.",
-              "Minden csapat 5 TuneTrack zsetont kap, és 1 kezdő kártyát a dátum oldalával felfelé. Minden új kártyát együtt illesztetek be a közös idővonalba. Helyes sorrendért megtarthatjátok, a rossz helyért elvesztetek 1 zsetont.",
-              "Próbáljátok meg összegyűjteni 10 kártyát, mielőtt elfogynak a zsetonjaitok!",
+              t("game_rules_cooperative_content1"),
+              t("game_rules_cooperative_content2"),
+              t("game_rules_cooperative_content3"),
             ]}
           />
 
@@ -99,7 +99,7 @@ export default function GameRulesScreen() {
           <View style={styles.footer}>
             <AppButton
               style={styles.menuButton}
-              title="Vissza"
+              title={t("button_generic_back")}
               onPress={handleBack}
             />
           </View>
@@ -108,6 +108,8 @@ export default function GameRulesScreen() {
     </View>
   );
 }
+
+export default GameRulesScreen;
 
 // -- STYLES --
 const styles = StyleSheet.create({

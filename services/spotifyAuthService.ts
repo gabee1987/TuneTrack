@@ -52,14 +52,14 @@ export async function refreshSpotifyToken(refreshToken: string): Promise<Spotify
       const expiresIn = result.expires_in ?? 3600;
       const tokenData: SpotifyTokenData = {
         access_token: result.access_token,
-        refresh_token: refreshToken, // Typically remains the same
+        refresh_token: refreshToken, // Usually stays the same
         expires_in: expiresIn,
         expiration_time: Date.now() + expiresIn * 1000,
       };
       await SecureStore.setItemAsync(TOKEN_KEY, JSON.stringify(tokenData));
       return tokenData;
     } else {
-      // If the refresh token is invalid, clear the stored token.
+      // Refresh failed—clear token and force re-login.
       console.error("Failed to refresh token:", result);
       await clearSpotifyToken();
       return null;
@@ -70,6 +70,7 @@ export async function refreshSpotifyToken(refreshToken: string): Promise<Spotify
     return null;
   }
 }
+
 
 
 /**

@@ -2,13 +2,13 @@
 import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
-import BackButton from "@/components/BackButton";
 import AppButton from "@/components/AppButton";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import GradientBackground from "@/components/ui/GradientBackground";
+import { t } from "@/localization/i18n";
 
-export default function SpotifyModeScreen() {
+function SpotifyModeScreen() {
   const router = useRouter();
 
   const handleFree = () => {
@@ -36,24 +36,22 @@ export default function SpotifyModeScreen() {
 
         <View style={styles.logoContainer}>
           <ThemedText type="defaultSemiBold" style={styles.title}>
-            Spotify Premium?
+            {t("settings_spotify_mode_title")}
           </ThemedText>
         </View>
 
         <ThemedText type="default" style={styles.subtitle}>
-          Válaszd a Spotify Free-t, ha nincs fizetős Spotify fiókod. Más esetben
-          a még jobb élmény érdekében válaszd a Spotify Premium-ot. További
-          tájékoztatásért lépj be a spotify.com-ra
+          {t("settings_spotify_mode_subtitle")}
         </ThemedText>
 
         <View style={styles.container}>
           <AppButton
-            title="Spotify Free"
+            title={t("settings_spotify_mode_free")}
             onPress={handleFree}
             style={styles.appButton}
           />
           <AppButton
-            title="Spotify Premium"
+            title={t("settings_spotify_mode_premium")}
             onPress={handlePremium}
             style={styles.appButton}
           />
@@ -62,6 +60,8 @@ export default function SpotifyModeScreen() {
     </View>
   );
 }
+
+export default SpotifyModeScreen;
 
 const styles = StyleSheet.create({
   container: {

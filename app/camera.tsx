@@ -3,8 +3,9 @@ import { View, StyleSheet, Button, TouchableOpacity } from "react-native";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
+import { t } from "@/localization/i18n";
 
-export default function CameraScreen() {
+function CameraScreen() {
   const [facing, setFacing] = useState<CameraType>("back"); // Default to back camera
   const [permission, requestPermission] = useCameraPermissions(); // Camera permission hook
   const router = useRouter();
@@ -37,9 +38,12 @@ export default function CameraScreen() {
     return (
       <View style={styles.container}>
         <ThemedText type="default" style={styles.permissionText}>
-          We need camera permission to use this feature.
+          {t("camera_permission_text")}
         </ThemedText>
-        <Button title="Grant Permission" onPress={requestPermission} />
+        <Button
+          title={t("camera_grant_permission")}
+          onPress={requestPermission}
+        />
       </View>
     );
   }
@@ -59,13 +63,17 @@ export default function CameraScreen() {
               setFacing((prev) => (prev === "back" ? "front" : "back"))
             }
           >
-            <ThemedText style={styles.toggleButtonText}>Flip Camera</ThemedText>
+            <ThemedText style={styles.toggleButtonText}>
+              {t("camera_flip_camera")}
+            </ThemedText>
           </TouchableOpacity>
         </View>
       </CameraView>
     </View>
   );
 }
+
+export default CameraScreen;
 
 const styles = StyleSheet.create({
   container: {

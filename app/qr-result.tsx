@@ -13,8 +13,9 @@ import { playSpotifyTrack } from "@/services/spotifyPlaybackService";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import EqualizerAnimation from "@/components/EqualizerAnimation";
+import { t } from "@/localization/i18n";
 
-export default function QrResultScreen() {
+function QrResultScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const qrData = Array.isArray(params.qrData)
@@ -72,7 +73,7 @@ export default function QrResultScreen() {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.centerContainer}>{/* <EqualizerAnimation /> */}</View>
+      <View style={styles.centerContainer}>{<EqualizerAnimation />}</View>
 
       {/* Swipe instruction container */}
       <Animated.View
@@ -85,7 +86,7 @@ export default function QrResultScreen() {
         <View style={styles.swipeContent}>
           <Ionicons name="chevron-back" size={28} color="#ffffff" />
           <ThemedText style={styles.swipeText}>
-            Húzd félre a következő kártya beolvasásához
+            {t("qr_result_swipe_instruction")}
           </ThemedText>
           <Ionicons name="chevron-forward" size={28} color="#ffffff" />
         </View>
@@ -93,6 +94,8 @@ export default function QrResultScreen() {
     </View>
   );
 }
+
+export default QrResultScreen;
 
 const styles = StyleSheet.create({
   container: {
