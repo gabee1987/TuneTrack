@@ -14,7 +14,7 @@ export default {
       supportsTablet: true,
     },
     android: {
-      package: "com.mycompany.myapp",
+      package: "com.gabee.tunetrack",
       versionCode: 1,
       adaptiveIcon: {
         foregroundImage: "./assets/images/adaptive-icon.png",
