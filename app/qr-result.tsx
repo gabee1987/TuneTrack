@@ -62,7 +62,7 @@ function QrResultScreen() {
   }
 
   const handleBack = () => {
-    router.back();
+    router.navigate("/");
   };
 
   return (
@@ -74,7 +74,7 @@ function QrResultScreen() {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.centerContainer}>{<EqualizerAnimation />}</View>
+      {/* <View style={styles.centerContainer}>{<EqualizerAnimation />}</View> */}
 
       {/* Swipe instruction container */}
       <Animated.View

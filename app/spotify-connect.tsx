@@ -9,6 +9,7 @@ import AppButton from "@/components/AppButton";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
+import GradientBackground from "@/components/ui/GradientBackground";
 
 // Retrieve your client ID from app.config.js via Constants.expoConfig.extra
 const CLIENT_ID = Constants.expoConfig?.extra?.spotifyClientId;
@@ -16,7 +17,7 @@ const CLIENT_ID = Constants.expoConfig?.extra?.spotifyClientId;
 // Generate the redirect URI (must match Spotify Developer Dashboard)
 const REDIRECT_URI = AuthSession.makeRedirectUri({
   scheme: "tunetrack",
-  path: "spotify-connect",
+  path: "tunetrack://redirect",
   native: "tunetrack://spotify-connect",
   // useProxy: false,
 });
@@ -76,6 +77,7 @@ function SpotifyConnectScreen() {
               JSON.stringify(tokenData)
             );
             setIsLoggedIn(true);
+            router.replace("/");
           } catch (error) {
             console.error("Error exchanging code:", error);
           }
@@ -111,33 +113,37 @@ function SpotifyConnectScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.statusBar}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-          <Ionicons name="close-circle-outline" size={36} color="white" />
-        </TouchableOpacity>
-      </View>
-      <ThemedText type="title" style={styles.title}>
-        {t("spotify_connect_title")}
-      </ThemedText>
-      <ThemedText type="default" style={styles.subtitle}>
-        {t("spotify_connect_subtitle")}
-      </ThemedText>
-
-      {!isLoggedIn ? (
-        <View style={styles.buttonContainer}>
-          <AppButton
-            style={styles.menuButton}
-            title={t("spotify_connect_connect")}
-            onPress={handleSpotifyLogin}
-          />
+      <GradientBackground>
+        <View style={styles.statusBar}>
+          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+            <Ionicons name="close-circle-outline" size={36} color="white" />
+          </TouchableOpacity>
         </View>
-      ) : (
-        <AppButton
-          style={styles.menuButton}
-          title={t("spotify_connect_already")}
-          onPress={() => router.back()}
-        />
-      )}
+        <View style={styles.logoContainer}>
+          <ThemedText type="default" style={styles.title}>
+            {t("spotify_connect_title")}
+          </ThemedText>
+          <ThemedText type="default" style={styles.subtitle}>
+            {t("spotify_connect_subtitle")}
+          </ThemedText>
+        </View>
+
+        <View style={styles.container}>
+          {!isLoggedIn ? (
+            <AppButton
+              style={styles.menuButton}
+              title={t("spotify_connect_connect")}
+              onPress={handleSpotifyLogin}
+            />
+          ) : (
+            <AppButton
+              style={styles.menuButton}
+              title={t("spotify_connect_already")}
+              onPress={() => router.back()}
+            />
+          )}
+        </View>
+      </GradientBackground>
     </View>
   );
 }
@@ -145,12 +151,21 @@ function SpotifyConnectScreen() {
 export default SpotifyConnectScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: "center" },
+  container: {
+    flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    width: "100%",
+  },
   statusBar: {
     width: "100%",
     padding: 20,
     flexDirection: "row",
     justifyContent: "flex-end",
+  },
+  logoContainer: {
+    marginBottom: 30,
+    alignItems: "center",
   },
   backButton: {
     width: 40,
@@ -158,13 +173,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  title: { fontSize: 26, marginBottom: 30, color: "#fff" },
+  title: {
+    fontSize: 36,
+    lineHeight: 46,
+    textAlign: "center",
+    color: "#fff",
+    textShadowColor: "#3535357d",
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 16,
+    marginBottom: 20,
+  },
   subtitle: {
     fontSize: 14,
-    color: "#fff",
+    color: "#000000",
     textAlign: "center",
     marginBottom: 30,
   },
-  buttonContainer: { width: "100%", alignItems: "center" },
   menuButton: { paddingHorizontal: 10, width: "70%", marginBottom: 20 },
 });

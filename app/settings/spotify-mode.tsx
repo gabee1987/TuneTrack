@@ -7,18 +7,19 @@ import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import GradientBackground from "@/components/ui/GradientBackground";
 import { useTranslation } from "react-i18next";
+import { setSpotifyMode } from "@/services/spotifyModeService";
 
 function SpotifyModeScreen() {
   const router = useRouter();
   const { t } = useTranslation();
 
-  const handleFree = () => {
-    // Logic: set app mode to "Spotify Free" here
+  const handleFree = async () => {
+    await setSpotifyMode("free"); // Store 'free' in local storage
     router.back();
   };
 
-  const handlePremium = () => {
-    // Logic: set app mode to "Spotify Premium" here
+  const handlePremium = async () => {
+    await setSpotifyMode("premium"); // Store 'premium' in local storage
     router.back();
   };
 
@@ -69,6 +70,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
+    width: "100%",
   },
   statusBar: {
     width: "100%",
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   appButton: {
-    width: "80%",
+    width: "70%",
     marginVertical: 10,
   },
   closeButton: {
