@@ -55,8 +55,10 @@ export default {
     },
     extra: {
       spotifyClientId: process.env.EXPO_PUBLIC_SPOTIFY_CLIENT_ID,
-      //   spotifyRedirectUri: process.env.EXPO_PUBLIC_SPOTIFY_REDIRECT_URI,
       spotifyRedirectUri: "tunetrack://redirect", // For testing only
+      eas: {
+        projectId: "60653866-b625-4057-a406-77ce83ab8688",
+      },
     },
   },
 };
