@@ -14,6 +14,8 @@ export default {
       supportsTablet: true,
     },
     android: {
+      package: "com.mycompany.myapp",
+      versionCode: 1,
       adaptiveIcon: {
         foregroundImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#ffffff",
