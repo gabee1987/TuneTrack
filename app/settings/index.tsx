@@ -1,26 +1,23 @@
-import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Modal } from "react-native";
+import React from "react";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import AppButton from "@/components/AppButton";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import GradientBackground from "@/components/ui/GradientBackground";
+import { useTranslation } from "react-i18next";
 
 export default function SettingsScreen() {
   const router = useRouter();
-  const [modalVisible, setModalVisible] = useState(false);
+  const { t } = useTranslation();
 
   const handleChangeSpotifyMode = () => {
     router.push("/settings/spotify-mode");
   };
 
+  // Handle language change
   const handleLanguageChange = () => {
-    // Show the "Coming Soon" modal when the language change button is pressed.
-    setModalVisible(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
+    router.push("/settings/language");
   };
 
   const handleBack = () => {
@@ -38,39 +35,22 @@ export default function SettingsScreen() {
 
         <View style={styles.logoContainer}>
           <ThemedText type="defaultSemiBold" style={styles.title}>
-            Beallítások
+            {t("settings_title")}
           </ThemedText>
         </View>
 
         <View style={styles.container}>
           <AppButton
             style={styles.menuButton}
-            title="Spotify mód módosítása"
+            title={t("settings_spotify_mode")}
             onPress={handleChangeSpotifyMode}
           />
           <AppButton
             style={styles.menuButton}
-            title="Nyelv módosítása"
+            title={t("settings_language")}
             onPress={handleLanguageChange}
           />
         </View>
-
-        {/* Modal for language change - Coming Soon */}
-        <Modal
-          visible={modalVisible}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={handleCloseModal}
-        >
-          <View style={modalStyles.modalOverlay}>
-            <View style={modalStyles.modalContent}>
-              <ThemedText type="defaultSemiBold" style={modalStyles.modalTitle}>
-                Hamarosan!
-              </ThemedText>
-              <AppButton title="Vissza" onPress={handleCloseModal} />
-            </View>
-          </View>
-        </Modal>
       </GradientBackground>
     </View>
   );
@@ -81,6 +61,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
+    width: "100%",
   },
   statusBar: {
     width: "100%",
@@ -107,34 +88,8 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 16,
   },
-  buttonContainer: {
-    width: "100%",
-    alignItems: "center",
-  },
   menuButton: {
     width: "70%",
     marginBottom: 20,
-  },
-});
-
-const modalStyles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContent: {
-    width: "80%",
-    backgroundColor: "#222",
-    borderRadius: 10,
-    padding: 20,
-    alignItems: "center",
-  },
-  modalTitle: {
-    fontSize: 28,
-    marginBottom: 20,
-    color: "#fff",
-    lineHeight: 30,
   },
 });

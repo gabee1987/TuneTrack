@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingVertical: 15,
     paddingHorizontal: 40,
-    borderRadius: 30,
+    borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
     // iOS Shadow

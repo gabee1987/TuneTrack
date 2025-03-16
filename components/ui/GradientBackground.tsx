@@ -20,5 +20,10 @@ export default function GradientBackground({
 const styles = StyleSheet.create({
   gradientBackground: {
     flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: "100%",
+    position: "relative",
   },
 });

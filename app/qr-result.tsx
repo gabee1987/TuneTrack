@@ -13,10 +13,11 @@ import { playSpotifyTrack } from "@/services/spotifyPlaybackService";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import EqualizerAnimation from "@/components/EqualizerAnimation";
-import { t } from "@/localization/i18n";
+import { useTranslation } from "react-i18next";
 
 function QrResultScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const params = useLocalSearchParams();
   const qrData = Array.isArray(params.qrData)
     ? params.qrData[0]

@@ -8,7 +8,7 @@ import { SPOTIFY_SCOPES } from "@/constants/spotifyScopes";
 import AppButton from "@/components/AppButton";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
-import { t } from "@/localization/i18n";
+import { useTranslation } from "react-i18next";
 
 // Retrieve your client ID from app.config.js via Constants.expoConfig.extra
 const CLIENT_ID = Constants.expoConfig?.extra?.spotifyClientId;
@@ -31,6 +31,7 @@ const discovery = {
 
 function SpotifyConnectScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Set up the PKCE flow: request an authorization code

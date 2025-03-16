@@ -1,6 +1,5 @@
-// localization/LanguageContext.tsx
 import React, { createContext, useState, useEffect, ReactNode } from "react";
-import { initLocale, setLocale, t } from "@/localization/i18n";
+import { initLocale, setLocale } from "@/localization/i18n";
 import i18n from "@/localization/i18n";
 
 type LanguageContextType = {
@@ -9,17 +8,17 @@ type LanguageContextType = {
 };
 
 export const LanguageContext = createContext<LanguageContextType>({
-  language: (i18n as any).locale,
+  language: i18n.language,
   setLanguage: async () => {},
 });
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguageState] = useState<string>((i18n as any).locale);
+  const [language, setLanguageState] = useState<string>(i18n.language);
 
   useEffect(() => {
     async function loadLocale() {
       await initLocale();
-      setLanguageState((i18n as any).locale);
+      setLanguageState(i18n.language);
     }
     loadLocale();
   }, []);

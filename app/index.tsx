@@ -5,10 +5,11 @@ import AppButton from "@/components/AppButton";
 import { getStoredSpotifyToken } from "@/services/spotifyAuthService";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
-import { t } from "@/localization/i18n";
+import { useTranslation } from "react-i18next";
 
 function MainScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [isSpotifyConnected, setIsSpotifyConnected] = useState(false);
 
   useEffect(() => {

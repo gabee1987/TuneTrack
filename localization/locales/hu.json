@@ -1,4 +1,9 @@
 {
+  "settings_title": "Beállítások",
+  "settings_spotify_mode": "Spotify mód módosítása",
+  "settings_language": "Nyelv módosítása",
+  "settings_coming_soon": "Hamarosan!",
+  "settings_modal_select_language": "Nyelv kiválasztása",
   "settings_spotify_mode_title": "Spotify Premium?",
   "settings_spotify_mode_subtitle": "Válaszd a Spotify Free-t, ha nincs fizetős Spotify fiókod. Más esetben a jobb élmény érdekében válaszd a Spotify Premium-ot. További tájékoztatásért látogass el a spotify.com-ra.",
   "settings_spotify_mode_free": "Spotify Free",

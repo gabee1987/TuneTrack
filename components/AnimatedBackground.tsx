@@ -22,8 +22,8 @@ const COLOR_SETS = [
 ];
 
 // Configurable constants
-const BUBBLE_COUNT = 3; // Allow fewer bubbles
-const BUBBLE_MIN_SIZE = 300; // Larger circles for a more noticeable effect
+const BUBBLE_COUNT = 4; // Allow fewer bubbles
+const BUBBLE_MIN_SIZE = 100; // Larger circles for a more noticeable effect
 const BUBBLE_MAX_SIZE = 800; // Max size increased for better bokeh effect
 
 export default function AnimatedBackground() {

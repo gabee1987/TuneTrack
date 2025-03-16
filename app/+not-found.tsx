@@ -1,13 +1,15 @@
 import React from "react"; // Added explicit import
 import { Link, router, Stack } from "expo-router";
 import { StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { t } from "@/localization/i18n";
 import AppButton from "@/components/AppButton";
 
 function NotFoundScreen() {
+  const { t } = useTranslation();
+
   function goHome() {
     router.push("/");
   }
@@ -17,7 +19,7 @@ function NotFoundScreen() {
       <ThemedView style={styles.container}>
         <ThemedText type="title">{t("not_found_message")}</ThemedText>
         <Link href="/" style={styles.link}>
-          <ThemedText type="link">Go to home screen!</ThemedText>
+          <ThemedText type="subtitle">{t("not_found_link")}</ThemedText>
           <AppButton title={t("not_found_link")} onPress={goHome} />
         </Link>
       </ThemedView>

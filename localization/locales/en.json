@@ -1,4 +1,9 @@
 {
+  "settings_title": "Settings",
+  "settings_spotify_mode": "Change Spotify Mode",
+  "settings_language": "Change Language",
+  "settings_coming_soon": "Coming Soon!",
+  "settings_modal_select_language": "Select Language",
   "settings_spotify_mode_title": "Spotify Premium?",
   "settings_spotify_mode_subtitle": "Choose Spotify Free if you don't have a paid Spotify account. Otherwise, choose Spotify Premium for a better experience. For more information, visit spotify.com.",
   "settings_spotify_mode_free": "Spotify Free",

@@ -3,12 +3,13 @@ import { View, StyleSheet, Button, TouchableOpacity } from "react-native";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
-import { t } from "@/localization/i18n";
+import { useTranslation } from "react-i18next";
 
 function CameraScreen() {
   const [facing, setFacing] = useState<CameraType>("back"); // Default to back camera
   const [permission, requestPermission] = useCameraPermissions(); // Camera permission hook
   const router = useRouter();
+  const { t } = useTranslation();
 
   // Handle barcode scanning
   const handleBarcodeScanned = (scanningResult: {

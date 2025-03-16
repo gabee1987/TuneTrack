@@ -1,35 +1,39 @@
-// localization/i18n.ts
-import i18n from "i18n-js";
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 import * as Localization from "expo-localization";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// Load your translations
-const en = require("@/localization/locales/en.json");
-const hu = require("@/localization/locales/hu.json");
+// Import translations
+import en from "@/localization/locales/en.json";
+import hu from "@/localization/locales/hu.json";
 
-// Use type assertions to bypass outdated types:
-(i18n as any).translations = { en, hu };
-(i18n as any).fallbacks = true;
+// Get the default device language
+const defaultLocale = Localization.getLocales()[0]?.languageCode || "en";
 
-const defaultLocale = Localization.locale.split("-")[0] || "en";
-(i18n as any).locale = defaultLocale;
+// Load translations
+const resources = { en: { translation: en }, hu: { translation: hu } };
 
-// Export a helper function for translation
-export const t = (key: string, config?: any) => (i18n as any).t(key, config);
+i18n.use(initReactI18next).init({
+  resources,
+  lng: defaultLocale,
+  fallbackLng: "en",
+  interpolation: { escapeValue: false },
+});
 
-// Function to change the locale and persist it
-export async function setLocale(locale: string) {
-  (i18n as any).locale = locale;
-  await AsyncStorage.setItem("userLocale", locale);
+// Custom `t()` function for simpler import
+export const t = (key: string, options?: any) => i18n.t(key, options);
+
+// Function to set locale
+export async function setLocale(lang: string) {
+  await i18n.changeLanguage(lang);
+  await AsyncStorage.setItem("userLocale", lang);
 }
 
-// Function to initialize the locale from storage (if available)
+// Function to load saved language
 export async function initLocale() {
-  const storedLocale = await AsyncStorage.getItem("userLocale");
-  if (storedLocale) {
-    (i18n as any).locale = storedLocale;
-  } else {
-    (i18n as any).locale = defaultLocale;
+  const savedLocale = await AsyncStorage.getItem("userLocale");
+  if (savedLocale) {
+    await i18n.changeLanguage(savedLocale);
   }
 }
 

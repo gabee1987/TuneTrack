@@ -4,10 +4,11 @@ import { View, StyleSheet, TouchableOpacity } from "react-native";
 import AnimatedBackground from "../components/AnimatedBackground";
 import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
-import { t } from "@/localization/i18n";
+import { useTranslation } from "react-i18next";
 
 function WarnNetworkScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const handleOk = () => {
     // Request camera permissions next

@@ -7,9 +7,11 @@ import { router } from "expo-router";
 import GradientBackground from "@/components/ui/GradientBackground";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
-import { t } from "@/localization/i18n";
+import { useTranslation } from "react-i18next";
 
 function GameRulesScreen() {
+  const { t } = useTranslation();
+
   const handleBack = () => {
     router.back();
   };

@@ -6,10 +6,11 @@ import AppButton from "@/components/AppButton";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import GradientBackground from "@/components/ui/GradientBackground";
-import { t } from "@/localization/i18n";
+import { useTranslation } from "react-i18next";
 
 function SpotifyModeScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const handleFree = () => {
     // Logic: set app mode to "Spotify Free" here
