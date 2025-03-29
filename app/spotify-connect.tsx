@@ -17,8 +17,9 @@ const CLIENT_ID = Constants.expoConfig?.extra?.spotifyClientId;
 // Generate the redirect URI (must match Spotify Developer Dashboard)
 const REDIRECT_URI = AuthSession.makeRedirectUri({
   scheme: "tunetrack",
-  path: "tunetrack://redirect",
-  native: "tunetrack://spotify-connect",
+  path: "redirect",
+  // path: "tunetrack://redirect",
+  // native: "tunetrack://spotify-connect",
   // useProxy: false,
 });
 
@@ -49,12 +50,20 @@ function SpotifyConnectScreen() {
 
   // When the auth response arrives, exchange the code for tokens.
   useEffect(() => {
+    console.log("Auth request:", request);
+    console.log("Auth response:", response);
+    console.log("Redirect URI:", REDIRECT_URI);
+    console.log("Client ID:", CLIENT_ID);
+
     // Check if response is successful and has a code.
     if (response?.type === "success") {
       const params = (response as any).params; // Type assertion
+      console.log("Response params:", params);
+
       if (params?.code) {
         async function exchangeCode() {
           try {
+            console.log("Exchanging code for token...");
             const tokenResponse = await AuthSession.exchangeCodeAsync(
               {
                 clientId: CLIENT_ID,
@@ -64,6 +73,8 @@ function SpotifyConnectScreen() {
               },
               discovery
             );
+            console.log("Token response:", tokenResponse);
+
             // Provide a default value for expiresIn if undefined
             const expiresIn = tokenResponse.expiresIn ?? 3600;
             const tokenData = {
@@ -76,6 +87,7 @@ function SpotifyConnectScreen() {
               TOKEN_KEY,
               JSON.stringify(tokenData)
             );
+            console.log("Token successfully saved to SecureStore.");
             setIsLoggedIn(true);
             router.replace("/");
           } catch (error) {
@@ -84,22 +96,36 @@ function SpotifyConnectScreen() {
         }
         exchangeCode();
       }
+    } else if (response?.type === "error") {
+      console.error("Auth session error:", response.error);
+    } else {
+      console.log("No valid auth response yet.");
     }
   }, [response, request]);
 
   async function handleSpotifyLogin() {
+    console.log("Prompting Spotify login...");
     if (request) {
       await promptAsync();
+    } else {
+      console.warn("Auth request not ready yet.");
     }
   }
 
   async function checkTokenOnLoad() {
+    console.log("Checking existing Spotify token in SecureStore...");
     const data = await SecureStore.getItemAsync(TOKEN_KEY);
     if (data) {
       const parsed = JSON.parse(data);
+      console.log("Stored token data:", parsed);
       if (parsed.expiration_time > Date.now()) {
         setIsLoggedIn(true);
+        console.log("Token is still valid.");
+      } else {
+        console.log("Token has expired.");
       }
+    } else {
+      console.log("No token found.");
     }
   }
 

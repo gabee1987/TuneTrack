@@ -74,14 +74,15 @@ function QrResultScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* <View style={styles.centerContainer}>{<EqualizerAnimation />}</View> */}
+      {/* Middle section – could show equalizer, track info etc. */}
+      <View style={styles.middleContainer}>
+        {/* Example placeholder: */}
+        {/* <EqualizerAnimation /> */}
+      </View>
 
-      {/* Swipe instruction container */}
+      {/* Bottom swipe instruction */}
       <Animated.View
-        style={[
-          styles.swipeContainer,
-          { transform: pan.getTranslateTransform() },
-        ]}
+        style={styles.swipeContainer}
         {...panResponder.panHandlers}
       >
         <View style={styles.swipeContent}>
@@ -103,6 +104,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#222",
     paddingTop: 50,
+    justifyContent: "space-between", // Push top & bottom content
     alignItems: "center",
   },
   statusBar: {
@@ -121,24 +123,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  centerContainer: {
+  middleContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    width: "100%",
   },
   swipeContainer: {
-    position: "absolute",
-    bottom: 60,
-    width: "60%",
-    // backgroundColor: "#fff",
-    // borderRadius: 50,
-    paddingVertical: 15,
+    paddingVertical: 25,
     alignItems: "center",
+    width: "100%",
   },
   swipeContent: {
     flexDirection: "row",
     alignItems: "center",
-    width: "100%",
   },
   swipeText: {
     marginHorizontal: 10,

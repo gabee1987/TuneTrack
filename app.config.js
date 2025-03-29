@@ -14,14 +14,13 @@ export default {
       supportsTablet: true,
     },
     android: {
-      package: "com.gabee.tunetrack",
+      package: "com.gabee1987.tunetrack",
       versionCode: 1,
       adaptiveIcon: {
         foregroundImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#ffffff",
       },
       permissions: ["CAMERA", "RECORD_AUDIO"],
-      package: "com.gabee1987.tunetrack",
     },
     web: {
       bundler: "metro",

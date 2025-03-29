@@ -52,6 +52,8 @@ function CameraScreen() {
   return (
     <View style={styles.container}>
       <CameraView
+        autofocus="on"
+        focusable={true}
         style={styles.camera}
         facing={facing} // Front or back camera
         onBarcodeScanned={handleBarcodeScanned} // Barcode scanning callback

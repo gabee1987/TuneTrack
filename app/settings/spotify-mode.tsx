@@ -15,12 +15,12 @@ function SpotifyModeScreen() {
 
   const handleFree = async () => {
     await setSpotifyMode("free"); // Store 'free' in local storage
-    router.back();
+    router.replace("/");
   };
 
   const handlePremium = async () => {
     await setSpotifyMode("premium"); // Store 'premium' in local storage
-    router.back();
+    router.replace("/");
   };
 
   const handleBack = () => {

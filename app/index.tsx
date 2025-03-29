@@ -6,6 +6,7 @@ import { getStoredSpotifyToken } from "@/services/spotifyAuthService";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
+import { getSpotifyMode } from "@/services/spotifyModeService";
 
 function MainScreen() {
   const router = useRouter();
@@ -18,6 +19,9 @@ function MainScreen() {
 
   async function checkSpotifyConnection() {
     const token = await getStoredSpotifyToken();
+    const mode = await getSpotifyMode();
+
+    const connected = !!token || mode === "free";
     setIsSpotifyConnected(!!token);
   }
 
