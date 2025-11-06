@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import AppButton from "@/components/AppButton";
 import { getStoredSpotifyToken } from "@/services/spotifyAuthService";
 import { ThemedText } from "@/components/ThemedText";
@@ -13,16 +13,22 @@ function MainScreen() {
   const { t } = useTranslation();
   const [isSpotifyConnected, setIsSpotifyConnected] = useState(false);
 
-  useEffect(() => {
-    checkSpotifyConnection();
-  }, []);
+  // Check connection status on mount and when screen comes into focus
+  useFocusEffect(
+    React.useCallback(() => {
+      checkSpotifyConnection();
+    }, [])
+  );
 
   async function checkSpotifyConnection() {
     const token = await getStoredSpotifyToken();
     const mode = await getSpotifyMode();
 
-    const connected = !!token || mode === "free";
-    setIsSpotifyConnected(!!token);
+    // User is connected if they have a token OR if they're in free mode
+    // Free mode users can scan QR codes without login
+    // If no mode is set yet, we allow access (they can choose mode later)
+    const connected = !!token || mode === "free" || mode === null;
+    setIsSpotifyConnected(connected);
   }
 
   const handleReadRules = () => {
