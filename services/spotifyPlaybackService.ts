@@ -53,3 +53,33 @@ export async function playSpotifyTrack(uri: string): Promise<void> {
     console.error("Error playing Spotify track:", err);
   }
 }
+
+export async function stopSpotifyPlayback(): Promise<void> {
+  try {
+    const mode = await getSpotifyMode();
+    if (mode !== "premium") {
+      console.log("Stop playback not supported for current Spotify mode.");
+      return;
+    }
+
+    const tokenData = await getStoredSpotifyToken();
+    if (!tokenData?.access_token) {
+      console.warn("No Spotify access token found. Cannot stop playback.");
+      return;
+    }
+
+    const pauseResponse = await fetch("https://api.spotify.com/v1/me/player/pause", {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${tokenData.access_token}`,
+      },
+    });
+
+    if (!pauseResponse.ok && pauseResponse.status !== 204) {
+      const errorDetails = await pauseResponse.text();
+      console.warn("Failed to pause Spotify playback:", errorDetails);
+    }
+  } catch (error) {
+    console.error("Error stopping Spotify playback:", error);
+  }
+}
