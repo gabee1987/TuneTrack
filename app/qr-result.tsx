@@ -13,19 +13,13 @@ import {
   ScrollView,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import {
-  playSpotifyTrack,
-  stopSpotifyPlayback,
-} from "@/services/spotifyPlaybackService";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import EqualizerAnimation from "@/components/EqualizerAnimation";
 import { useTranslation } from "react-i18next";
 import * as Clipboard from "expo-clipboard";
-import {
-  fetchSpotifyTrackDetails,
-  SpotifyTrackDetails,
-} from "@/services/spotifyTrackService";
+import { spotifyServices } from "@/modules/spotify/di/spotifyServiceLocator";
+import { SpotifyTrackDetails } from "@/modules/spotify/domain/SpotifyTrack";
 
 function QrResultScreen() {
   const router = useRouter();
@@ -83,7 +77,11 @@ function QrResultScreen() {
     }
 
     if (trackUri) {
-      playSpotifyTrack(trackUri);
+      spotifyServices.playbackService
+        .playTrack(trackUri)
+        .catch((error) =>
+          console.error("Failed to start Spotify playback", error)
+        );
       return;
     }
 
@@ -100,7 +98,8 @@ function QrResultScreen() {
     }
 
     setIsFetchingDetails(true);
-    fetchSpotifyTrackDetails(trackId)
+    spotifyServices.trackService
+      .fetchDetails(trackId)
       .then((details) => {
         if (!cancelled) {
           setTrackDetails(details);
@@ -269,7 +268,7 @@ function QrResultScreen() {
 
   const handleStopAndScan = useCallback(async () => {
     setShowHeaderDetails(false);
-    await stopSpotifyPlayback();
+    await spotifyServices.playbackService.stopPlayback();
     router.push("/camera");
   }, [router]);
 

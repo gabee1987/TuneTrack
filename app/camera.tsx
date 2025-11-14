@@ -4,8 +4,6 @@ import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { useTranslation } from "react-i18next";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { useAutofocus } from "@/hooks/useAutofocus";
 import { Ionicons } from "@expo/vector-icons";
 
 function CameraScreen() {
@@ -13,16 +11,6 @@ function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions(); // Camera permission hook
   const router = useRouter();
   const { t } = useTranslation();
-
-  const { isRefreshing, onTap } = useAutofocus();
-  const tap = Gesture.Tap().onStart(() => {
-    try {
-      console.log("Tap to refocus");
-      onTap();
-    } catch (e) {
-      console.error("Tap gesture error:", e);
-    }
-  });
 
   // Handle barcode scanning
   const handleBarcodeScanned = (scanningResult: {
@@ -63,7 +51,6 @@ function CameraScreen() {
   }
 
   return (
-    // <GestureDetector gesture={tap}>
     <View style={styles.container}>
       <CameraView
         // autofocus={isRefreshing ? "off" : "on"}
@@ -108,7 +95,6 @@ function CameraScreen() {
         </View>
       </CameraView>
     </View>
-    // </GestureDetector>
   );
 }
 

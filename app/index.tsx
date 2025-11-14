@@ -1,35 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { View, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
 import { useRouter, useFocusEffect } from "expo-router";
 import AppButton from "@/components/AppButton";
-import { getStoredSpotifyToken } from "@/services/spotifyAuthService";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import { getSpotifyMode } from "@/services/spotifyModeService";
+import { useSpotifyConnection } from "@/modules/spotify/hooks/useSpotifyConnection";
 
 function MainScreen() {
   const router = useRouter();
   const { t } = useTranslation();
-  const [isSpotifyConnected, setIsSpotifyConnected] = useState(false);
+  const { isConnected, refresh } = useSpotifyConnection();
 
   // Check connection status on mount and when screen comes into focus
   useFocusEffect(
     React.useCallback(() => {
-      checkSpotifyConnection();
-    }, [])
+      refresh();
+    }, [refresh])
   );
-
-  async function checkSpotifyConnection() {
-    const token = await getStoredSpotifyToken();
-    const mode = await getSpotifyMode();
-
-    // User is connected if they have a token OR if they're in free mode
-    // Free mode users can scan QR codes without login
-    // If no mode is set yet, we allow access (they can choose mode later)
-    const connected = !!token || mode === "free" || mode === null;
-    setIsSpotifyConnected(connected);
-  }
 
   const handleReadRules = () => {
     router.push("/game-rules");
@@ -46,7 +34,7 @@ function MainScreen() {
   const handleSettingsPress = () => {
     router.push({
       pathname: "/settings",
-      params: { isSpotifyConnected: isSpotifyConnected.toString() },
+      params: { isSpotifyConnected: isConnected.toString() },
     });
   };
 
@@ -75,7 +63,7 @@ function MainScreen() {
             title={t("index_read_rules")}
             onPress={handleReadRules}
           />
-          {isSpotifyConnected ? (
+          {isConnected ? (
             <AppButton
               style={styles.menuButton}
               title={t("index_start_game")}

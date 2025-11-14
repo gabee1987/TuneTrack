@@ -1,5 +1,5 @@
 // components/AnimatedBlurredBlobs.tsx
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { StyleSheet, Dimensions, View } from "react-native";
 import Svg, { Defs, Filter, FeGaussianBlur, Circle } from "react-native-svg";
 import Animated, {
@@ -31,23 +31,61 @@ const BLOB_MAX_SIZE = 500;
 // Create an animated version of the SVG Circle
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-type BlobType = {
-  x: Animated.SharedValue<number>;
-  y: Animated.SharedValue<number>;
-  size: Animated.SharedValue<number>;
-};
-
 type AnimatedBlobProps = {
-  blob: BlobType;
   fill: string;
 };
 
-function AnimatedBlob({ blob, fill }: AnimatedBlobProps) {
+function AnimatedBlob({ fill }: AnimatedBlobProps) {
+  const initialMetrics = useMemo(
+    () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      size: BLOB_MIN_SIZE + Math.random() * (BLOB_MAX_SIZE - BLOB_MIN_SIZE),
+      durationX: 30000 + Math.random() * 10000,
+      durationY: 30000 + Math.random() * 10000,
+      durationSize: 20000 + Math.random() * 10000,
+    }),
+    []
+  );
+
+  const x = useSharedValue(initialMetrics.x);
+  const y = useSharedValue(initialMetrics.y);
+  const size = useSharedValue(initialMetrics.size);
+
+  const { durationX, durationY, durationSize } = initialMetrics;
+
+  useEffect(() => {
+    x.value = withRepeat(
+      withTiming(Math.random() * width, {
+        duration: durationX,
+        easing: Easing.linear,
+      }),
+      -1,
+      true
+    );
+    y.value = withRepeat(
+      withTiming(Math.random() * height, {
+        duration: durationY,
+        easing: Easing.linear,
+      }),
+      -1,
+      true
+    );
+    size.value = withRepeat(
+      withTiming(
+        BLOB_MIN_SIZE + Math.random() * (BLOB_MAX_SIZE - BLOB_MIN_SIZE),
+        { duration: durationSize, easing: Easing.linear }
+      ),
+      -1,
+      true
+    );
+  }, [durationX, durationY, durationSize, size, x, y]);
+
   // Animate the Circle's properties
   const animatedProps = useAnimatedProps(() => ({
-    cx: blob.x.value,
-    cy: blob.y.value,
-    r: blob.size.value / 2,
+    cx: x.value,
+    cy: y.value,
+    r: size.value / 2,
   }));
 
   return <AnimatedCircle animatedProps={animatedProps} fill={fill} />;
@@ -88,50 +126,6 @@ export default function AnimatedBlurredBlobs() {
     };
   });
 
-  // Create a stable array of blob objects with shared values for position and size
-  const blobsRef = useRef<BlobType[]>(
-    Array.from({ length: BLOB_COUNT }).map(() => ({
-      x: useSharedValue(Math.random() * width),
-      y: useSharedValue(Math.random() * height),
-      size: useSharedValue(
-        BLOB_MIN_SIZE + Math.random() * (BLOB_MAX_SIZE - BLOB_MIN_SIZE)
-      ),
-    }))
-  );
-
-  // Animate each blob's position and size
-  useEffect(() => {
-    blobsRef.current.forEach((blob) => {
-      const durX = 30000 + Math.random() * 10000;
-      const durY = 30000 + Math.random() * 10000;
-      const durSize = 20000 + Math.random() * 10000;
-      blob.x.value = withRepeat(
-        withTiming(Math.random() * width, {
-          duration: durX,
-          easing: Easing.linear,
-        }),
-        -1,
-        true
-      );
-      blob.y.value = withRepeat(
-        withTiming(Math.random() * height, {
-          duration: durY,
-          easing: Easing.linear,
-        }),
-        -1,
-        true
-      );
-      blob.size.value = withRepeat(
-        withTiming(
-          BLOB_MIN_SIZE + Math.random() * (BLOB_MAX_SIZE - BLOB_MIN_SIZE),
-          { duration: durSize, easing: Easing.linear }
-        ),
-        -1,
-        true
-      );
-    });
-  }, []);
-
   return (
     <View style={styles.container}>
       {/* Animated background color */}
@@ -144,12 +138,8 @@ export default function AnimatedBlurredBlobs() {
             <FeGaussianBlur in="SourceGraphic" stdDeviation="20" />
           </Filter>
         </Defs>
-        {blobsRef.current.map((blob, index) => (
-          <AnimatedBlob
-            key={index}
-            blob={blob}
-            fill={colorSet[index % colorSet.length]}
-          />
+        {Array.from({ length: BLOB_COUNT }).map((_, index) => (
+          <AnimatedBlob key={index} fill={colorSet[index % colorSet.length]} />
         ))}
       </Svg>
 

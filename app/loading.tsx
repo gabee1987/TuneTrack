@@ -7,11 +7,11 @@ function LoadingScreen() {
   const router = useRouter();
 
   useEffect(() => {
-    setTimeout(() => {
-      // Navigate to the main screen (app/index.tsx -> '/')
+    const timeout = setTimeout(() => {
       router.replace("/");
     }, 2000);
-  }, []);
+    return () => clearTimeout(timeout);
+  }, [router]);
 
   return (
     <View style={styles.container}>

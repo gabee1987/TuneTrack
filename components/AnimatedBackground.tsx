@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import { BlurView } from "expo-blur";
 import Animated, {
@@ -26,6 +26,64 @@ const BUBBLE_COUNT = 4; // Allow fewer bubbles
 const BUBBLE_MIN_SIZE = 100; // Larger circles for a more noticeable effect
 const BUBBLE_MAX_SIZE = 800; // Max size increased for better bokeh effect
 
+function AnimatedCircle() {
+  const initialMetrics = useMemo(
+    () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      size:
+        BUBBLE_MIN_SIZE + Math.random() * (BUBBLE_MAX_SIZE - BUBBLE_MIN_SIZE),
+      durationX: 25000 + Math.random() * 10000,
+      durationY: 25000 + Math.random() * 10000,
+      durationSize: 20000 + Math.random() * 10000,
+    }),
+    []
+  );
+
+  const x = useSharedValue(initialMetrics.x);
+  const y = useSharedValue(initialMetrics.y);
+  const size = useSharedValue(initialMetrics.size);
+
+  const { durationX, durationY, durationSize } = initialMetrics;
+
+  useEffect(() => {
+    x.value = withRepeat(
+      withTiming(Math.random() * width, {
+        duration: durationX,
+        easing: Easing.linear,
+      }),
+      -1,
+      true
+    );
+    y.value = withRepeat(
+      withTiming(Math.random() * height, {
+        duration: durationY,
+        easing: Easing.linear,
+      }),
+      -1,
+      true
+    );
+    size.value = withRepeat(
+      withTiming(
+        BUBBLE_MIN_SIZE + Math.random() * (BUBBLE_MAX_SIZE - BUBBLE_MIN_SIZE),
+        { duration: durationSize, easing: Easing.linear }
+      ),
+      -1,
+      true
+    );
+  }, [durationSize, durationX, durationY, x, y, size]);
+
+  const circleStyle = useAnimatedStyle(() => ({
+    left: x.value - size.value / 2,
+    top: y.value - size.value / 2,
+    width: size.value,
+    height: size.value,
+    borderRadius: size.value / 2,
+  }));
+
+  return <Animated.View style={[styles.circle, circleStyle]} />;
+}
+
 export default function AnimatedBackground() {
   // 1) Pick a random color set on mount
   const colorSet = useMemo(
@@ -45,7 +103,6 @@ export default function AnimatedBackground() {
   }, [progress]);
 
   const backgroundStyle = useAnimatedStyle(() => {
-    const segment = 1 / (colorSet.length - 1);
     const floatIndex = progress.value * (colorSet.length - 1);
     const idxStart = Math.floor(floatIndex);
     const idxEnd = Math.min(idxStart + 1, colorSet.length - 1);
@@ -65,68 +122,11 @@ export default function AnimatedBackground() {
     };
   });
 
-  // 3) Create stable array of circles
-  const circlesRef = useRef(
-    Array.from({ length: BUBBLE_COUNT }).map(() => ({
-      x: useSharedValue(Math.random() * width),
-      y: useSharedValue(Math.random() * height),
-      size: useSharedValue(
-        BUBBLE_MIN_SIZE + Math.random() * (BUBBLE_MAX_SIZE - BUBBLE_MIN_SIZE)
-      ),
-    }))
-  );
-
-  // 4) Animate the circles
-  useEffect(() => {
-    circlesRef.current.forEach((circle) => {
-      const durX = 25000 + Math.random() * 10000; // Slower movement
-      const durY = 25000 + Math.random() * 10000;
-      const durSize = 20000 + Math.random() * 10000;
-
-      circle.x.value = withRepeat(
-        withTiming(Math.random() * width, {
-          duration: durX,
-          easing: Easing.linear,
-        }),
-        -1,
-        true
-      );
-      circle.y.value = withRepeat(
-        withTiming(Math.random() * height, {
-          duration: durY,
-          easing: Easing.linear,
-        }),
-        -1,
-        true
-      );
-      circle.size.value = withRepeat(
-        withTiming(
-          BUBBLE_MIN_SIZE + Math.random() * (BUBBLE_MAX_SIZE - BUBBLE_MIN_SIZE),
-          { duration: durSize, easing: Easing.linear }
-        ),
-        -1,
-        true
-      );
-    });
-  }, []);
-
   return (
     <View style={styles.container}>
       <Animated.View style={[StyleSheet.absoluteFill, backgroundStyle]} />
-      {circlesRef.current.map(({ x, y, size }, i) => (
-        <Animated.View
-          key={i}
-          style={[
-            styles.circle,
-            useAnimatedStyle(() => ({
-              left: x.value - size.value / 2,
-              top: y.value - size.value / 2,
-              width: size.value,
-              height: size.value,
-              borderRadius: size.value / 2,
-            })),
-          ]}
-        />
+      {Array.from({ length: BUBBLE_COUNT }).map((_, index) => (
+        <AnimatedCircle key={index} />
       ))}
       <BlurView style={styles.blurContainer} intensity={30} tint="dark" />
     </View>

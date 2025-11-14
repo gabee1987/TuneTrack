@@ -1,6 +1,6 @@
 // components/DynamicEqualizer.tsx
 import React, { useEffect } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -9,8 +9,6 @@ import Animated, {
   Easing,
   interpolateColor,
 } from "react-native-reanimated";
-
-const { width } = Dimensions.get("window");
 
 // Configurable parameters for the equalizer:
 const CONFIG = {
@@ -29,6 +27,29 @@ const phases = Array.from({ length: CONFIG.BAR_COUNT }).map(
   () => Math.random() * 2 * Math.PI
 );
 
+type EqualizerBarProps = {
+  phase: number;
+  time: Animated.SharedValue<number>;
+};
+
+function EqualizerBar({ phase, time }: EqualizerBarProps) {
+  const animatedStyle = useAnimatedStyle(() => {
+    const sineValue = Math.sin(time.value + phase);
+    const scaleY = 1 + CONFIG.AMPLITUDE * sineValue;
+    const backgroundColor = interpolateColor(
+      sineValue,
+      [-1, 1],
+      [CONFIG.MIN_COLOR, CONFIG.MAX_COLOR]
+    );
+    return {
+      transform: [{ scaleY }],
+      backgroundColor,
+    };
+  });
+
+  return <Animated.View style={[styles.bar, animatedStyle]} />;
+}
+
 export default function DynamicEqualizer() {
   // Shared time value that loops from 0 to 2π infinitely.
   const time = useSharedValue(0);
@@ -46,27 +67,9 @@ export default function DynamicEqualizer() {
 
   return (
     <View style={styles.container}>
-      {phases.map((phase, index) => {
-        const animatedStyle = useAnimatedStyle(() => {
-          // Compute sine value between -1 and 1:
-          const sineValue = Math.sin(time.value + phase);
-          // Compute scale factor: scales between (1 - AMPLITUDE) and (1 + AMPLITUDE)
-          const scaleY = 1 + CONFIG.AMPLITUDE * sineValue;
-          // Interpolate color based on sineValue:
-          const backgroundColor = interpolateColor(
-            sineValue,
-            [-1, 1],
-            [CONFIG.MIN_COLOR, CONFIG.MAX_COLOR]
-          );
-          return {
-            transform: [{ scaleY }],
-            backgroundColor,
-          };
-        });
-        return (
-          <Animated.View key={index} style={[styles.bar, animatedStyle]} />
-        );
-      })}
+      {phases.map((phase, index) => (
+        <EqualizerBar key={index} phase={phase} time={time} />
+      ))}
     </View>
   );
 }

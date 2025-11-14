@@ -7,19 +7,19 @@ import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import GradientBackground from "@/components/ui/GradientBackground";
 import { useTranslation } from "react-i18next";
-import { setSpotifyMode } from "@/services/spotifyModeService";
+import { spotifyServices } from "@/modules/spotify/di/spotifyServiceLocator";
 
 function SpotifyModeScreen() {
   const router = useRouter();
   const { t } = useTranslation();
 
   const handleFree = async () => {
-    await setSpotifyMode("free"); // Store 'free' in local storage
+    await spotifyServices.modeService.setMode("free"); // Store 'free' in local storage
     router.replace("/");
   };
 
   const handlePremium = async () => {
-    await setSpotifyMode("premium"); // Store 'premium' in local storage
+    await spotifyServices.modeService.setMode("premium"); // Store 'premium' in local storage
     router.replace("/");
   };
 
