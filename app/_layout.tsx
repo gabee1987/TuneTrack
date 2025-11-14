@@ -8,6 +8,7 @@ import { useFonts } from "expo-font";
 import { ThemeProvider } from "@/themes/ThemeProvider";
 import { LanguageProvider } from "@/localization/LanguageContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { AnimationSettingsProvider } from "@/contexts/AnimationSettingsContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -37,23 +38,25 @@ function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider>
         <LanguageProvider>
-          <View style={{ flex: 1 }}>
-            <AnimatedBackground />
-            <Stack
-              screenOptions={{
-                headerShown: false,
-                contentStyle: { backgroundColor: "transparent" },
-              }}
-            >
-              <Stack.Screen name="index" />
-              <Stack.Screen name="spotify-connect" />
-              <Stack.Screen name="settings" />
-              <Stack.Screen name="camera" />
-              <Stack.Screen name="qr-result" />
-              <Stack.Screen name="warning" />
-              <Stack.Screen name="game-rules" />
-            </Stack>
-          </View>
+          <AnimationSettingsProvider>
+            <View style={{ flex: 1 }}>
+              <AnimatedBackground />
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                  contentStyle: { backgroundColor: "transparent" },
+                }}
+              >
+                <Stack.Screen name="index" />
+                <Stack.Screen name="spotify-connect" />
+                <Stack.Screen name="settings" />
+                <Stack.Screen name="camera" />
+                <Stack.Screen name="qr-result" />
+                <Stack.Screen name="warning" />
+                <Stack.Screen name="game-rules" />
+              </Stack>
+            </View>
+          </AnimationSettingsProvider>
         </LanguageProvider>
       </ThemeProvider>
     </GestureHandlerRootView>

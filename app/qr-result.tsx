@@ -1,5 +1,11 @@
 // app/qr-result.tsx
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { ComponentProps } from "react";
 import {
   View,
@@ -11,15 +17,18 @@ import {
   Share,
   Linking,
   ScrollView,
+  Animated,
+  Easing,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
-import EqualizerAnimation from "@/components/EqualizerAnimation";
 import { useTranslation } from "react-i18next";
 import * as Clipboard from "expo-clipboard";
 import { spotifyServices } from "@/modules/spotify/di/spotifyServiceLocator";
 import { SpotifyTrackDetails } from "@/modules/spotify/domain/SpotifyTrack";
+import { LinearGradient } from "expo-linear-gradient";
+import AudioBackdrop from "@/components/AudioBackdrop";
 
 function QrResultScreen() {
   const router = useRouter();
@@ -35,6 +44,16 @@ function QrResultScreen() {
   const [isFetchingDetails, setIsFetchingDetails] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(false);
   const [showHeaderDetails, setShowHeaderDetails] = useState(false);
+  const infoReveal = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(infoReveal, {
+      toValue: showHeaderDetails ? 1 : 0,
+      duration: 320,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: false,
+    }).start();
+  }, [showHeaderDetails, infoReveal]);
 
   const trackId = useMemo(() => {
     if (!qrData) {
@@ -187,6 +206,23 @@ function QrResultScreen() {
   const explicitTag = trackDetails?.explicit
     ? t("qr_result_explicit_tag", "Explicit")
     : null;
+  const detailsAvailable = Boolean(trackDetails);
+  const infoContainerAnimatedStyle = {
+    maxHeight: infoReveal.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 260],
+    }),
+    opacity: infoReveal,
+    transform: [
+      {
+        translateY: infoReveal.interpolate({
+          inputRange: [0, 1],
+          outputRange: [20, 0],
+        }),
+      },
+    ],
+  };
+  const nowPlayingPointerEvents = showHeaderDetails ? "auto" : "none";
 
   const handleToggleHeaderDetails = useCallback(() => {
     if (!hasTrack) {
@@ -276,32 +312,60 @@ function QrResultScreen() {
     | Exclude<ComponentProps<typeof Ionicons>["name"], undefined>
     | "logo-spotify";
 
-  const ControlButton = ({
+  type ActionButtonVariant = "primary" | "secondary" | "ghost";
+
+  const ActionButton = ({
     icon,
     label,
     onPress,
     disabled,
+    variant = "primary",
   }: {
-    icon: IoniconName;
+    icon?: IoniconName;
     label: string;
     onPress: () => void;
     disabled?: boolean;
-  }) => (
-    <TouchableOpacity
-      style={[styles.controlButton, disabled && styles.controlButtonDisabled]}
-      onPress={onPress}
-      disabled={disabled}
-      activeOpacity={0.8}
-    >
-      <Ionicons
-        name={icon as ComponentProps<typeof Ionicons>["name"]}
-        size={20}
-        color="#7dffcb"
-        style={styles.controlIcon}
-      />
-      <ThemedText style={styles.controlLabel}>{label}</ThemedText>
-    </TouchableOpacity>
-  );
+    variant?: ActionButtonVariant;
+  }) => {
+    const iconColor =
+      variant === "primary"
+        ? "#7dffcb"
+        : variant === "ghost"
+        ? "#f4fffe"
+        : "#e2f7ff";
+
+    return (
+      <TouchableOpacity
+        style={[
+          styles.actionButton,
+          variant === "secondary" && styles.actionButtonSecondary,
+          variant === "ghost" && styles.actionButtonGhost,
+          disabled && styles.actionButtonDisabled,
+        ]}
+        onPress={onPress}
+        disabled={disabled}
+        activeOpacity={0.86}
+      >
+        {icon ? (
+          <Ionicons
+            name={icon as ComponentProps<typeof Ionicons>["name"]}
+            size={20}
+            color={iconColor}
+            style={styles.actionButtonIcon}
+          />
+        ) : null}
+        <ThemedText
+          style={[
+            styles.actionButtonLabel,
+            variant !== "primary" && styles.actionButtonLabelSecondary,
+          ]}
+          numberOfLines={1}
+        >
+          {label}
+        </ThemedText>
+      </TouchableOpacity>
+    );
+  };
 
   const InfoRow = ({
     icon,
@@ -333,14 +397,57 @@ function QrResultScreen() {
 
   return (
     <View style={styles.container}>
+      <AudioBackdrop />
       <View style={styles.statusBar}>
         <TouchableOpacity style={styles.closeButton} onPress={handleBack}>
           <Ionicons name="close-circle-outline" size={36} color="white" />
         </TouchableOpacity>
       </View>
 
-      <View style={styles.middleContainer}>
-        <ControlButton
+      <View style={styles.content}>
+        <Animated.View
+          style={[styles.songInfoWrapper, infoContainerAnimatedStyle]}
+          pointerEvents={nowPlayingPointerEvents}
+        >
+          <View style={styles.songInfoCard}>
+            {trackDetails?.albumArtUrl ? (
+              <Image
+                source={{ uri: trackDetails.albumArtUrl }}
+                style={styles.songArt}
+              />
+            ) : (
+              <View style={styles.songArtPlaceholder}>
+                <Ionicons
+                  name="musical-notes-outline"
+                  size={42}
+                  color="#7dffcb"
+                />
+              </View>
+            )}
+            <View style={styles.songTextBlock}>
+              <ThemedText style={styles.songTitle} numberOfLines={1}>
+                {trackDetails?.name ||
+                  t("qr_result_playing_now", "Playing now")}
+              </ThemedText>
+              <ThemedText style={styles.songArtists} numberOfLines={1}>
+                {trackDetails?.artistNames.join(", ") ||
+                  t("qr_result_artist_unknown", "Spotify Track")}
+              </ThemedText>
+              <ThemedText style={styles.songMeta} numberOfLines={1}>
+                {albumYearLabel || durationLabel || "-"}
+              </ThemedText>
+              {explicitTag ? (
+                <View style={styles.songBadge}>
+                  <ThemedText style={styles.songBadgeText}>
+                    {explicitTag}
+                  </ThemedText>
+                </View>
+              ) : null}
+            </View>
+          </View>
+        </Animated.View>
+
+        <ActionButton
           icon={
             showHeaderDetails ? "chevron-up-outline" : "musical-notes-outline"
           }
@@ -353,66 +460,28 @@ function QrResultScreen() {
           disabled={!hasTrack}
         />
 
-        {showHeaderDetails ? (
-          <View style={styles.albumCard}>
-            {trackDetails?.albumArtUrl ? (
-              <Image
-                source={{ uri: trackDetails.albumArtUrl }}
-                style={styles.albumArt}
-              />
-            ) : (
-              <View style={styles.albumPlaceholder}>
-                <Ionicons
-                  name="musical-notes-outline"
-                  size={48}
-                  color="#7dffcb"
-                />
-              </View>
-            )}
-            <View style={styles.trackInfo}>
-              <ThemedText style={styles.trackTitle} numberOfLines={1}>
-                {trackDetails?.name ||
-                  t("qr_result_playing_now", "Playing now")}
-              </ThemedText>
-              <ThemedText style={styles.trackSubtitle} numberOfLines={1}>
-                {trackDetails?.artistNames.join(", ") ||
-                  t("qr_result_artist_unknown", "Spotify Track")}
-              </ThemedText>
-              {albumYearLabel ? (
-                <ThemedText style={styles.trackMeta} numberOfLines={1}>
-                  {albumYearLabel}
-                </ThemedText>
-              ) : null}
-            </View>
-          </View>
-        ) : null}
-
-        <View style={styles.equalizerContainer}>
-          <EqualizerAnimation />
-        </View>
-
-        <View style={styles.controlsRow}>
-          <ControlButton
+        <View style={styles.actionStack}>
+          <ActionButton
             icon="information-circle-outline"
             label={t("qr_result_details_button", "Song details")}
             onPress={handleShowDetails}
-            disabled={!trackDetails && !isFetchingDetails}
+            disabled={!detailsAvailable && !isFetchingDetails}
           />
-          <ControlButton
+          <ActionButton
+            variant="secondary"
             icon="copy-outline"
             label={t("qr_result_copy_button", "Copy link")}
             onPress={handleCopyLink}
             disabled={!trackUrl}
           />
-        </View>
-        <View style={styles.controlsRow}>
-          <ControlButton
+          <ActionButton
+            variant="secondary"
             icon="share-social-outline"
             label={t("qr_result_share_button", "Share link")}
             onPress={handleShareLink}
             disabled={!trackUrl}
           />
-          <ControlButton
+          <ActionButton
             icon="logo-spotify"
             label={t("qr_result_open_spotify_button", "Open in Spotify")}
             onPress={handleOpenInSpotify}
@@ -421,8 +490,9 @@ function QrResultScreen() {
         </View>
       </View>
 
-      <View style={styles.nextScanContainer}>
-        <ControlButton
+      <View style={styles.footer}>
+        <ActionButton
+          variant="ghost"
           icon="scan-outline"
           label={t("qr_result_next_scan_button", "Scan next QR")}
           onPress={handleStopAndScan}
@@ -433,111 +503,116 @@ function QrResultScreen() {
       </View>
 
       <Modal
-        animationType="slide"
-        transparent
+        animationType="fade"
         visible={detailsVisible}
         onRequestClose={() => setDetailsVisible(false)}
+        presentationStyle="fullScreen"
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalCard}>
-            <View style={styles.modalHeader}>
-              <TouchableOpacity
-                style={styles.modalClose}
-                onPress={() => setDetailsVisible(false)}
-              >
-                <Ionicons name="close" size={24} color="#0f1320" />
-              </TouchableOpacity>
-            </View>
-            <ScrollView
-              contentContainerStyle={styles.modalContent}
-              showsVerticalScrollIndicator={false}
+        <View style={styles.detailsScreen}>
+          <LinearGradient
+            colors={["#04070f", "#0f1320", "#0b172d"]}
+            style={StyleSheet.absoluteFill}
+          />
+          <View style={styles.detailsHeader}>
+            <TouchableOpacity
+              style={styles.modalClose}
+              onPress={() => setDetailsVisible(false)}
             >
-              {trackDetails?.albumArtUrl ? (
-                <Image
-                  source={{ uri: trackDetails.albumArtUrl }}
-                  style={styles.modalArt}
-                />
-              ) : (
-                <View style={styles.modalArtPlaceholder}>
-                  <Ionicons
-                    name="musical-notes-outline"
-                    size={72}
-                    color="#7dffcb"
-                  />
-                </View>
-              )}
-              <ThemedText style={styles.modalTitle}>
-                {trackDetails?.name ||
-                  t("qr_result_details_title", "Spotify track")}
-              </ThemedText>
-              {trackDetails?.artistNames.length ? (
-                <ThemedText style={styles.modalSubtitle}>
-                  {trackDetails.artistNames.join(", ")}
-                </ThemedText>
-              ) : null}
-              {albumYearLabel ? (
-                <ThemedText style={styles.modalAlbum}>
-                  {albumYearLabel}
-                </ThemedText>
-              ) : null}
-              {explicitTag ? (
-                <View style={styles.modalTagRow}>
-                  <View style={styles.modalTag}>
-                    <ThemedText style={styles.modalTagText}>
-                      {explicitTag}
-                    </ThemedText>
-                  </View>
-                </View>
-              ) : null}
-
-              <View style={styles.modalInfoGroup}>
-                <InfoRow
-                  icon="calendar-outline"
-                  label={t("qr_result_detail_release", "Release")}
-                  value={releaseDateLabel}
-                />
-                <InfoRow
-                  icon="disc-outline"
-                  label={t("qr_result_detail_album", "Album")}
-                  value={trackDetails?.albumName ?? null}
-                />
-                <InfoRow
-                  icon="musical-notes-outline"
-                  label={t("qr_result_detail_track_number", "Track")}
-                  value={trackPositionLabel}
-                />
-                <InfoRow
-                  icon="time-outline"
-                  label={t("qr_result_detail_duration", "Duration")}
-                  value={durationLabel}
-                />
-                <InfoRow
-                  icon="stats-chart-outline"
-                  label={t("qr_result_detail_popularity", "Popularity")}
-                  value={popularityLabel}
+              <Ionicons name="close-circle" size={32} color="#f4fffe" />
+            </TouchableOpacity>
+          </View>
+          <ScrollView
+            contentContainerStyle={styles.detailsContent}
+            showsVerticalScrollIndicator={false}
+          >
+            {trackDetails?.albumArtUrl ? (
+              <Image
+                source={{ uri: trackDetails.albumArtUrl }}
+                style={styles.detailsArt}
+              />
+            ) : (
+              <View style={styles.detailsArtPlaceholder}>
+                <Ionicons
+                  name="musical-notes-outline"
+                  size={72}
+                  color="#7dffcb"
                 />
               </View>
+            )}
+            <ThemedText style={styles.detailsTitle}>
+              {trackDetails?.name ||
+                t("qr_result_details_title", "Spotify track")}
+            </ThemedText>
+            {trackDetails?.artistNames.length ? (
+              <ThemedText style={styles.detailsSubtitle}>
+                {trackDetails.artistNames.join(", ")}
+              </ThemedText>
+            ) : null}
+            {albumYearLabel ? (
+              <ThemedText style={styles.detailsAlbum}>
+                {albumYearLabel}
+              </ThemedText>
+            ) : null}
+            {explicitTag ? (
+              <View style={styles.modalTagRow}>
+                <View style={styles.modalTag}>
+                  <ThemedText style={styles.modalTagText}>
+                    {explicitTag}
+                  </ThemedText>
+                </View>
+              </View>
+            ) : null}
 
-              <TouchableOpacity
-                style={styles.modalSpotifyButton}
-                onPress={handleOpenInSpotify}
-                disabled={!trackUrl}
-                activeOpacity={0.85}
-              >
-                <Ionicons
-                  name={
-                    "logo-spotify" as ComponentProps<typeof Ionicons>["name"]
-                  }
-                  size={20}
-                  color="#0f1320"
-                  style={styles.modalSpotifyIcon}
-                />
-                <ThemedText style={styles.modalSpotifyLabel}>
-                  {t("qr_result_open_spotify_button", "Open in Spotify")}
-                </ThemedText>
-              </TouchableOpacity>
-            </ScrollView>
-          </View>
+            <View style={styles.modalInfoGroup}>
+              <InfoRow
+                icon="calendar-outline"
+                label={t("qr_result_detail_release", "Release")}
+                value={releaseDateLabel}
+              />
+              <InfoRow
+                icon="disc-outline"
+                label={t("qr_result_detail_album", "Album")}
+                value={trackDetails?.albumName ?? null}
+              />
+              <InfoRow
+                icon="musical-notes-outline"
+                label={t("qr_result_detail_track_number", "Track")}
+                value={trackPositionLabel}
+              />
+              <InfoRow
+                icon="time-outline"
+                label={t("qr_result_detail_duration", "Duration")}
+                value={durationLabel}
+              />
+              <InfoRow
+                icon="stats-chart-outline"
+                label={t("qr_result_detail_popularity", "Popularity")}
+                value={popularityLabel}
+              />
+              <InfoRow
+                icon="link-outline"
+                label={t("qr_result_detail_link", "Spotify link")}
+                value={trackUrl}
+              />
+            </View>
+
+            <TouchableOpacity
+              style={styles.modalSpotifyButton}
+              onPress={handleOpenInSpotify}
+              disabled={!trackUrl}
+              activeOpacity={0.9}
+            >
+              <Ionicons
+                name={"logo-spotify" as ComponentProps<typeof Ionicons>["name"]}
+                size={20}
+                color="#0f1320"
+                style={styles.modalSpotifyIcon}
+              />
+              <ThemedText style={styles.modalSpotifyLabel}>
+                {t("qr_result_open_spotify_button", "Open in Spotify")}
+              </ThemedText>
+            </TouchableOpacity>
+          </ScrollView>
         </View>
       </Modal>
     </View>
@@ -549,214 +624,209 @@ export default QrResultScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#222",
-    paddingTop: 50,
-    justifyContent: "space-between", // Push top & bottom content
-    alignItems: "center",
+    backgroundColor: "rgba(4, 7, 15, 0.96)",
+    paddingTop: 70,
+    paddingHorizontal: 24,
+    paddingBottom: 28,
+    justifyContent: "space-between",
   },
   statusBar: {
     position: "absolute",
     top: 0,
+    left: 0,
     right: 0,
-    width: "100%",
     padding: 20,
     flexDirection: "row",
     justifyContent: "flex-end",
     zIndex: 10,
   },
   closeButton: {
-    width: 40,
-    height: 40,
+    width: 44,
+    height: 44,
     alignItems: "center",
     justifyContent: "center",
   },
-  middleContainer: {
+  content: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
     width: "100%",
-    paddingHorizontal: 24,
-    gap: 28,
+    justifyContent: "flex-start",
+    gap: 18,
   },
-  nextScanContainer: {
-    paddingBottom: 36,
+  songInfoWrapper: {
+    width: "100%",
+    overflow: "hidden",
+    borderRadius: 30,
+  },
+  songInfoCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(15, 19, 32, 0.9)",
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: "rgba(125, 255, 203, 0.3)",
+    padding: 20,
+    gap: 16,
+  },
+  songArt: {
+    width: 86,
+    height: 86,
+    borderRadius: 20,
+  },
+  songArtPlaceholder: {
+    width: 86,
+    height: 86,
+    borderRadius: 20,
+    backgroundColor: "rgba(125, 255, 203, 0.14)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  songTextBlock: {
+    flex: 1,
+    gap: 4,
+  },
+  songTitle: {
+    color: "#f5fbff",
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  songArtists: {
+    color: "#c5d9e2",
+    fontSize: 15,
+  },
+  songMeta: {
+    color: "#8aa5b5",
+    fontSize: 13,
+  },
+  songBadge: {
+    marginTop: 8,
+    alignSelf: "flex-start",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 14,
+    backgroundColor: "rgba(125, 255, 203, 0.16)",
+  },
+  songBadgeText: {
+    color: "#7dffcb",
+    fontSize: 11,
+    letterSpacing: 0.4,
+  },
+  actionStack: {
+    width: "100%",
+    gap: 12,
+  },
+  actionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: "rgba(125, 255, 203, 0.35)",
+    backgroundColor: "rgba(5, 8, 18, 0.95)",
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    minHeight: 56,
+    width: "100%",
+  },
+  actionButtonSecondary: {
+    backgroundColor: "rgba(255, 255, 255, 0.08)",
+    borderColor: "rgba(255, 255, 255, 0.18)",
+  },
+  actionButtonGhost: {
+    backgroundColor: "transparent",
+    borderColor: "rgba(255, 255, 255, 0.4)",
+  },
+  actionButtonDisabled: {
+    opacity: 0.4,
+  },
+  actionButtonIcon: {
+    marginRight: 10,
+  },
+  actionButtonLabel: {
+    color: "#f4fffe",
+    fontWeight: "600",
+    letterSpacing: 0.3,
+  },
+  actionButtonLabelSecondary: {
+    color: "#dbe4f0",
+  },
+  footer: {
     alignItems: "center",
     width: "100%",
     gap: 10,
+    marginTop: 12,
   },
   nextScanHint: {
     color: "#baced9",
     fontSize: 13,
     letterSpacing: 0.2,
   },
-  albumCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "rgba(15, 19, 32, 0.78)",
-    padding: 16,
-    borderRadius: 28,
-    borderWidth: 1,
-    borderColor: "rgba(125, 255, 203, 0.3)",
-    width: "100%",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.4,
-    shadowRadius: 12,
-  },
-  albumArt: {
-    width: 86,
-    height: 86,
-    borderRadius: 18,
-    marginRight: 16,
-  },
-  albumPlaceholder: {
-    width: 86,
-    height: 86,
-    borderRadius: 18,
-    marginRight: 16,
-    backgroundColor: "rgba(125, 255, 203, 0.18)",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  trackInfo: {
+  detailsScreen: {
     flex: 1,
-    gap: 4,
+    backgroundColor: "#02040a",
   },
-  trackTitle: {
-    color: "#f5fbff",
-    fontSize: 18,
-    fontWeight: "700",
-    letterSpacing: 0.3,
-  },
-  trackSubtitle: {
-    color: "#c5d9e2",
-    fontSize: 14,
-  },
-  trackMeta: {
-    color: "#9bb7c5",
-    fontSize: 13,
-  },
-  equalizerContainer: {
-    paddingVertical: 18,
-    paddingHorizontal: 26,
-    backgroundColor: "rgba(15, 19, 32, 0.7)",
-    borderRadius: 24,
-    borderWidth: 1,
-    borderColor: "rgba(119, 255, 203, 0.28)",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.35,
-    shadowRadius: 16,
-  },
-  controlsRow: {
-    flexDirection: "row",
-    gap: 16,
-  },
-  controlButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 18,
-    paddingVertical: 14,
-    backgroundColor: "rgba(15, 19, 32, 0.78)",
-    borderRadius: 26,
-    borderWidth: 1,
-    borderColor: "rgba(125, 255, 203, 0.4)",
-    minWidth: 150,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.35,
-    shadowRadius: 10,
-  },
-  controlButtonDisabled: {
-    opacity: 0.5,
-  },
-  controlIcon: {
-    marginRight: 10,
-  },
-  controlLabel: {
-    color: "#f4fffe",
-    fontWeight: "600",
-    letterSpacing: 0.2,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(5, 7, 12, 0.85)",
-    justifyContent: "flex-end",
-  },
-  modalCard: {
-    width: "100%",
-    maxHeight: "92%",
-    backgroundColor: "#f4fffe",
-    borderTopLeftRadius: 32,
-    borderTopRightRadius: 32,
-    paddingHorizontal: 24,
-    paddingTop: 16,
-    paddingBottom: 24,
-    alignItems: "stretch",
-  },
-  modalHeader: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginBottom: 8,
+  detailsHeader: {
+    paddingTop: 48,
+    paddingHorizontal: 20,
+    alignItems: "flex-end",
   },
   modalClose: {
     padding: 8,
   },
-  modalContent: {
-    paddingBottom: 40,
+  detailsContent: {
     alignItems: "center",
-    gap: 16,
+    paddingHorizontal: 24,
+    paddingBottom: 60,
+    gap: 18,
   },
-  modalArt: {
-    width: 220,
-    height: 220,
-    borderRadius: 28,
+  detailsArt: {
+    width: 260,
+    height: 260,
+    borderRadius: 32,
   },
-  modalArtPlaceholder: {
-    width: 220,
-    height: 220,
-    borderRadius: 28,
+  detailsArtPlaceholder: {
+    width: 260,
+    height: 260,
+    borderRadius: 32,
     backgroundColor: "rgba(125, 255, 203, 0.22)",
     alignItems: "center",
     justifyContent: "center",
   },
-  modalTitle: {
-    fontSize: 22,
+  detailsTitle: {
+    fontSize: 26,
     fontWeight: "700",
-    color: "#0f1320",
+    color: "#f4fffe",
     textAlign: "center",
   },
-  modalSubtitle: {
-    fontSize: 16,
-    color: "#283247",
+  detailsSubtitle: {
+    fontSize: 18,
+    color: "#d0e7ff",
     textAlign: "center",
   },
-  modalAlbum: {
-    fontSize: 14,
-    color: "#4d5870",
+  detailsAlbum: {
+    fontSize: 15,
+    color: "#9fb5cc",
     textAlign: "center",
   },
   modalTagRow: {
     flexDirection: "row",
     justifyContent: "center",
+    width: "100%",
   },
   modalTag: {
-    backgroundColor: "rgba(15, 19, 32, 0.08)",
+    backgroundColor: "rgba(255, 255, 255, 0.08)",
     borderRadius: 16,
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
     paddingVertical: 6,
   },
   modalTagText: {
-    color: "#0f1320",
+    color: "#f4fffe",
     fontWeight: "600",
     fontSize: 12,
     letterSpacing: 0.4,
-    textTransform: "uppercase",
   },
   modalInfoGroup: {
     width: "100%",
-    gap: 14,
+    gap: 16,
   },
   infoRow: {
     flexDirection: "row",
@@ -765,21 +835,21 @@ const styles = StyleSheet.create({
   },
   infoIcon: {
     padding: 6,
-    borderRadius: 16,
-    backgroundColor: "rgba(125, 255, 203, 0.18)",
+    borderRadius: 18,
+    backgroundColor: "rgba(125, 255, 203, 0.2)",
   },
   infoTextWrapper: {
     flex: 1,
     gap: 2,
   },
   infoLabel: {
-    color: "#4d5870",
+    color: "#9fb5cc",
     fontSize: 12,
     textTransform: "uppercase",
-    letterSpacing: 0.7,
+    letterSpacing: 0.6,
   },
   infoValue: {
-    color: "#0f1320",
+    color: "#f5fbff",
     fontSize: 16,
     fontWeight: "600",
   },
@@ -787,16 +857,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#7dffcb",
-    borderRadius: 24,
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    alignSelf: "center",
+    borderRadius: 28,
+    paddingHorizontal: 24,
+    paddingVertical: 14,
   },
   modalSpotifyIcon: {
-    marginRight: 8,
+    marginRight: 10,
   },
   modalSpotifyLabel: {
     color: "#0f1320",
-    fontWeight: "600",
+    fontWeight: "700",
+    letterSpacing: 0.2,
   },
 });

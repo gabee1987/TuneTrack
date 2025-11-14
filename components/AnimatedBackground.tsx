@@ -9,6 +9,7 @@ import Animated, {
   withRepeat,
   interpolateColor,
 } from "react-native-reanimated";
+import { useAnimationSettings } from "@/contexts/AnimationSettingsContext";
 
 // Screen size
 const { width, height } = Dimensions.get("window");
@@ -85,6 +86,12 @@ function AnimatedCircle() {
 }
 
 export default function AnimatedBackground() {
+  const { animationsEnabled } = useAnimationSettings();
+
+  if (!animationsEnabled) {
+    return <View style={[styles.container, styles.disabledBackground]} />;
+  }
+
   // 1) Pick a random color set on mount
   const colorSet = useMemo(
     () => COLOR_SETS[Math.floor(Math.random() * COLOR_SETS.length)],
@@ -137,6 +144,9 @@ const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     zIndex: -1,
+  },
+  disabledBackground: {
+    backgroundColor: "#0f1320",
   },
   circle: {
     position: "absolute",
