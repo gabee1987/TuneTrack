@@ -337,6 +337,8 @@ function QrResultScreen() {
         ? "#f4fffe"
         : "#e2f7ff";
 
+    const isSpotifyIcon = icon === "logo-spotify";
+
     return (
       <TouchableOpacity
         style={[
@@ -350,12 +352,24 @@ function QrResultScreen() {
         activeOpacity={0.86}
       >
         {icon ? (
-          <Ionicons
-            name={icon as ComponentProps<typeof Ionicons>["name"]}
-            size={20}
-            color={iconColor}
-            style={styles.actionButtonIcon}
-          />
+          isSpotifyIcon ? (
+            <ThemedText
+              style={[
+                styles.actionButtonIcon,
+                styles.actionButtonIconText,
+                { color: iconColor },
+              ]}
+            >
+              ♪
+            </ThemedText>
+          ) : (
+            <Ionicons
+              name={icon as ComponentProps<typeof Ionicons>["name"]}
+              size={20}
+              color={iconColor}
+              style={styles.actionButtonIcon}
+            />
+          )
         ) : null}
         <ThemedText
           style={[
@@ -616,6 +630,9 @@ const styles = StyleSheet.create({
   },
   actionButtonIcon: {
     marginRight: 10,
+  },
+  actionButtonIconText: {
+    fontSize: 18,
   },
   actionButtonLabel: {
     color: "#f4fffe",

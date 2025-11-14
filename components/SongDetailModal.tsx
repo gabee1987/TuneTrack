@@ -10,9 +10,11 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import type { TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { ThemedText } from "@/components/ThemedText";
 import { SpotifyTrackDetails } from "@/modules/spotify/domain/SpotifyTrack";
+
+type TranslationFunction = ReturnType<typeof useTranslation>["t"];
 
 type IoniconName =
   | Exclude<ComponentProps<typeof Ionicons>["name"], undefined>
@@ -30,7 +32,7 @@ interface SongDetailModalProps {
   popularityLabel: string | null;
   trackPositionLabel: string | null;
   onOpenInSpotify: () => void;
-  t: TFunction<"translation", undefined>;
+  t: TranslationFunction;
 }
 
 const InfoRow = ({
@@ -204,12 +206,7 @@ export default function SongDetailModal({
             disabled={!trackUrl}
             activeOpacity={0.9}
           >
-            <Ionicons
-              name={"logo-spotify" as ComponentProps<typeof Ionicons>["name"]}
-              size={20}
-              color="#0f1320"
-              style={styles.modalSpotifyIcon}
-            />
+            <ThemedText style={styles.modalSpotifyIcon}>♪</ThemedText>
             <ThemedText style={styles.modalSpotifyLabel}>
               {t("qr_result_open_spotify_button", "Open in Spotify")}
             </ThemedText>
@@ -378,7 +375,9 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
   },
   modalSpotifyIcon: {
-    marginRight: 10,
+    marginRight: 8,
+    fontSize: 18,
+    color: "#0f1320",
   },
   modalSpotifyLabel: {
     color: "#0f1320",

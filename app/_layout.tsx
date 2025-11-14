@@ -49,7 +49,7 @@ function RootLayout() {
               >
                 <Stack.Screen name="index" />
                 <Stack.Screen name="spotify-connect" />
-                <Stack.Screen name="settings" />
+                <Stack.Screen name="settings/index" />
                 <Stack.Screen name="camera" />
                 <Stack.Screen name="qr-result" />
                 <Stack.Screen name="warning" />

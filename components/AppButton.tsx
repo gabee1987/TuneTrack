@@ -12,6 +12,7 @@ interface AppButtonProps {
   onPress: () => void;
   style?: ViewStyle;
   textStyle?: TextStyle;
+  disabled?: boolean;
 }
 
 export default function AppButton({
@@ -19,10 +20,18 @@ export default function AppButton({
   onPress,
   style,
   textStyle,
+  disabled = false,
 }: AppButtonProps) {
   return (
-    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
-      <Text style={[styles.buttonText, textStyle]}>{title}</Text>
+    <TouchableOpacity
+      style={[styles.button, disabled && styles.buttonDisabled, style]}
+      onPress={onPress}
+      disabled={disabled}
+      activeOpacity={0.8}
+    >
+      <Text style={[styles.buttonText, disabled && styles.buttonTextDisabled, textStyle]}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -51,5 +60,11 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     color: "#000",
+  },
+  buttonDisabled: {
+    opacity: 0.5,
+  },
+  buttonTextDisabled: {
+    opacity: 0.7,
   },
 });
