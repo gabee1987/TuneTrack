@@ -110,10 +110,7 @@ export default function SongDetailModal({
           style={StyleSheet.absoluteFill}
         />
         <View style={styles.detailsHeader}>
-          <TouchableOpacity
-            style={styles.detailsCloseButton}
-            onPress={onClose}
-          >
+          <TouchableOpacity style={styles.detailsCloseButton} onPress={onClose}>
             <Ionicons name="close-circle-outline" size={36} color="#f4fffe" />
           </TouchableOpacity>
         </View>
@@ -229,9 +226,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#02040a",
   },
   detailsHeader: {
-    paddingTop: 28,
-    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingHorizontal: 10,
     alignItems: "flex-end",
+    borderBottomWidth: 1,
+    borderColor: "rgba(125, 255, 203, 0.18)",
   },
   detailsCloseButton: {
     width: 44,
@@ -250,15 +249,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
   },
-  detailsArtWrapper: {
-    padding: 8,
-    borderRadius: 36,
-    backgroundColor: "rgba(255, 255, 255, 0.02)",
-  },
+  detailsArtWrapper: {},
   detailsArt: {
     width: 300,
     height: 300,
-    borderRadius: 36,
+    borderRadius: 26,
+    marginTop: 30,
+    borderWidth: 1,
+    borderColor: "rgba(125, 255, 203, 0.18)",
   },
   detailsArtPlaceholder: {
     width: 300,
@@ -388,4 +386,3 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
 });
-
