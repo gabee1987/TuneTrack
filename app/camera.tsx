@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { View, StyleSheet, Button, TouchableOpacity } from "react-native";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useRouter } from "expo-router";
@@ -11,15 +11,28 @@ function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions(); // Camera permission hook
   const router = useRouter();
   const { t } = useTranslation();
+  const lastScannedRef = useRef<string | null>(null);
+  const isNavigatingRef = useRef(false);
 
   // Handle barcode scanning
   const handleBarcodeScanned = (scanningResult: {
     data: string;
     type: string;
   }) => {
+    // Prevent multiple scans of the same code
+    if (
+      isNavigatingRef.current ||
+      lastScannedRef.current === scanningResult.data
+    ) {
+      return;
+    }
+
     console.log(
       `Scanned Data: ${scanningResult.data}, Type: ${scanningResult.type}`
     );
+    lastScannedRef.current = scanningResult.data;
+    isNavigatingRef.current = true;
+
     router.push({
       pathname: "/qr-result",
       params: { qrData: scanningResult.data },

@@ -6,14 +6,24 @@ export class SpotifyPlaybackService {
   constructor(
     private readonly apiClient: SpotifyApiClient,
     private readonly modeService: SpotifyModeService,
-    private readonly openUrl: (url: string) => Promise<void> = Linking.openURL
+    private readonly openUrl: (url: string) => Promise<void> = async (
+      url: string
+    ) => {
+      await Linking.openURL(url);
+    }
   ) {}
 
   async playTrack(uri: string): Promise<void> {
     const mode = await this.modeService.getMode();
     if (mode !== "premium") {
-      console.log("[spotify] Free mode - opening track in Spotify", uri);
-      await this.openUrl(uri);
+      // Convert Spotify URI to URL for free mode
+      let url = uri;
+      if (uri.startsWith("spotify:track:")) {
+        const trackId = uri.replace("spotify:track:", "");
+        url = `https://open.spotify.com/track/${trackId}`;
+      }
+      console.log("[spotify] Free mode - opening track in Spotify", url);
+      await this.openUrl(url);
       return;
     }
 
@@ -51,4 +61,3 @@ export class SpotifyPlaybackService {
     }
   }
 }
-

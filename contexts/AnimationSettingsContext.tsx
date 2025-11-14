@@ -15,7 +15,7 @@ type AnimationSettingsContextValue = {
   toggleAnimations: () => Promise<void>;
 };
 
-const STORAGE_KEY = "tunetrack:animations-enabled";
+const STORAGE_KEY = "tunetrack_animations_enabled";
 
 const AnimationSettingsContext = createContext<AnimationSettingsContextValue>({
   animationsEnabled: true,

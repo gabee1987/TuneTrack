@@ -45,13 +45,28 @@ export class SpotifyApiClient {
         body: body ? JSON.stringify(body) : undefined,
       });
 
+      const contentType = response.headers.get("content-type") || "";
+      const isJsonResponse = contentType.includes("application/json");
+      
       const text = await response.text();
       let payload: T | undefined;
-      if (text) {
+      
+      // Only try to parse JSON if the content type indicates JSON
+      // 204 No Content responses are expected to be empty
+      if (text && isJsonResponse) {
         try {
           payload = JSON.parse(text) as T;
         } catch (error) {
-          console.warn("[spotify] Failed to parse response body", error);
+          // Only warn if we expected JSON but failed to parse
+          console.warn("[spotify] Failed to parse JSON response body", error);
+        }
+      } else if (text && !isJsonResponse && response.status !== 204) {
+        // Non-JSON response that's not a 204 - might be an error page
+        // Only log if it's an error status
+        if (!response.ok) {
+          console.warn(
+            `[spotify] Non-JSON response (${contentType}): ${text.substring(0, 100)}`
+          );
         }
       }
 

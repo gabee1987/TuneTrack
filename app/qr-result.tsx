@@ -44,6 +44,7 @@ function QrResultScreen() {
   const [showHeaderDetails, setShowHeaderDetails] = useState(false);
   const infoReveal = useRef(new Animated.Value(0)).current;
   const playbackTrackRef = useRef<string | null>(null);
+  const hasOpenedSpotifyRef = useRef(false);
 
   useEffect(() => {
     Animated.timing(infoReveal, {
@@ -95,7 +96,11 @@ function QrResultScreen() {
     }
 
     if (trackUri) {
-      if (playbackTrackRef.current === trackUri) {
+      // Don't replay if we've already played this track or opened Spotify
+      if (
+        playbackTrackRef.current === trackUri ||
+        hasOpenedSpotifyRef.current
+      ) {
         return;
       }
       playbackTrackRef.current = trackUri;
@@ -298,6 +303,7 @@ function QrResultScreen() {
     if (!trackUrl) {
       return;
     }
+    hasOpenedSpotifyRef.current = true;
     Linking.openURL(trackUrl);
   }, [trackUrl]);
 
