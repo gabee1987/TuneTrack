@@ -45,6 +45,7 @@ function QrResultScreen() {
   const [detailsVisible, setDetailsVisible] = useState(false);
   const [showHeaderDetails, setShowHeaderDetails] = useState(false);
   const infoReveal = useRef(new Animated.Value(0)).current;
+  const playbackTrackRef = useRef<string | null>(null);
 
   useEffect(() => {
     Animated.timing(infoReveal, {
@@ -96,6 +97,10 @@ function QrResultScreen() {
     }
 
     if (trackUri) {
+      if (playbackTrackRef.current === trackUri) {
+        return;
+      }
+      playbackTrackRef.current = trackUri;
       spotifyServices.playbackService
         .playTrack(trackUri)
         .catch((error) =>
@@ -207,6 +212,9 @@ function QrResultScreen() {
     ? t("qr_result_explicit_tag", "Explicit")
     : null;
   const detailsAvailable = Boolean(trackDetails);
+  const hasQuickStats = Boolean(
+    releaseDateLabel || durationLabel || popularityLabel
+  );
   const infoContainerAnimatedStyle = {
     maxHeight: infoReveal.interpolate({
       inputRange: [0, 1],
@@ -395,6 +403,24 @@ function QrResultScreen() {
     );
   };
 
+  const DetailStat = ({
+    label,
+    value,
+  }: {
+    label: string;
+    value?: string | null;
+  }) => {
+    if (!value) {
+      return null;
+    }
+    return (
+      <View style={styles.detailStat}>
+        <ThemedText style={styles.detailStatValue}>{value}</ThemedText>
+        <ThemedText style={styles.detailStatLabel}>{label}</ThemedText>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <AudioBackdrop />
@@ -515,60 +541,79 @@ function QrResultScreen() {
           />
           <View style={styles.detailsHeader}>
             <TouchableOpacity
-              style={styles.modalClose}
+              style={styles.detailsCloseButton}
               onPress={() => setDetailsVisible(false)}
             >
-              <Ionicons name="close-circle" size={32} color="#f4fffe" />
+              <Ionicons name="close-circle-outline" size={36} color="#f4fffe" />
             </TouchableOpacity>
           </View>
           <ScrollView
             contentContainerStyle={styles.detailsContent}
             showsVerticalScrollIndicator={false}
           >
-            {trackDetails?.albumArtUrl ? (
-              <Image
-                source={{ uri: trackDetails.albumArtUrl }}
-                style={styles.detailsArt}
-              />
-            ) : (
-              <View style={styles.detailsArtPlaceholder}>
-                <Ionicons
-                  name="musical-notes-outline"
-                  size={72}
-                  color="#7dffcb"
-                />
+            <View style={styles.detailsHero}>
+              <View style={styles.detailsArtWrapper}>
+                {trackDetails?.albumArtUrl ? (
+                  <Image
+                    source={{ uri: trackDetails.albumArtUrl }}
+                    style={styles.detailsArt}
+                  />
+                ) : (
+                  <View style={styles.detailsArtPlaceholder}>
+                    <Ionicons
+                      name="musical-notes-outline"
+                      size={84}
+                      color="#7dffcb"
+                    />
+                  </View>
+                )}
               </View>
-            )}
-            <ThemedText style={styles.detailsTitle}>
-              {trackDetails?.name ||
-                t("qr_result_details_title", "Spotify track")}
-            </ThemedText>
-            {trackDetails?.artistNames.length ? (
-              <ThemedText style={styles.detailsSubtitle}>
-                {trackDetails.artistNames.join(", ")}
-              </ThemedText>
-            ) : null}
-            {albumYearLabel ? (
-              <ThemedText style={styles.detailsAlbum}>
-                {albumYearLabel}
-              </ThemedText>
-            ) : null}
-            {explicitTag ? (
-              <View style={styles.modalTagRow}>
-                <View style={styles.modalTag}>
-                  <ThemedText style={styles.modalTagText}>
-                    {explicitTag}
-                  </ThemedText>
+              {explicitTag ? (
+                <View style={styles.modalTagRow}>
+                  <View style={styles.modalTag}>
+                    <ThemedText style={styles.modalTagText}>
+                      {explicitTag}
+                    </ThemedText>
+                  </View>
                 </View>
+              ) : null}
+              <ThemedText style={styles.detailsTitle}>
+                {trackDetails?.name ||
+                  t("qr_result_details_title", "Spotify track")}
+              </ThemedText>
+              {trackDetails?.artistNames.length ? (
+                <ThemedText style={styles.detailsSubtitle}>
+                  {trackDetails.artistNames.join(", ")}
+                </ThemedText>
+              ) : null}
+              {albumYearLabel ? (
+                <ThemedText style={styles.detailsAlbum}>
+                  {albumYearLabel}
+                </ThemedText>
+              ) : null}
+            </View>
+
+            {hasQuickStats ? (
+              <View style={styles.detailsStatsRow}>
+                <DetailStat
+                  label={t("qr_result_detail_release", "Release")}
+                  value={releaseDateLabel}
+                />
+                <DetailStat
+                  label={t("qr_result_detail_duration", "Duration")}
+                  value={durationLabel}
+                />
+                <DetailStat
+                  label={t("qr_result_detail_popularity", "Popularity")}
+                  value={popularityLabel}
+                />
               </View>
             ) : null}
 
-            <View style={styles.modalInfoGroup}>
-              <InfoRow
-                icon="calendar-outline"
-                label={t("qr_result_detail_release", "Release")}
-                value={releaseDateLabel}
-              />
+            <View style={styles.detailsSection}>
+              <ThemedText style={styles.detailsSectionLabel}>
+                {t("qr_result_detail_overview", "Overview")}
+              </ThemedText>
               <InfoRow
                 icon="disc-outline"
                 label={t("qr_result_detail_album", "Album")}
@@ -578,16 +623,6 @@ function QrResultScreen() {
                 icon="musical-notes-outline"
                 label={t("qr_result_detail_track_number", "Track")}
                 value={trackPositionLabel}
-              />
-              <InfoRow
-                icon="time-outline"
-                label={t("qr_result_detail_duration", "Duration")}
-                value={durationLabel}
-              />
-              <InfoRow
-                icon="stats-chart-outline"
-                label={t("qr_result_detail_popularity", "Popularity")}
-                value={popularityLabel}
               />
               <InfoRow
                 icon="link-outline"
@@ -765,28 +800,41 @@ const styles = StyleSheet.create({
     backgroundColor: "#02040a",
   },
   detailsHeader: {
-    paddingTop: 48,
+    paddingTop: 28,
     paddingHorizontal: 20,
     alignItems: "flex-end",
   },
-  modalClose: {
-    padding: 8,
+  detailsCloseButton: {
+    width: 44,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center",
   },
   detailsContent: {
     alignItems: "center",
     paddingHorizontal: 24,
     paddingBottom: 60,
-    gap: 18,
+    gap: 22,
+  },
+  detailsHero: {
+    width: "100%",
+    alignItems: "center",
+    gap: 12,
+  },
+  detailsArtWrapper: {
+    padding: 8,
+    borderRadius: 36,
+    backgroundColor: "rgba(255, 255, 255, 0.02)",
   },
   detailsArt: {
-    width: 260,
-    height: 260,
-    borderRadius: 32,
+    width: 300,
+    height: 300,
+    borderRadius: 36,
   },
   detailsArtPlaceholder: {
-    width: 260,
-    height: 260,
-    borderRadius: 32,
+    width: 300,
+    height: 300,
+    borderRadius: 36,
     backgroundColor: "rgba(125, 255, 203, 0.22)",
     alignItems: "center",
     justifyContent: "center",
@@ -824,9 +872,48 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 0.4,
   },
-  modalInfoGroup: {
+  detailsStatsRow: {
+    flexDirection: "row",
     width: "100%",
-    gap: 16,
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  detailStat: {
+    flex: 1,
+    backgroundColor: "rgba(8, 17, 35, 0.85)",
+    borderRadius: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    borderWidth: 1,
+    borderColor: "rgba(125, 255, 203, 0.18)",
+  },
+  detailStatValue: {
+    color: "#f4fffe",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  detailStatLabel: {
+    color: "#9fb5cc",
+    fontSize: 11,
+    marginTop: 2,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  detailsSection: {
+    width: "100%",
+    borderRadius: 26,
+    backgroundColor: "rgba(5, 10, 22, 0.9)",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.08)",
+    paddingHorizontal: 18,
+    paddingVertical: 20,
+    gap: 14,
+  },
+  detailsSectionLabel: {
+    color: "#7dffcb",
+    fontSize: 13,
+    letterSpacing: 0.6,
+    textTransform: "uppercase",
   },
   infoRow: {
     flexDirection: "row",

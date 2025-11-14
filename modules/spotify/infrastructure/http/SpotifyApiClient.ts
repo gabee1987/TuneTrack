@@ -46,7 +46,14 @@ export class SpotifyApiClient {
       });
 
       const text = await response.text();
-      const payload = text ? (JSON.parse(text) as T) : undefined;
+      let payload: T | undefined;
+      if (text) {
+        try {
+          payload = JSON.parse(text) as T;
+        } catch (error) {
+          console.warn("[spotify] Failed to parse response body", error);
+        }
+      }
 
       if (!response.ok) {
         return { ok: false, status: response.status, error: text || "error" };
