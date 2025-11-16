@@ -91,7 +91,10 @@ function QrResultScreen() {
 
   useEffect(() => {
     if (!qrData) {
-      Alert.alert("Error", "No Spotify URI found in QR Code.");
+      Alert.alert(
+        t("qr_result_error_title", "Error"),
+        t("qr_result_error_no_uri", "No Spotify URI found in QR Code.")
+      );
       return;
     }
 
@@ -112,8 +115,11 @@ function QrResultScreen() {
       return;
     }
 
-    Alert.alert("QR Code", "Not recognized as a Spotify track URI");
-  }, [qrData, trackUri]);
+    Alert.alert(
+      t("qr_result_error_qr_title", "QR Code"),
+      t("qr_result_error_not_recognized", "Not recognized as a Spotify track URI")
+    );
+  }, [qrData, trackUri, t]);
 
   useEffect(() => {
     let cancelled = false;
@@ -188,10 +194,15 @@ function QrResultScreen() {
       return null;
     }
     if (trackDetails.albumTotalTracks) {
-      return `Track ${trackDetails.trackNumber} of ${trackDetails.albumTotalTracks}`;
+      return t("qr_result_track_position_of", "Track {{number}} of {{total}}", {
+        number: trackDetails.trackNumber,
+        total: trackDetails.albumTotalTracks,
+      });
     }
-    return `Track ${trackDetails.trackNumber}`;
-  }, [trackDetails?.trackNumber, trackDetails?.albumTotalTracks]);
+    return t("qr_result_track_position", "Track {{number}}", {
+      number: trackDetails.trackNumber,
+    });
+  }, [trackDetails?.trackNumber, trackDetails?.albumTotalTracks, t]);
 
   const popularityLabel = useMemo(() => {
     if (typeof trackDetails?.popularity !== "number") {

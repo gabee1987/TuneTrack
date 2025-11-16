@@ -2,9 +2,11 @@ import React, { useEffect } from "react";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
+import { useTranslation } from "react-i18next";
 
 function LoadingScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -16,7 +18,7 @@ function LoadingScreen() {
   return (
     <View style={styles.container}>
       <ActivityIndicator size="large" color="#fff" />
-      <ThemedText style={styles.logoText}>TuneTrack</ThemedText>
+      <ThemedText style={styles.logoText}>{t("index_logo")}</ThemedText>
     </View>
   );
 }

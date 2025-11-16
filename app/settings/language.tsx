@@ -22,8 +22,8 @@ export default function LanguageScreen() {
   const { language, setLanguage } = useContext(LanguageContext);
 
   const languages = [
-    { code: "en", name: "English" },
-    { code: "hu", name: "Magyar" },
+    { code: "en", name: t("language_name_english", "English") },
+    { code: "hu", name: t("language_name_hungarian", "Magyar") },
   ];
 
   const handleLanguageChange = async (lang: string) => {

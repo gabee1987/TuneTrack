@@ -43,7 +43,7 @@ function CameraScreen() {
   if (!permission) {
     return (
       <View style={styles.loadingContainer}>
-        <ThemedText type="default">Loading permissions...</ThemedText>
+        <ThemedText type="default">{t("camera_loading_permissions")}</ThemedText>
       </View>
     );
   }

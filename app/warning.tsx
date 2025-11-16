@@ -23,7 +23,7 @@ function WarnNetworkScreen() {
     <View style={styles.container}>
       <AnimatedBackground />
       <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-        <ThemedText style={styles.backButtonText}>Vissza</ThemedText>
+        <ThemedText style={styles.backButtonText}>{t("button_generic_back")}</ThemedText>
       </TouchableOpacity>
       <ThemedText type="title" style={styles.warningTitle}>
         {t("warning_title")}

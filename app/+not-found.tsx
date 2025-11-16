@@ -17,9 +17,9 @@ function NotFoundScreen() {
     <>
       <Stack.Screen />
       <ThemedView style={styles.container}>
-        <ThemedText type="title">{t("not_found_message")}</ThemedText>
+        <ThemedText type="title">{t("not_found_title")}</ThemedText>
+        <ThemedText type="subtitle">{t("not_found_message")}</ThemedText>
         <Link href="/" style={styles.link}>
-          <ThemedText type="subtitle">{t("not_found_link")}</ThemedText>
           <AppButton title={t("not_found_link")} onPress={goHome} />
         </Link>
       </ThemedView>

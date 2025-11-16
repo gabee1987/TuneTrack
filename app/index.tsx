@@ -53,7 +53,7 @@ function MainScreen() {
 
         <View style={styles.logoContainer}>
           <ThemedText type="title" style={styles.logoText}>
-            TuneTrack
+            {t("index_logo")}
           </ThemedText>
         </View>
 
