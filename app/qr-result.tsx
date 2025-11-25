@@ -28,11 +28,13 @@ import AudioBackdrop from "@/components/AudioBackdrop";
 import SongDetailModal from "@/components/SongDetailModal";
 import createQrResultStyles from "../styles/screens/qrResultStyles";
 import { useAppTheme } from "@/design/theme/ThemeProvider";
+import { useAnimationSettings } from "@/contexts/AnimationSettingsContext";
 
 function QrResultScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { mode, tokens } = useAppTheme();
+  const { animationsEnabled } = useAnimationSettings();
   const params = useLocalSearchParams();
   const qrData = Array.isArray(params.qrData)
     ? params.qrData[0]
@@ -49,13 +51,18 @@ function QrResultScreen() {
   const hasOpenedSpotifyRef = useRef(false);
 
   useEffect(() => {
-    Animated.timing(infoReveal, {
-      toValue: showHeaderDetails ? 1 : 0,
-      duration: 320,
-      easing: Easing.out(Easing.cubic),
-      useNativeDriver: false,
-    }).start();
-  }, [showHeaderDetails, infoReveal]);
+    if (animationsEnabled) {
+      Animated.timing(infoReveal, {
+        toValue: showHeaderDetails ? 1 : 0,
+        duration: 320,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: false,
+      }).start();
+    } else {
+      // Immediately set to target value without animation
+      infoReveal.setValue(showHeaderDetails ? 1 : 0);
+    }
+  }, [showHeaderDetails, infoReveal, animationsEnabled]);
 
   const trackId = useMemo(() => {
     if (!qrData) {

@@ -4,6 +4,7 @@ import { useAppTheme } from "@/design/theme/ThemeProvider";
 import { ThemedText } from "@/components/ThemedText";
 import { radii, spacing, shadowPresets, borders } from "@/styles/designTokens";
 import { getAppButtonPalette } from "@/styles/components/appButtonTokens";
+import { useAnimationSettings } from "@/contexts/AnimationSettingsContext";
 
 type ToggleOption<TValue extends string> = {
   label: string;
@@ -26,6 +27,7 @@ export function TogglePill<TValue extends string>({
   caption,
 }: TogglePillProps<TValue>) {
   const { tokens, mode } = useAppTheme();
+  const { animationsEnabled } = useAnimationSettings();
   const buttonPalette = useMemo(() => getAppButtonPalette(mode), [mode]);
   const activeIndex = options.findIndex((option) => option.value === value);
   const [containerWidth, setContainerWidth] = React.useState(0);
@@ -36,13 +38,18 @@ export function TogglePill<TValue extends string>({
   );
 
   React.useEffect(() => {
-    Animated.spring(animatedValue, {
-      toValue: activeIndex,
-      useNativeDriver: false, // Using false to support left positioning
-      damping: 12,
-      stiffness: 120,
-    }).start();
-  }, [activeIndex, animatedValue]);
+    if (animationsEnabled) {
+      Animated.spring(animatedValue, {
+        toValue: activeIndex,
+        useNativeDriver: false, // Using false to support left positioning
+        damping: 12,
+        stiffness: 120,
+      }).start();
+    } else {
+      // Immediately set to target value without animation
+      animatedValue.setValue(activeIndex);
+    }
+  }, [activeIndex, animatedValue, animationsEnabled]);
 
   const gapSize = spacing.sm;
   const thumbWidth = React.useMemo(() => {
