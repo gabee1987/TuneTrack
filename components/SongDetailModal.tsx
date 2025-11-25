@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import { ThemedText } from "@/components/ThemedText";
 import { SpotifyTrackDetails } from "@/modules/spotify/domain/SpotifyTrack";
 import { useAppTheme } from "@/design/theme/ThemeProvider";
+import { useAnimationSettings } from "@/contexts/AnimationSettingsContext";
 import { createSongDetailModalStyles } from "@/styles/components/songDetailModalStyles";
 import { getSongDetailModalColors } from "@/styles/screenColors";
 
@@ -145,6 +146,7 @@ export default function SongDetailModal({
   t,
 }: SongDetailModalProps) {
   const { mode, tokens } = useAppTheme();
+  const { animationsEnabled } = useAnimationSettings();
   const styles = useMemo(() => createSongDetailModalStyles(mode), [mode]);
   const colors = useMemo(() => getSongDetailModalColors(mode), [mode]);
   const lightColors = useMemo(() => getSongDetailModalColors("light"), []);
@@ -156,7 +158,7 @@ export default function SongDetailModal({
 
   return (
     <Modal
-      animationType="fade"
+      animationType={animationsEnabled ? "fade" : "none"}
       visible={visible}
       onRequestClose={onClose}
       presentationStyle="fullScreen"

@@ -41,9 +41,10 @@ export function TogglePill<TValue extends string>({
     if (animationsEnabled) {
       Animated.spring(animatedValue, {
         toValue: activeIndex,
-        useNativeDriver: false, // Using false to support left positioning
-        damping: 12,
-        stiffness: 120,
+        useNativeDriver: true, // Use native driver for better performance
+        damping: 15,
+        stiffness: 150,
+        mass: 0.8,
       }).start();
     } else {
       // Immediately set to target value without animation
@@ -57,7 +58,7 @@ export function TogglePill<TValue extends string>({
     return (containerWidth - gapSize * (options.length - 1)) / options.length;
   }, [containerWidth, options.length, gapSize]);
 
-  const leftPosition = React.useMemo(() => {
+  const translateX = React.useMemo(() => {
     return animatedValue.interpolate({
       inputRange: options.map((_, idx) => idx),
       outputRange: options.map((_, idx) => {
@@ -92,7 +93,7 @@ export function TogglePill<TValue extends string>({
               styles.activeThumb,
               {
                 width: thumbWidth,
-                left: leftPosition,
+                transform: [{ translateX }],
                 backgroundColor: tokens.pillActiveBackground,
                 shadowColor: tokens.pillShadow,
               },
@@ -165,13 +166,14 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     backgroundColor: "transparent",
   },
-  activeThumb: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    borderRadius: radii.pill,
-    ...shadowPresets.floating,
-  },
+    activeThumb: {
+      position: "absolute",
+      top: 0,
+      bottom: 0,
+      left: 0,
+      borderRadius: radii.pill,
+      ...shadowPresets.floating,
+    },
   option: {
     flex: 1,
     borderRadius: radii.pill,

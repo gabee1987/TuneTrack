@@ -68,12 +68,16 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   }, [systemPreference]);
 
   const handleSetMode = useCallback((nextMode: ThemeMode) => {
+    // Update state immediately for instant UI response
+    // This triggers immediate re-render of all consumers
     setModeState((current) => {
       if (current === nextMode) {
         return current;
       }
       return nextMode;
     });
+    // Persist to storage asynchronously without blocking the UI
+    // Fire and forget - don't await or block on this
     AsyncStorage.setItem(STORAGE_KEY, nextMode).catch((error) =>
       console.warn("Failed to persist theme mode", error)
     );
@@ -98,4 +102,3 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const useAppTheme = () => useContext(ThemeContext);
-

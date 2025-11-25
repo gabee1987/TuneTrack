@@ -84,4 +84,4 @@ export const appTheme = {
 export type ThemeMode = keyof typeof colorRoles;
 export type ThemeColorName = keyof typeof colorRoles.light &
   keyof typeof colorRoles.dark;
-export type ThemeTokens = typeof themeTokens.light;
+export type ThemeTokens = typeof themeTokens.light | typeof themeTokens.dark;

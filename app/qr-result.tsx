@@ -63,9 +63,9 @@ function QrResultScreen() {
     if (animationsEnabled) {
       Animated.timing(infoReveal, {
         toValue: showHeaderDetails ? 1 : 0,
-        duration: 320,
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: false,
+        duration: 300,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true, // Use native driver for better performance
       }).start();
     } else {
       // Immediately set to target value without animation
@@ -269,16 +269,18 @@ function QrResultScreen() {
   const styles = useMemo(() => createQrResultStyles(mode), [mode]);
 
   const infoContainerAnimatedStyle = {
-    maxHeight: infoReveal.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0, 260],
-    }),
     opacity: infoReveal,
     transform: [
       {
         translateY: infoReveal.interpolate({
           inputRange: [0, 1],
-          outputRange: [20, 0],
+          outputRange: [10, 0],
+        }),
+      },
+      {
+        scaleY: infoReveal.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0.95, 1],
         }),
       },
     ],

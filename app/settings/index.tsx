@@ -76,7 +76,10 @@ export default function SettingsScreen() {
                   { label: t("settings_theme_dark", "Dark"), value: "dark" },
                 ]}
                 value={themeMode}
-                onChange={(nextMode) => setThemeMode(nextMode)}
+                onChange={(nextMode) => {
+                  // Immediately update theme - no delays
+                  setThemeMode(nextMode);
+                }}
               />
             </View>
 

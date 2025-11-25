@@ -9,13 +9,17 @@ import { useFonts } from "expo-font";
 import { ThemeProvider, useAppTheme } from "@/design/theme/ThemeProvider";
 import { LanguageProvider } from "@/localization/LanguageContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { AnimationSettingsProvider } from "@/contexts/AnimationSettingsContext";
+import {
+  AnimationSettingsProvider,
+  useAnimationSettings,
+} from "@/contexts/AnimationSettingsContext";
 import { CurrentTrackProvider } from "@/contexts/CurrentTrackContext";
 
 SplashScreen.preventAutoHideAsync();
 
 function AppContent() {
   const { mode } = useAppTheme();
+  const { animationsEnabled } = useAnimationSettings();
 
   return (
     <View style={{ flex: 1 }}>
@@ -25,6 +29,11 @@ function AppContent() {
         screenOptions={{
           headerShown: false,
           contentStyle: { backgroundColor: "transparent" },
+          animation: animationsEnabled ? "fade_from_bottom" : "none",
+          animationDuration: animationsEnabled ? 200 : 0,
+          animationTypeForReplace: "push",
+          gestureEnabled: true,
+          gestureDirection: "horizontal",
         }}
       >
         <Stack.Screen name="index" />
