@@ -1,49 +1,55 @@
 import { StyleSheet } from "react-native";
+import { getWarningColors } from "../screenColors";
+import { radii } from "../designTokens";
+import { ThemeMode } from "@/design/tokens/theme";
 
-const warningStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    position: "relative",
-    padding: 20,
-    justifyContent: "center",
-  },
-  backButton: {
-    position: "absolute",
-    top: 50,
-    right: 20,
-    backgroundColor: "#00000080",
-    padding: 10,
-    borderRadius: 8,
-  },
-  backButtonText: {
-    color: "#fff",
-  },
-  warningTitle: {
-    fontSize: 24,
-    color: "#fff",
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 20,
-  },
-  warningText: {
-    fontSize: 16,
-    color: "#fff",
-    textAlign: "center",
-    marginHorizontal: 20,
-    marginBottom: 40,
-  },
-  okButton: {
-    backgroundColor: "#ff6666",
-    borderRadius: 30,
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    alignSelf: "center",
-  },
-  okButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-});
+const createWarningStyles = (mode: ThemeMode) => {
+  const colors = getWarningColors(mode);
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      position: "relative",
+      padding: 20,
+      justifyContent: "center",
+    },
+    backButton: {
+      position: "absolute",
+      top: 50,
+      right: 20,
+      backgroundColor: colors.backButtonBackground,
+      padding: 10,
+      borderRadius: radii.xs,
+    },
+    backButtonText: {
+      color: colors.textLight,
+    },
+    warningTitle: {
+      fontSize: 24,
+      color: colors.textLight,
+      fontWeight: "bold",
+      textAlign: "center",
+      marginBottom: 20,
+    },
+    warningText: {
+      fontSize: 16,
+      color: colors.textLight,
+      textAlign: "center",
+      marginHorizontal: 20,
+      marginBottom: 40,
+    },
+    okButton: {
+      backgroundColor: colors.okButtonBackground,
+      borderRadius: radii.card,
+      paddingVertical: 15,
+      paddingHorizontal: 40,
+      alignSelf: "center",
+    },
+    okButtonText: {
+      color: colors.textLight,
+      fontWeight: "bold",
+      fontSize: 16,
+    },
+  });
+};
 
-export default warningStyles;
+export default createWarningStyles;

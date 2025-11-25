@@ -1,5 +1,5 @@
-import React from "react";
-import { View, TouchableOpacity, Switch } from "react-native";
+import React, { useMemo } from "react";
+import { View, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import AppButton from "@/components/AppButton";
 import { ThemedText } from "@/components/ThemedText";
@@ -7,13 +7,22 @@ import { Ionicons } from "@expo/vector-icons";
 import GradientBackground from "@/components/ui/GradientBackground";
 import { useTranslation } from "react-i18next";
 import { useAnimationSettings } from "@/contexts/AnimationSettingsContext";
-import settingsStyles from "../../styles/screens/settingsStyles";
+import createSettingsStyles from "../../styles/screens/settingsStyles";
+import TogglePill from "@/components/TogglePill";
+import { ThemeMode } from "@/design/tokens/theme";
+import { useAppTheme } from "@/design/theme/ThemeProvider";
 
 export default function SettingsScreen() {
   const router = useRouter();
   const { t } = useTranslation();
-  const { animationsEnabled, toggleAnimations, loading } =
+  const { animationsEnabled, loading, setAnimationsEnabled } =
     useAnimationSettings();
+  const {
+    mode: themeMode,
+    setMode: setThemeMode,
+    tokens: themeTokens,
+  } = useAppTheme();
+  const styles = useMemo(() => createSettingsStyles(themeMode), [themeMode]);
 
   const handleChangeSpotifyMode = () => {
     router.push("/settings/spotify-mode");
@@ -29,55 +38,65 @@ export default function SettingsScreen() {
   };
 
   return (
-    <View style={settingsStyles.container}>
+    <View style={styles.container}>
       <GradientBackground>
-        <View style={settingsStyles.statusBar}>
-          <TouchableOpacity
-            style={settingsStyles.closeButton}
-            onPress={handleBack}
-          >
-            <Ionicons name="close-circle-outline" size={36} color="white" />
+        <View style={styles.statusBar}>
+          <TouchableOpacity style={styles.closeButton} onPress={handleBack}>
+            <Ionicons
+              name="close-circle-outline"
+              size={36}
+              color={themeTokens.closeButtonIcon}
+            />
           </TouchableOpacity>
         </View>
 
-        <View style={settingsStyles.logoContainer}>
-          <ThemedText type="defaultSemiBold" style={settingsStyles.title}>
+        <View style={styles.logoContainer}>
+          <ThemedText type="defaultSemiBold" style={styles.title}>
             {t("settings_title")}
           </ThemedText>
         </View>
 
-        <View style={settingsStyles.container}>
+        <View style={styles.container}>
           <AppButton
-            style={settingsStyles.menuButton}
+            style={styles.menuButton}
             title={t("settings_spotify_mode")}
             onPress={handleChangeSpotifyMode}
           />
           <AppButton
-            style={settingsStyles.menuButton}
+            style={styles.menuButton}
             title={t("settings_language")}
             onPress={handleLanguageChange}
           />
-          <View style={settingsStyles.toggleCard}>
-            <View style={settingsStyles.toggleTextWrapper}>
-              <ThemedText style={settingsStyles.toggleTitle}>
-                {t("settings_animation_toggle_label", "Animated backgrounds")}
-              </ThemedText>
-              <ThemedText style={settingsStyles.toggleSubtitle}>
-                {t(
-                  "settings_animation_toggle_hint",
-                  "Turn this off to reduce motion and save battery."
-                )}
-              </ThemedText>
+          <View style={styles.sectionStack}>
+            <View style={styles.sectionCard}>
+              <TogglePill<ThemeMode>
+                caption={t("settings_theme_label", "App appearance")}
+                options={[
+                  { label: t("settings_theme_light", "Light"), value: "light" },
+                  { label: t("settings_theme_dark", "Dark"), value: "dark" },
+                ]}
+                value={themeMode}
+                onChange={(nextMode) => setThemeMode(nextMode)}
+              />
             </View>
-            <Switch
-              value={animationsEnabled}
-              onValueChange={() => {
-                toggleAnimations();
-              }}
-              disabled={loading}
-              thumbColor={animationsEnabled ? "#0f1320" : "#fafafa"}
-              trackColor={{ false: "#c8d1d9", true: "#7dffcb" }}
-            />
+
+            <View style={styles.sectionCard}>
+              <TogglePill<"on" | "off">
+                caption={t(
+                  "settings_animation_toggle_label",
+                  "Animated backgrounds"
+                )}
+                options={[
+                  { label: t("settings_toggle_on", "On"), value: "on" },
+                  { label: t("settings_toggle_off", "Off"), value: "off" },
+                ]}
+                value={animationsEnabled ? "on" : "off"}
+                onChange={(selection) =>
+                  setAnimationsEnabled(selection === "on")
+                }
+                disabled={loading}
+              />
+            </View>
           </View>
         </View>
       </GradientBackground>

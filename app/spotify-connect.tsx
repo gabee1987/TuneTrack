@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { View, TouchableOpacity, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import AppButton from "@/components/AppButton";
@@ -7,13 +7,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import GradientBackground from "@/components/ui/GradientBackground";
 import { useSpotifyAuth } from "@/modules/spotify/hooks/useSpotifyAuth";
-import spotifyConnectStyles from "../styles/screens/spotifyConnectStyles";
+import createSpotifyConnectStyles from "../styles/screens/spotifyConnectStyles";
+import { useAppTheme } from "@/design/theme/ThemeProvider";
 
 function SpotifyConnectScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { authorize, status, error, isAuthenticated, clearError } =
     useSpotifyAuth();
+  const { mode, tokens } = useAppTheme();
+  const styles = useMemo(() => createSpotifyConnectStyles(mode), [mode]);
 
   useEffect(() => {
     if ((status === "authenticated" || isAuthenticated) && !error) {
@@ -44,28 +47,29 @@ function SpotifyConnectScreen() {
   const isBusy = status === "prompt" || status === "exchanging";
 
   return (
-    <View style={spotifyConnectStyles.container}>
+    <View style={styles.container}>
       <GradientBackground>
-        <View style={spotifyConnectStyles.statusBar}>
-          <TouchableOpacity
-            style={spotifyConnectStyles.backButton}
-            onPress={handleBack}
-          >
-            <Ionicons name="close-circle-outline" size={36} color="white" />
+        <View style={styles.statusBar}>
+          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+            <Ionicons
+              name="close-circle-outline"
+              size={36}
+              color={tokens.closeButtonIcon}
+            />
           </TouchableOpacity>
         </View>
-        <View style={spotifyConnectStyles.logoContainer}>
-          <ThemedText type="default" style={spotifyConnectStyles.title}>
+        <View style={styles.logoContainer}>
+          <ThemedText type="default" style={styles.title}>
             {t("spotify_connect_title")}
           </ThemedText>
-          <ThemedText type="default" style={spotifyConnectStyles.subtitle}>
+          <ThemedText type="default" style={styles.subtitle}>
             {t("spotify_connect_subtitle")}
           </ThemedText>
         </View>
 
-        <View style={spotifyConnectStyles.container}>
+        <View style={styles.container}>
           <AppButton
-            style={spotifyConnectStyles.menuButton}
+            style={styles.menuButton}
             title={
               isAuthenticated
                 ? t("spotify_connect_already", "You're connected")

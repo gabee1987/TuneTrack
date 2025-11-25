@@ -1,11 +1,12 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { View, Button, TouchableOpacity } from "react-native";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
-import cameraStyles from "../styles/screens/cameraStyles";
+import createCameraStyles from "../styles/screens/cameraStyles";
+import { useAppTheme } from "@/design/theme/ThemeProvider";
 
 function CameraScreen() {
   const [facing, setFacing] = useState<CameraType>("back"); // Default to back camera
@@ -14,6 +15,8 @@ function CameraScreen() {
   const { t } = useTranslation();
   const lastScannedRef = useRef<string | null>(null);
   const isNavigatingRef = useRef(false);
+  const { mode } = useAppTheme();
+  const styles = useMemo(() => createCameraStyles(mode), [mode]);
 
   // Handle barcode scanning
   const handleBarcodeScanned = (scanningResult: {
@@ -43,7 +46,7 @@ function CameraScreen() {
   // If permissions are loading
   if (!permission) {
     return (
-      <View style={cameraStyles.loadingContainer}>
+      <View style={styles.loadingContainer}>
         <ThemedText type="default">
           {t("camera_loading_permissions")}
         </ThemedText>
@@ -54,8 +57,8 @@ function CameraScreen() {
   // If permissions are not granted
   if (!permission.granted) {
     return (
-      <View style={cameraStyles.container}>
-        <ThemedText type="default" style={cameraStyles.permissionText}>
+      <View style={styles.container}>
+        <ThemedText type="default" style={styles.permissionText}>
           {t("camera_permission_text")}
         </ThemedText>
         <Button
@@ -67,22 +70,22 @@ function CameraScreen() {
   }
 
   return (
-    <View style={cameraStyles.container}>
+    <View style={styles.container}>
       <CameraView
         // autofocus={isRefreshing ? "off" : "on"}
         autofocus="on"
         focusable={true}
-        style={cameraStyles.camera}
+        style={styles.camera}
         facing={facing} // Front or back camera
         onBarcodeScanned={handleBarcodeScanned} // Barcode scanning callback
         barcodeScannerSettings={{ barcodeTypes: ["qr"] }} // Only scan QR codes
       >
-        <View style={cameraStyles.overlay} pointerEvents="none">
-          <View style={cameraStyles.scanFrame}>
-            <View style={cameraStyles.scanFrameInner} />
+        <View style={styles.overlay} pointerEvents="none">
+          <View style={styles.scanFrame}>
+            <View style={styles.scanFrameInner} />
           </View>
-          <View style={cameraStyles.overlayContent}>
-            <ThemedText style={cameraStyles.overlayText}>
+          <View style={styles.overlayContent}>
+            <ThemedText style={styles.overlayText}>
               {t(
                 "camera_align_instruction",
                 "Align the QR code inside the frame"
@@ -90,9 +93,9 @@ function CameraScreen() {
             </ThemedText>
           </View>
         </View>
-        <View style={cameraStyles.buttonContainer}>
+        <View style={styles.buttonContainer}>
           <TouchableOpacity
-            style={cameraStyles.controlButton}
+            style={styles.controlButton}
             onPress={() =>
               setFacing((prev) => (prev === "back" ? "front" : "back"))
             }
@@ -101,9 +104,9 @@ function CameraScreen() {
               name="camera-reverse-outline"
               size={20}
               color="#7dffcb"
-              style={cameraStyles.controlButtonIcon}
+              style={styles.controlButtonIcon}
             />
-            <ThemedText style={cameraStyles.controlButtonText}>
+            <ThemedText style={styles.controlButtonText}>
               {t("camera_flip_camera")}
             </ThemedText>
           </TouchableOpacity>

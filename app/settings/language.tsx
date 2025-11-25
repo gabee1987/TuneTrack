@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { View, TouchableOpacity, FlatList } from "react-native";
 import { useRouter } from "expo-router";
 import AppButton from "@/components/AppButton";
@@ -7,12 +7,15 @@ import { Ionicons } from "@expo/vector-icons";
 import GradientBackground from "@/components/ui/GradientBackground";
 import { useTranslation } from "react-i18next";
 import { LanguageContext } from "@/localization/LanguageContext";
-import languageSettingsStyles from "../../styles/screens/languageSettingsStyles";
+import createLanguageSettingsStyles from "../../styles/screens/languageSettingsStyles";
+import { useAppTheme } from "@/design/theme/ThemeProvider";
 
 export default function LanguageScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { language, setLanguage } = useContext(LanguageContext);
+  const { mode, tokens } = useAppTheme();
+  const styles = useMemo(() => createLanguageSettingsStyles(mode), [mode]);
 
   const languages = [
     { code: "en", name: t("language_name_english", "English") },
@@ -29,28 +32,26 @@ export default function LanguageScreen() {
   };
 
   return (
-    <View style={languageSettingsStyles.container}>
+    <View style={styles.container}>
       <GradientBackground>
-        <View style={languageSettingsStyles.statusBar}>
-          <TouchableOpacity
-            style={languageSettingsStyles.closeButton}
-            onPress={handleBack}
-          >
-            <Ionicons name="close-circle-outline" size={36} color="white" />
+        <View style={styles.statusBar}>
+          <TouchableOpacity style={styles.closeButton} onPress={handleBack}>
+            <Ionicons
+              name="close-circle-outline"
+              size={36}
+              color={tokens.closeButtonIcon}
+            />
           </TouchableOpacity>
         </View>
 
-        <View style={languageSettingsStyles.logoContainer}>
-          <ThemedText
-            type="defaultSemiBold"
-            style={languageSettingsStyles.title}
-          >
+        <View style={styles.logoContainer}>
+          <ThemedText type="defaultSemiBold" style={styles.title}>
             {t("settings_language")}
           </ThemedText>
         </View>
 
         <FlatList
-          contentContainerStyle={languageSettingsStyles.flatList}
+          contentContainerStyle={styles.flatList}
           data={languages}
           keyExtractor={(item) => item.code}
           renderItem={({ item }) => (
@@ -58,10 +59,8 @@ export default function LanguageScreen() {
               title={item.name}
               onPress={() => handleLanguageChange(item.code)}
               style={{
-                ...languageSettingsStyles.languageButton,
-                ...(item.code === language
-                  ? languageSettingsStyles.selectedLanguage
-                  : {}),
+                ...styles.languageButton,
+                ...(item.code === language ? styles.selectedLanguage : {}),
               }}
             />
           )}

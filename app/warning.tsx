@@ -1,15 +1,18 @@
 // src/screens/WarnNetworkScreen.tsx
-import React from "react";
+import React, { useMemo } from "react";
 import { View, TouchableOpacity } from "react-native";
 import AnimatedBackground from "../components/AnimatedBackground";
 import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { useTranslation } from "react-i18next";
-import warningStyles from "../styles/screens/warningStyles";
+import createWarningStyles from "../styles/screens/warningStyles";
+import { useAppTheme } from "@/design/theme/ThemeProvider";
 
 function WarnNetworkScreen() {
   const router = useRouter();
   const { t } = useTranslation();
+  const { mode } = useAppTheme();
+  const warningStyles = useMemo(() => createWarningStyles(mode), [mode]);
 
   const handleOk = () => {
     // Request camera permissions next

@@ -26,11 +26,13 @@ import { spotifyServices } from "@/modules/spotify/di/spotifyServiceLocator";
 import { SpotifyTrackDetails } from "@/modules/spotify/domain/SpotifyTrack";
 import AudioBackdrop from "@/components/AudioBackdrop";
 import SongDetailModal from "@/components/SongDetailModal";
-import qrResultStyles from "../styles/screens/qrResultStyles";
+import createQrResultStyles from "../styles/screens/qrResultStyles";
+import { useAppTheme } from "@/design/theme/ThemeProvider";
 
 function QrResultScreen() {
   const router = useRouter();
   const { t } = useTranslation();
+  const { mode, tokens } = useAppTheme();
   const params = useLocalSearchParams();
   const qrData = Array.isArray(params.qrData)
     ? params.qrData[0]
@@ -229,6 +231,8 @@ function QrResultScreen() {
     ? t("qr_result_explicit_tag", "Explicit")
     : null;
   const detailsAvailable = Boolean(trackDetails);
+  const styles = useMemo(() => createQrResultStyles(mode), [mode]);
+
   const infoContainerAnimatedStyle = {
     maxHeight: infoReveal.interpolate({
       inputRange: [0, 1],
@@ -409,7 +413,11 @@ function QrResultScreen() {
       <AudioBackdrop />
       <View style={styles.statusBar}>
         <TouchableOpacity style={styles.closeButton} onPress={handleBack}>
-          <Ionicons name="close-circle-outline" size={36} color="white" />
+          <Ionicons
+            name="close-circle-outline"
+            size={36}
+            color={tokens.closeButtonIcon}
+          />
         </TouchableOpacity>
       </View>
 
@@ -530,5 +538,3 @@ function QrResultScreen() {
 }
 
 export default QrResultScreen;
-
-const styles = qrResultStyles;

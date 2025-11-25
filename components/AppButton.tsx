@@ -1,11 +1,8 @@
-import React from "react";
-import {
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  ViewStyle,
-  TextStyle,
-} from "react-native";
+import React, { useMemo } from "react";
+import { TouchableOpacity, Text, ViewStyle, TextStyle } from "react-native";
+import { useAppTheme } from "@/design/theme/ThemeProvider";
+import { getAppButtonPalette } from "@/styles/components/appButtonTokens";
+import { createAppButtonStyles } from "@/styles/components/appButtonStyles";
 
 interface AppButtonProps {
   title: string;
@@ -22,6 +19,10 @@ export default function AppButton({
   textStyle,
   disabled = false,
 }: AppButtonProps) {
+  const { mode } = useAppTheme();
+  const palette = useMemo(() => getAppButtonPalette(mode), [mode]);
+  const styles = useMemo(() => createAppButtonStyles(palette), [palette]);
+
   return (
     <TouchableOpacity
       style={[styles.button, disabled && styles.buttonDisabled, style]}
@@ -29,42 +30,15 @@ export default function AppButton({
       disabled={disabled}
       activeOpacity={0.8}
     >
-      <Text style={[styles.buttonText, disabled && styles.buttonTextDisabled, textStyle]}>
+      <Text
+        style={[
+          styles.buttonText,
+          disabled && styles.buttonTextDisabled,
+          textStyle,
+        ]}
+      >
         {title}
       </Text>
     </TouchableOpacity>
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: "#fff",
-    marginVertical: 10,
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    // iOS Shadow
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 20,
-    // borderStyle: "solid",
-    // borderWidth: 2,
-    // borderColor: "#ff009d",
-
-    // Android Shadow
-    elevation: 10,
-  },
-  buttonText: {
-    fontSize: 16,
-    color: "#000",
-  },
-  buttonDisabled: {
-    opacity: 0.5,
-  },
-  buttonTextDisabled: {
-    opacity: 0.7,
-  },
-});

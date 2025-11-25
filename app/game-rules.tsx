@@ -1,5 +1,5 @@
 // app/game-rules.tsx
-import React from "react";
+import React, { useMemo } from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
 import AppButton from "@/components/AppButton";
 import RuleCard from "@/components/RuleCard";
@@ -8,33 +8,37 @@ import GradientBackground from "@/components/ui/GradientBackground";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import gameRulesStyles from "../styles/screens/gameRulesStyles";
+import createGameRulesStyles from "../styles/screens/gameRulesStyles";
+import { useAppTheme } from "@/design/theme/ThemeProvider";
 
 function GameRulesScreen() {
   const { t } = useTranslation();
+  const { mode, tokens } = useAppTheme();
+  const styles = useMemo(() => createGameRulesStyles(mode), [mode]);
 
   const handleBack = () => {
     router.back();
   };
 
   return (
-    <View style={gameRulesStyles.container}>
+    <View style={styles.container}>
       <GradientBackground>
-        <View style={gameRulesStyles.statusBar}>
-          <TouchableOpacity
-            style={gameRulesStyles.closeButton}
-            onPress={handleBack}
-          >
-            <Ionicons name="close-circle-outline" size={36} color="white" />
+        <View style={styles.statusBar}>
+          <TouchableOpacity style={styles.closeButton} onPress={handleBack}>
+            <Ionicons
+              name="close-circle-outline"
+              size={36}
+              color={tokens.closeButtonIcon}
+            />
           </TouchableOpacity>
         </View>
 
         {/* A scrollable view for all the rule cards */}
         <ScrollView
-          style={gameRulesStyles.scrollContainer}
+          style={styles.scrollContainer}
           showsVerticalScrollIndicator={false}
         >
-          <ThemedText type="title" style={gameRulesStyles.headerTitle}>
+          <ThemedText type="title" style={styles.headerTitle}>
             {t("game_rules_header")}
           </ThemedText>
 
@@ -102,9 +106,9 @@ function GameRulesScreen() {
           />
 
           {/* BACK BUTTON or some navigation button */}
-          <View style={gameRulesStyles.footer}>
+          <View style={styles.footer}>
             <AppButton
-              style={gameRulesStyles.menuButton}
+              style={styles.menuButton}
               title={t("button_generic_back")}
               onPress={handleBack}
             />

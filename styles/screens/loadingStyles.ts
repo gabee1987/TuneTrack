@@ -1,18 +1,23 @@
 import { StyleSheet } from "react-native";
+import { getLoadingScreenColors } from "../screenColors";
+import { ThemeMode } from "@/design/tokens/theme";
 
-const loadingStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#222",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  logoText: {
-    marginTop: 10,
-    color: "#fff",
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-});
+const createLoadingStyles = (mode: ThemeMode) => {
+  const colors = getLoadingScreenColors(mode);
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    logoText: {
+      marginTop: 10,
+      color: colors.logoText,
+      fontSize: 24,
+      fontWeight: "bold",
+    },
+  });
+};
 
-export default loadingStyles;
+export default createLoadingStyles;

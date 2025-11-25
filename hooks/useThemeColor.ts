@@ -4,18 +4,18 @@
  */
 
 import { ThemeColorName, colorRoles } from "@/design/tokens/theme";
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useAppTheme } from "@/design/theme/ThemeProvider";
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
   colorName: ThemeColorName
 ) {
-  const theme = useColorScheme() ?? 'light';
-  const colorFromProps = props[theme];
+  const { mode } = useAppTheme();
+  const colorFromProps = props[mode];
 
   if (colorFromProps) {
     return colorFromProps;
   } else {
-    return colorRoles[theme][colorName];
+    return colorRoles[mode][colorName];
   }
 }
