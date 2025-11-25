@@ -249,3 +249,98 @@ export const getSpotifyConnectColors = (mode: ThemeMode) =>
 export const getSpotifyModeColors = (mode: ThemeMode) =>
   spotifyModeColorMap[mode];
 export const getWarningColors = (mode: ThemeMode) => warningColorMap[mode];
+
+const songDetailModalColorMap: ModeMap<{
+  background: string;
+  gradientStart: string;
+  gradientMiddle: string;
+  gradientEnd: string;
+  headerBorder: string;
+  closeButtonIcon: string;
+  artBorder: string;
+  artPlaceholderBackground: string;
+  artPlaceholderIcon: string;
+  title: string;
+  subtitle: string;
+  album: string;
+  tagBackground: string;
+  tagText: string;
+  statBackground: string;
+  statBorder: string;
+  statValue: string;
+  statLabel: string;
+  sectionBackground: string;
+  sectionBorder: string;
+  sectionLabel: string;
+  infoIconBackground: string;
+  infoIcon: string;
+  infoLabel: string;
+  infoValue: string;
+  spotifyButtonBackground: string;
+  spotifyButtonText: string;
+  spotifyButtonIcon: string;
+}> = {
+  light: {
+    background: "#f8f9ff",
+    gradientStart: "#f0f4ff",
+    gradientMiddle: "#e8f0ff",
+    gradientEnd: "#e0ecff",
+    headerBorder: "rgba(111, 202, 189, 0.2)",
+    closeButtonIcon: "#1f2333",
+    artBorder: "rgba(111, 202, 189, 0.25)",
+    artPlaceholderBackground: "rgba(111, 202, 189, 0.15)",
+    artPlaceholderIcon: "#6fcabd",
+    title: "#1f2333",
+    subtitle: "#2a2d3f",
+    album: "#3a3d4f",
+    tagBackground: "rgba(111, 202, 189, 0.15)",
+    tagText: "#1f2333",
+    statBackground: "rgba(255, 255, 255, 0.8)",
+    statBorder: "rgba(111, 202, 189, 0.25)",
+    statValue: "#1f2333",
+    statLabel: "#3a3d4f",
+    sectionBackground: "rgba(255, 255, 255, 0.9)",
+    sectionBorder: "rgba(111, 202, 189, 0.15)",
+    sectionLabel: "#6fcabd",
+    infoIconBackground: "rgba(111, 202, 189, 0.2)",
+    infoIcon: "#6fcabd",
+    infoLabel: "#3a3d4f",
+    infoValue: "#1f2333",
+    spotifyButtonBackground: "#6fcabd",
+    spotifyButtonText: "#ffffff",
+    spotifyButtonIcon: "#ffffff",
+  },
+  dark: {
+    background: "#02040a",
+    gradientStart: "#04070f",
+    gradientMiddle: "#0f1320",
+    gradientEnd: "#0b172d",
+    headerBorder: "rgba(125, 255, 203, 0.18)",
+    closeButtonIcon: "#f4fffe",
+    artBorder: "rgba(125, 255, 203, 0.18)",
+    artPlaceholderBackground: "rgba(125, 255, 203, 0.22)",
+    artPlaceholderIcon: "#7dffcb",
+    title: "#f4fffe",
+    subtitle: "#d0e7ff",
+    album: "#9fb5cc",
+    tagBackground: "rgba(255, 255, 255, 0.08)",
+    tagText: "#f4fffe",
+    statBackground: "rgba(8, 17, 35, 0.85)",
+    statBorder: "rgba(125, 255, 203, 0.18)",
+    statValue: "#f4fffe",
+    statLabel: "#9fb5cc",
+    sectionBackground: "rgba(5, 10, 22, 0.9)",
+    sectionBorder: "rgba(255, 255, 255, 0.08)",
+    sectionLabel: "#7dffcb",
+    infoIconBackground: "rgba(125, 255, 203, 0.2)",
+    infoIcon: "#7dffcb",
+    infoLabel: "#9fb5cc",
+    infoValue: "#f5fbff",
+    spotifyButtonBackground: "#7dffcb",
+    spotifyButtonText: "#0f1320",
+    spotifyButtonIcon: "#0f1320",
+  },
+};
+
+export const getSongDetailModalColors = (mode: ThemeMode) =>
+  songDetailModalColorMap[mode];
