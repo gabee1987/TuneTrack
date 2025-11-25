@@ -46,14 +46,29 @@ const cameraColorMap: ModeMap<{
 const gameRulesColorMap: ModeMap<{
   headerText: string;
   headerShadow: string;
+  cardBackground: string;
+  cardBorder: string;
+  cardTitle: string;
+  cardText: string;
+  cardShadow: string;
 }> = {
   light: {
     headerText: "#1f2233",
     headerShadow: "rgba(149, 125, 168, 0.5)",
+    cardBackground: "rgba(255, 255, 255, 0.95)",
+    cardBorder: "rgba(51, 82, 114, 0.2)",
+    cardTitle: "#1f2333",
+    cardText: "#2a2d3f",
+    cardShadow: "rgba(111, 202, 189, 0.25)",
   },
   dark: {
     headerText: "#ffffff",
     headerShadow: "#3535357d",
+    cardBackground: "rgba(6, 10, 18, 0.85)",
+    cardBorder: "rgba(125, 255, 203, 0.35)",
+    cardTitle: "#f4fffe",
+    cardText: "#e7f0ff",
+    cardShadow: "rgba(125, 255, 203, 0.2)",
   },
 };
 
