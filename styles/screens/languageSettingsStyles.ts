@@ -15,7 +15,9 @@ const createLanguageSettingsStyles = (mode: ThemeMode) => {
     },
     statusBar: {
       width: "100%",
-      padding: 20,
+      paddingTop: 50,
+      paddingHorizontal: 20,
+      paddingBottom: 20,
       flexDirection: "row",
       justifyContent: "flex-end",
     },

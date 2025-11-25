@@ -19,7 +19,9 @@ const createQrResultStyles = (mode: ThemeMode) => {
       top: 0,
       left: 0,
       right: 0,
-      padding: 20,
+      paddingTop: 50,
+      paddingHorizontal: 20,
+      paddingBottom: 20,
       flexDirection: "row",
       justifyContent: "flex-end",
       zIndex: 10,
@@ -35,6 +37,7 @@ const createQrResultStyles = (mode: ThemeMode) => {
       width: "100%",
       justifyContent: "flex-start",
       gap: 18,
+      marginTop: 30,
     },
     songInfoWrapper: {
       width: "100%",

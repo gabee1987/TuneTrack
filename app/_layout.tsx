@@ -1,17 +1,43 @@
 // app/_layout.tsx
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
-import { ThemeProvider } from "@/design/theme/ThemeProvider";
+import { ThemeProvider, useAppTheme } from "@/design/theme/ThemeProvider";
 import { LanguageProvider } from "@/localization/LanguageContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AnimationSettingsProvider } from "@/contexts/AnimationSettingsContext";
 import { CurrentTrackProvider } from "@/contexts/CurrentTrackContext";
 
 SplashScreen.preventAutoHideAsync();
+
+function AppContent() {
+  const { mode } = useAppTheme();
+
+  return (
+    <View style={{ flex: 1 }}>
+      <StatusBar style={mode === "dark" ? "light" : "dark"} />
+      <AnimatedBackground />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: "transparent" },
+        }}
+      >
+        <Stack.Screen name="index" />
+        <Stack.Screen name="spotify-connect" />
+        <Stack.Screen name="settings/index" />
+        <Stack.Screen name="camera" />
+        <Stack.Screen name="qr-result" />
+        <Stack.Screen name="warning" />
+        <Stack.Screen name="game-rules" />
+      </Stack>
+    </View>
+  );
+}
 
 function RootLayout() {
   // Load local fonts from assets/fonts
@@ -41,23 +67,7 @@ function RootLayout() {
         <LanguageProvider>
           <AnimationSettingsProvider>
             <CurrentTrackProvider>
-              <View style={{ flex: 1 }}>
-                <AnimatedBackground />
-                <Stack
-                  screenOptions={{
-                    headerShown: false,
-                    contentStyle: { backgroundColor: "transparent" },
-                  }}
-                >
-                  <Stack.Screen name="index" />
-                  <Stack.Screen name="spotify-connect" />
-                  <Stack.Screen name="settings/index" />
-                  <Stack.Screen name="camera" />
-                  <Stack.Screen name="qr-result" />
-                  <Stack.Screen name="warning" />
-                  <Stack.Screen name="game-rules" />
-                </Stack>
-              </View>
+              <AppContent />
             </CurrentTrackProvider>
           </AnimationSettingsProvider>
         </LanguageProvider>

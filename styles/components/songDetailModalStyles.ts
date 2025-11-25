@@ -11,8 +11,9 @@ export const createSongDetailModalStyles = (mode: ThemeMode) => {
       backgroundColor: colors.background,
     },
     detailsHeader: {
-      paddingTop: spacing.sm,
+      paddingTop: 0,
       paddingHorizontal: spacing.sm,
+      paddingBottom: spacing.sm,
       alignItems: "flex-end",
       borderBottomWidth: borders.hairline,
       borderColor: colors.headerBorder,
@@ -22,6 +23,7 @@ export const createSongDetailModalStyles = (mode: ThemeMode) => {
       height: 44,
       alignItems: "center",
       justifyContent: "center",
+      marginRight: spacing.md,
     },
     detailsContent: {
       alignItems: "center",
@@ -163,4 +165,3 @@ export const createSongDetailModalStyles = (mode: ThemeMode) => {
     },
   });
 };
-

@@ -19,6 +19,7 @@ const createWarningStyles = (mode: ThemeMode) => {
       backgroundColor: colors.backButtonBackground,
       padding: 10,
       borderRadius: radii.xs,
+      zIndex: 10,
     },
     backButtonText: {
       color: colors.textLight,
