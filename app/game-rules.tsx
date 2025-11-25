@@ -105,6 +105,23 @@ function GameRulesScreen() {
             ]}
           />
 
+          {/* TUNETRACK TOKENS */}
+          <RuleCard
+            title={t("game_rules_tokens_title")}
+            content={[
+              t("game_rules_tokens_intro"),
+              t("game_rules_tokens_own_turn_title"),
+              t("game_rules_tokens_own_turn"),
+              t("game_rules_tokens_opponent_turn_title"),
+              t("game_rules_tokens_opponent_turn"),
+              t("game_rules_tokens_opponent_note"),
+              t("game_rules_tokens_anytime_title"),
+              t("game_rules_tokens_anytime"),
+              t("game_rules_tokens_earning_title"),
+              t("game_rules_tokens_earning"),
+            ]}
+          />
+
           {/* BACK BUTTON or some navigation button */}
           <View style={styles.footer}>
             <AppButton
