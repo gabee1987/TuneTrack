@@ -8,12 +8,14 @@ import { useTranslation } from "react-i18next";
 import { useSpotifyConnection } from "@/modules/spotify/hooks/useSpotifyConnection";
 import createHomeStyles from "../styles/screens/homeStyles";
 import { useAppTheme } from "@/design/theme/ThemeProvider";
+import { useCurrentTrack } from "@/contexts/CurrentTrackContext";
 
 function MainScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { isConnected, refresh } = useSpotifyConnection();
   const { mode } = useAppTheme();
+  const { hasCurrentTrack, lastScannedQrData } = useCurrentTrack();
   const styles = useMemo(() => createHomeStyles(mode), [mode]);
 
   // Check connection status on mount and when screen comes into focus
@@ -42,6 +44,15 @@ function MainScreen() {
     });
   };
 
+  const handleViewCurrentTrack = () => {
+    if (lastScannedQrData) {
+      router.push({
+        pathname: "/qr-result",
+        params: { qrData: lastScannedQrData },
+      });
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -62,6 +73,13 @@ function MainScreen() {
         </View>
 
         <View style={styles.bottomContainer}>
+          {hasCurrentTrack && (
+            <AppButton
+              style={styles.menuButton}
+              title={t("index_view_current_track", "View Current Track")}
+              onPress={handleViewCurrentTrack}
+            />
+          )}
           <AppButton
             style={styles.menuButton}
             title={t("index_read_rules")}

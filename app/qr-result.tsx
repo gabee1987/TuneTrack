@@ -29,12 +29,21 @@ import SongDetailModal from "@/components/SongDetailModal";
 import createQrResultStyles from "../styles/screens/qrResultStyles";
 import { useAppTheme } from "@/design/theme/ThemeProvider";
 import { useAnimationSettings } from "@/contexts/AnimationSettingsContext";
+import { useCurrentTrack } from "@/contexts/CurrentTrackContext";
 
 function QrResultScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { mode, tokens } = useAppTheme();
   const { animationsEnabled } = useAnimationSettings();
+  const {
+    setLastScannedQrData,
+    playbackStarted,
+    setPlaybackStarted,
+    lastScannedQrData,
+    hasOpenedSpotify,
+    setHasOpenedSpotify,
+  } = useCurrentTrack();
   const params = useLocalSearchParams();
   const qrData = Array.isArray(params.qrData)
     ? params.qrData[0]
@@ -108,14 +117,24 @@ function QrResultScreen() {
     }
 
     if (trackUri) {
-      // Don't replay if we've already played this track or opened Spotify
+      // Don't replay if we've already played this track, opened Spotify, or if we're navigating back to the same track
+      const isNavigatingBack = lastScannedQrData === qrData && playbackStarted;
       if (
         playbackTrackRef.current === trackUri ||
-        hasOpenedSpotifyRef.current
+        hasOpenedSpotify ||
+        isNavigatingBack
       ) {
+        // If navigating back, restore the refs to prevent issues
+        if (isNavigatingBack) {
+          playbackTrackRef.current = trackUri;
+          hasOpenedSpotifyRef.current = hasOpenedSpotify;
+        }
         return;
       }
       playbackTrackRef.current = trackUri;
+      // Store the QR data so user can navigate back to this screen
+      setLastScannedQrData(qrData);
+      setPlaybackStarted(true);
       spotifyServices.playbackService
         .playTrack(trackUri)
         .catch((error) =>
@@ -131,7 +150,16 @@ function QrResultScreen() {
         "Not recognized as a Spotify track URI"
       )
     );
-  }, [qrData, trackUri, t]);
+  }, [
+    qrData,
+    trackUri,
+    t,
+    lastScannedQrData,
+    playbackStarted,
+    setLastScannedQrData,
+    setPlaybackStarted,
+    hasOpenedSpotify,
+  ]);
 
   useEffect(() => {
     let cancelled = false;
@@ -328,19 +356,29 @@ function QrResultScreen() {
     if (!trackUrl) {
       return;
     }
+    // Mark that Spotify has been opened - this prevents playback from restarting
+    setHasOpenedSpotify(true);
     hasOpenedSpotifyRef.current = true;
+    // Just open Spotify without stopping or restarting playback
     Linking.openURL(trackUrl);
-  }, [trackUrl]);
+  }, [trackUrl, setHasOpenedSpotify]);
 
   const handleBack = () => {
     router.navigate("/");
   };
 
+  const handleStopPlayback = useCallback(async () => {
+    await spotifyServices.playbackService.stopPlayback();
+    setLastScannedQrData(null); // Clear the stored QR data when stopping playback
+    setPlaybackStarted(false); // Reset playback started flag
+    setHasOpenedSpotify(false); // Reset Spotify opened flag
+  }, [setLastScannedQrData, setPlaybackStarted, setHasOpenedSpotify]);
+
   const handleStopAndScan = useCallback(async () => {
     setShowHeaderDetails(false);
-    await spotifyServices.playbackService.stopPlayback();
+    await handleStopPlayback();
     router.push("/camera");
-  }, [router]);
+  }, [router, handleStopPlayback]);
 
   type IoniconName =
     | Exclude<ComponentProps<typeof Ionicons>["name"], undefined>
@@ -510,6 +548,13 @@ function QrResultScreen() {
             label={t("qr_result_open_spotify_button", "Open in Spotify")}
             onPress={handleOpenInSpotify}
             disabled={!trackUrl}
+          />
+          <ActionButton
+            variant="secondary"
+            icon="stop-outline"
+            label={t("qr_result_stop_playback", "Stop Playback")}
+            onPress={handleStopPlayback}
+            disabled={!playbackStarted}
           />
         </View>
       </View>
