@@ -1,6 +1,6 @@
 // app/game-rules.tsx
 import React from "react";
-import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { View, ScrollView, TouchableOpacity } from "react-native";
 import AppButton from "@/components/AppButton";
 import RuleCard from "@/components/RuleCard";
 import { router } from "expo-router";
@@ -8,6 +8,7 @@ import GradientBackground from "@/components/ui/GradientBackground";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
+import gameRulesStyles from "../styles/screens/gameRulesStyles";
 
 function GameRulesScreen() {
   const { t } = useTranslation();
@@ -17,20 +18,23 @@ function GameRulesScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={gameRulesStyles.container}>
       <GradientBackground>
-        <View style={styles.statusBar}>
-          <TouchableOpacity style={styles.closeButton} onPress={handleBack}>
+        <View style={gameRulesStyles.statusBar}>
+          <TouchableOpacity
+            style={gameRulesStyles.closeButton}
+            onPress={handleBack}
+          >
             <Ionicons name="close-circle-outline" size={36} color="white" />
           </TouchableOpacity>
         </View>
 
         {/* A scrollable view for all the rule cards */}
         <ScrollView
-          style={styles.scrollContainer}
+          style={gameRulesStyles.scrollContainer}
           showsVerticalScrollIndicator={false}
         >
-          <ThemedText type="title" style={styles.headerTitle}>
+          <ThemedText type="title" style={gameRulesStyles.headerTitle}>
             {t("game_rules_header")}
           </ThemedText>
 
@@ -98,9 +102,9 @@ function GameRulesScreen() {
           />
 
           {/* BACK BUTTON or some navigation button */}
-          <View style={styles.footer}>
+          <View style={gameRulesStyles.footer}>
             <AppButton
-              style={styles.menuButton}
+              style={gameRulesStyles.menuButton}
               title={t("button_generic_back")}
               onPress={handleBack}
             />
@@ -114,44 +118,3 @@ function GameRulesScreen() {
 export default GameRulesScreen;
 
 // -- STYLES --
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollContainer: {
-    paddingHorizontal: 20,
-    marginBottom: 20,
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: "#fff",
-    textAlign: "center",
-    textShadowColor: "#3535357d",
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 16,
-    width: "100%",
-  },
-  statusBar: {
-    width: "100%",
-    padding: 20,
-    flexDirection: "row",
-    justifyContent: "flex-end",
-  },
-  closeButton: {
-    width: 40,
-    height: 40,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  footer: {
-    alignItems: "center",
-    marginBottom: 30,
-  },
-  menuButton: {
-    paddingHorizontal: 10,
-    width: "70%",
-    marginBottom: 20,
-  },
-});

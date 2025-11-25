@@ -1,7 +1,7 @@
 // components/ThemedText.tsx
 import { Text, type TextProps, StyleSheet } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { theme } from "@/themes/theme";
+import { appTheme, palette } from "@/design/tokens/theme";
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
@@ -38,26 +38,26 @@ const styles = StyleSheet.create({
   default: {
     fontSize: 16,
     lineHeight: 24,
-    fontFamily: theme.fonts.default,
+    fontFamily: appTheme.fonts.default,
   },
   defaultSemiBold: {
     fontSize: 16,
     lineHeight: 24,
-    fontFamily: theme.fonts.semiBold,
+    fontFamily: appTheme.fonts.semiBold,
   },
   title: {
     fontSize: 32,
     lineHeight: 36,
-    fontFamily: theme.fonts.title,
+    fontFamily: appTheme.fonts.title,
   },
   subtitle: {
     fontSize: 20,
-    fontFamily: theme.fonts.bold,
+    fontFamily: appTheme.fonts.bold,
   },
   link: {
     fontSize: 16,
     lineHeight: 30,
-    fontFamily: theme.fonts.default,
-    color: "#0a7ea4",
+    fontFamily: appTheme.fonts.default,
+    color: palette.accentPink,
   },
 });

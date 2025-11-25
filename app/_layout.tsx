@@ -5,7 +5,7 @@ import AnimatedBackground from "@/components/AnimatedBackground";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
-import { ThemeProvider } from "@/themes/ThemeProvider";
+import { ThemeProvider } from "@/design/theme/ThemeProvider";
 import { LanguageProvider } from "@/localization/LanguageContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AnimationSettingsProvider } from "@/contexts/AnimationSettingsContext";

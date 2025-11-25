@@ -1,11 +1,12 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
+import { View, TouchableOpacity, SafeAreaView } from "react-native";
 import { useRouter, useFocusEffect } from "expo-router";
 import AppButton from "@/components/AppButton";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { useSpotifyConnection } from "@/modules/spotify/hooks/useSpotifyConnection";
+import homeStyles from "../styles/screens/homeStyles";
 
 function MainScreen() {
   const router = useRouter();
@@ -39,39 +40,39 @@ function MainScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
+    <SafeAreaView style={homeStyles.safeArea}>
+      <View style={homeStyles.container}>
         {/* <AnimatedBlurredBlobs /> */}
-        <View style={styles.statusBar}>
+        <View style={homeStyles.statusBar}>
           <TouchableOpacity
-            style={styles.settingsButton}
+            style={homeStyles.settingsButton}
             onPress={handleSettingsPress}
           >
             <Ionicons name="settings-outline" size={28} color="white" />
           </TouchableOpacity>
         </View>
 
-        <View style={styles.logoContainer}>
-          <ThemedText type="title" style={styles.logoText}>
+        <View style={homeStyles.logoContainer}>
+          <ThemedText type="title" style={homeStyles.logoText}>
             {t("index_logo")}
           </ThemedText>
         </View>
 
-        <View style={styles.bottomContainer}>
+        <View style={homeStyles.bottomContainer}>
           <AppButton
-            style={styles.menuButton}
+            style={homeStyles.menuButton}
             title={t("index_read_rules")}
             onPress={handleReadRules}
           />
           {isConnected ? (
             <AppButton
-              style={styles.menuButton}
+              style={homeStyles.menuButton}
               title={t("index_start_game")}
               onPress={handleStartGame}
             />
           ) : (
             <AppButton
-              style={styles.menuButton}
+              style={homeStyles.menuButton}
               title={t("index_connect_spotify")}
               onPress={handleSpotifyConnect}
             />
@@ -83,54 +84,3 @@ function MainScreen() {
 }
 
 export default MainScreen;
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    position: "relative",
-    alignItems: "center",
-  },
-  statusBar: {
-    width: "100%",
-    padding: 20,
-    flexDirection: "row",
-    justifyContent: "flex-end",
-  },
-  settingsButton: {
-    width: 40,
-    height: 40,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  logoContainer: {
-    flex: 1,
-    alignItems: "center",
-    marginTop: 50,
-    height: "100%",
-    width: "100%",
-  },
-  logoText: {
-    fontSize: 60,
-    color: "#fff",
-    textAlign: "center",
-    lineHeight: 60,
-    textShadowColor: "#ff009d",
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 16,
-    width: "100%",
-  },
-  bottomContainer: {
-    position: "absolute",
-    bottom: 60,
-    width: "100%",
-    alignItems: "center",
-  },
-  menuButton: {
-    paddingHorizontal: 10,
-    width: "70%",
-    marginBottom: 10,
-  },
-});
