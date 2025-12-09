@@ -35,29 +35,34 @@ Before you begin, ensure you have:
 ### Required Icon Sizes
 
 Google Play Store requires specific icon sizes. Your current setup uses:
+
 - **Icon**: `./assets/images/icon.png` (1024x1024px recommended)
 - **Adaptive Icon**: `./assets/images/adaptive-icon.png` (1024x1024px)
 
 #### Icon Requirements:
 
 1. **App Icon** (`icon.png`):
+
    - Size: 1024x1024 pixels
    - Format: PNG (no transparency)
    - Background: Solid color or design
    - No rounded corners (Play Store will add them)
 
 2. **Adaptive Icon** (`adaptive-icon.png`):
+
    - Size: 1024x1024 pixels
    - Format: PNG
    - Safe zone: Keep important content within 512x512 center area
    - Background color: Defined in `app.config.js` (currently `#ffffff`)
 
 3. **Feature Graphic** (for Play Store listing):
+
    - Size: 1024x500 pixels
    - Format: PNG or JPG
    - Used as the banner image on your Play Store listing
 
 4. **Screenshots** (required):
+
    - Phone screenshots: At least 2, up to 8
    - Minimum: 320px width
    - Maximum: 3840px width
@@ -74,12 +79,14 @@ Google Play Store requires specific icon sizes. Your current setup uses:
 ### Creating Your Icons
 
 **Tools you can use:**
+
 - [Figma](https://www.figma.com/) - Free design tool
 - [Canva](https://www.canva.com/) - Easy icon creation
 - [App Icon Generator](https://www.appicon.co/) - Online generator
 - [Android Asset Studio](https://romannurik.github.io/AndroidAssetStudio/) - Google's official tool
 
 **Steps:**
+
 1. Design your icon at 1024x1024px
 2. Export as PNG
 3. Replace `./assets/images/icon.png` and `./assets/images/adaptive-icon.png`
@@ -94,11 +101,13 @@ Google Play Store requires specific icon sizes. Your current setup uses:
 EAS can automatically manage your app signing keys. This is the easiest and most secure option.
 
 **Setup:**
+
 1. No additional setup needed! EAS will generate and manage keys automatically
 2. Keys are stored securely in EAS servers
 3. You can download the keystore if needed later
 
 **To enable:**
+
 - Already configured if you're using EAS builds
 - Keys are generated on first production build
 
@@ -107,17 +116,20 @@ EAS can automatically manage your app signing keys. This is the easiest and most
 If you prefer to manage your own keys:
 
 **Generate a keystore:**
+
 ```bash
 keytool -genkeypair -v -storetype PKCS12 -keystore tunetrack-release-key.keystore -alias tunetrack-key -keyalg RSA -keysize 2048 -validity 10000
 ```
 
-**Important:** 
+**Important:**
+
 - Store the keystore file securely (never commit to git!)
 - Save the password and alias in a secure password manager
 - Back up the keystore file in multiple secure locations
 - **If you lose this keystore, you cannot update your app on Play Store!**
 
 **Add to EAS:**
+
 ```bash
 eas credentials
 # Select Android > Production > Set up keystore
@@ -131,6 +143,7 @@ eas credentials
 ### Current Setup
 
 Your app uses:
+
 - `EXPO_PUBLIC_SPOTIFY_CLIENT_ID` - Spotify API client ID
 
 ### Setting Up EAS Secrets
@@ -138,16 +151,19 @@ Your app uses:
 **For Production Builds:**
 
 1. **Set Spotify Client ID secret:**
+
    ```bash
    eas secret:create --scope project --name EXPO_PUBLIC_SPOTIFY_CLIENT_ID --value YOUR_SPOTIFY_CLIENT_ID
    ```
 
 2. **Verify secrets are set:**
+
    ```bash
    eas secret:list
    ```
 
 3. **For local development**, create a `.env` file (DO NOT commit this):
+
    ```env
    EXPO_PUBLIC_SPOTIFY_CLIENT_ID=your_client_id_here
    ```
@@ -162,6 +178,7 @@ Your app uses:
 ### Environment-Specific Configuration
 
 Your `app.config.js` already handles this correctly:
+
 - Local builds: Reads from `.env` file
 - EAS builds: Reads from EAS secrets
 - Validates that secrets exist before building
@@ -193,16 +210,19 @@ Your `eas.json` needs to be updated for Play Store submission. The Play Store re
 Prepare the following for your Play Store listing:
 
 #### 1. **App Name**
+
 - Current: "TuneTrack"
 - Maximum: 50 characters
 - Should match your app's display name
 
 #### 2. **Short Description**
+
 - Maximum: 80 characters
 - Appears in search results
 - Example: "Track and discover music with QR codes and Spotify integration"
 
 #### 3. **Full Description**
+
 - Maximum: 4000 characters
 - Should include:
   - What your app does
@@ -211,6 +231,7 @@ Prepare the following for your Play Store listing:
   - Any special requirements
 
 **Example:**
+
 ```
 TuneTrack is a modern music discovery app that lets you track and share your favorite songs using QR codes.
 
@@ -226,10 +247,12 @@ Perfect for music lovers who want to discover and share new tracks easily.
 ```
 
 #### 4. **App Category**
+
 - Primary: Music & Audio
 - Secondary: Entertainment (optional)
 
 #### 5. **Content Rating**
+
 - You'll need to complete a questionnaire
 - Questions about:
   - User-generated content
@@ -238,6 +261,7 @@ Perfect for music lovers who want to discover and share new tracks easily.
   - etc.
 
 #### 6. **Privacy Policy URL** (REQUIRED)
+
 - Must be publicly accessible
 - Must cover:
   - What data you collect
@@ -251,11 +275,13 @@ Perfect for music lovers who want to discover and share new tracks easily.
   - Privacy policy generators
 
 #### 7. **Contact Information**
+
 - Email address (will be public)
 - Website (optional)
 - Phone number (optional)
 
 #### 8. **Graphics**
+
 - Feature graphic: 1024x500px
 - Screenshots: 2-8 images
 - High-res icon: 512x512px (optional)
@@ -267,28 +293,33 @@ Perfect for music lovers who want to discover and share new tracks easily.
 ### Current Permissions
 
 Your app requests:
-- `CAMERA` - For QR code scanning
-- `RECORD_AUDIO` - For audio recording (if used)
+
+- `CAMERA` - For QR code scanning and gameplay camera features (required)
 - `INTERNET` - For API calls
 - `READ_EXTERNAL_STORAGE` - For file access
 - `WRITE_EXTERNAL_STORAGE` - For file saving
+
+Note: `RECORD_AUDIO` / microphone permission is NOT requested in production builds. If you later add an audio-recording feature, you must update the manifest, the privacy policy, and the Play Console data safety section.
 
 ### Privacy Policy Requirements
 
 Your privacy policy must explain:
 
 1. **Data Collection:**
+
    - What data you collect (if any)
    - Camera usage for QR scanning
    - Spotify authentication data
    - Any analytics or crash reporting
 
 2. **Third-Party Services:**
+
    - Spotify API usage
    - Their privacy policy link
    - Data shared with Spotify
 
 3. **Data Storage:**
+
    - Where data is stored (local device, cloud, etc.)
    - How long data is retained
 
@@ -332,6 +363,7 @@ Last updated: [Date]
 ```
 
 **Where to host:**
+
 - Create a simple HTML page
 - Host on GitHub Pages, Netlify, or your own domain
 - Make sure the URL is publicly accessible
@@ -345,6 +377,7 @@ Last updated: [Date]
 Before submitting, test thoroughly:
 
 #### Functional Testing
+
 - [ ] App launches without crashes
 - [ ] QR code scanning works
 - [ ] Spotify authentication works
@@ -354,6 +387,7 @@ Before submitting, test thoroughly:
 - [ ] Settings are saved correctly
 
 #### Device Testing
+
 - [ ] Test on different Android versions (Android 8.0+)
 - [ ] Test on different screen sizes
 - [ ] Test in portrait and landscape (if supported)
@@ -361,17 +395,20 @@ Before submitting, test thoroughly:
 - [ ] Test on high-end devices
 
 #### Permission Testing
+
 - [ ] Camera permission request works
 - [ ] App handles permission denial gracefully
 - [ ] App works if Spotify is not connected
 
 #### Performance Testing
+
 - [ ] App starts quickly (< 3 seconds)
 - [ ] No memory leaks
 - [ ] Smooth animations
 - [ ] No excessive battery drain
 
 #### Edge Cases
+
 - [ ] Handle no internet connection
 - [ ] Handle invalid QR codes
 - [ ] Handle Spotify API errors
@@ -382,6 +419,7 @@ Before submitting, test thoroughly:
 Use Google Play's internal testing track:
 
 1. Build a preview APK:
+
    ```bash
    eas build --platform android --profile preview
    ```
@@ -399,6 +437,7 @@ Use Google Play's internal testing track:
 #### 1. **Update Version Numbers**
 
 Before building, update version in `app.config.js`:
+
 ```javascript
 version: "1.0.0",  // User-facing version
 android: {
@@ -407,6 +446,7 @@ android: {
 ```
 
 **Versioning rules:**
+
 - `version`: Semantic version (1.0.0, 1.0.1, 1.1.0, etc.)
 - `versionCode`: Integer that must increase with each release (1, 2, 3, ...)
 
@@ -425,6 +465,7 @@ eas build --platform android --profile production
 ```
 
 This will:
+
 - Create an Android App Bundle (AAB)
 - Sign it with your production key
 - Upload it to EAS servers
@@ -433,6 +474,7 @@ This will:
 #### 4. **Download the Build**
 
 After build completes:
+
 ```bash
 eas build:list
 eas build:download [BUILD_ID]
@@ -463,6 +505,7 @@ Go to: https://play.google.com/console
 #### 3. **Set Up Store Listing**
 
 Fill in all required fields:
+
 - App name
 - Short description (80 chars)
 - Full description (4000 chars)
@@ -515,6 +558,7 @@ After submitting:
 ### Monitoring Your App
 
 **Tools to consider:**
+
 - **Expo Updates**: For OTA updates (if enabled)
 - **Sentry**: For crash reporting
 - **Firebase Analytics**: For usage analytics
@@ -525,19 +569,25 @@ After submitting:
 ## Common Issues & Solutions
 
 ### Issue: Build fails with missing secrets
+
 **Solution:** Run `eas secret:create` for all required environment variables
 
 ### Issue: App rejected for missing privacy policy
+
 **Solution:** Ensure privacy policy URL is publicly accessible and covers all data usage
 
 ### Issue: App crashes on certain devices
+
 **Solution:** Test on multiple devices, check device-specific logs, update dependencies
 
 ### Issue: Version code conflict
+
 **Solution:** Increment `versionCode` in `app.config.js` for each new release
 
 ### Issue: AAB file too large
-**Solution:** 
+
+**Solution:**
+
 - Enable ProGuard/R8 minification
 - Remove unused assets
 - Use Android App Bundle (already using AAB, which helps)
@@ -591,4 +641,3 @@ eas submit --platform android
 7. ✅ Submit to Play Store
 
 Good luck with your release! 🚀
-

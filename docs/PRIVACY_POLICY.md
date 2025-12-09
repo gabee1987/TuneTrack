@@ -48,28 +48,28 @@ We use this data only to provide the core gameplay and music-related features in
 
 For more information about how Spotify processes your data, please see Spotify’s own Privacy Policy.
 
-### 2.3. Camera and Microphone
+### 2.3. Camera
 
-The App requests the following Android permissions:
+The App requests the following Android permission:
 
 - `CAMERA`
-- `RECORD_AUDIO`
 
-**Camera**
+Camera is used for in-app features such as scanning QR codes and interacting with game elements that require live camera input.
 
-TuneTrack uses the camera for in-app features such as scanning codes or interacting with game elements that require camera input.
-
-- Camera access is used **only while you are using these features**.
+- Camera access is used only while you are using the relevant features.
 - We do not store raw camera images or video streams on our servers.
 
-**Microphone**
+Microphone / Audio
 
-TuneTrack may request access to the microphone because of the underlying camera/recording functionality used by the App.
+TuneTrack does not request microphone access in production builds and does not record audio. Any references to audio recording or microphone permission in development were removed from production configuration.
 
-- At the time of this policy, we do **not** store audio recordings on our own servers.
-- If a feature uses microphone input (e.g. for specific game mechanics), audio is used only to provide that feature and is not stored longer than necessary.
+If you disable camera permission, some camera-related features of the App may not function correctly.
 
-If you disable camera or microphone permissions, some features of the App may not function correctly.
+Third-Party Inspiration and Intended Use
+
+TuneTrack was inspired by other music discovery apps. It is not affiliated with or endorsed by any other app or company. This project is developed for private, non-commercial use by the author and their close relatives/friends; there is no intention to monetize or distribute user data.
+
+If you have concerns about similarity to another app, please contact us at the address below.
 
 ### 2.4. Device and Usage Information
 

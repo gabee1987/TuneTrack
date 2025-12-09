@@ -87,11 +87,6 @@ function AnimatedCircle() {
 
 export default function AnimatedBackground() {
   const { animationsEnabled } = useAnimationSettings();
-
-  if (!animationsEnabled) {
-    return <View style={[styles.container, styles.disabledBackground]} />;
-  }
-
   // 1) Pick a random color set on mount
   const colorSet = useMemo(
     () => COLOR_SETS[Math.floor(Math.random() * COLOR_SETS.length)],
@@ -102,12 +97,14 @@ export default function AnimatedBackground() {
   const progress = useSharedValue(0);
 
   useEffect(() => {
+    if (!animationsEnabled) return;
+
     progress.value = withRepeat(
       withTiming(1, { duration: 20000, easing: Easing.linear }), // Slower transition
       -1,
       true
     );
-  }, [progress]);
+  }, [progress, animationsEnabled]);
 
   const backgroundStyle = useAnimatedStyle(() => {
     const floatIndex = progress.value * (colorSet.length - 1);
@@ -128,6 +125,10 @@ export default function AnimatedBackground() {
       backgroundColor: currentColor,
     };
   });
+
+  if (!animationsEnabled) {
+    return <View style={[styles.container, styles.disabledBackground]} />;
+  }
 
   return (
     <View style={styles.container}>

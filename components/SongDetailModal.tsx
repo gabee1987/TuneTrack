@@ -145,7 +145,7 @@ export default function SongDetailModal({
   onOpenInSpotify,
   t,
 }: SongDetailModalProps) {
-  const { mode, tokens } = useAppTheme();
+  const { mode } = useAppTheme();
   const { animationsEnabled } = useAnimationSettings();
   const styles = useMemo(() => createSongDetailModalStyles(mode), [mode]);
   const colors = useMemo(() => getSongDetailModalColors(mode), [mode]);

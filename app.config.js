@@ -47,7 +47,7 @@ export default {
         foregroundImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#ffffff",
       },
-      permissions: ["CAMERA", "RECORD_AUDIO"],
+      permissions: ["CAMERA"],
     },
     web: {
       bundler: "metro",
@@ -69,8 +69,7 @@ export default {
         "expo-camera",
         {
           cameraPermission: "Allow TuneTrack to access your camera",
-          microphonePermission: "Allow TuneTrack to access your microphone",
-          recordAudioAndroid: true,
+          recordAudioAndroid: false,
         },
       ],
       "expo-secure-store",
