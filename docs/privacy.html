@@ -16,377 +16,301 @@
       a {
         color: var(--neon-mint);
       }
+      code {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+      h3 {
+        margin-top: 24px;
+        margin-bottom: 12px;
+      }
+      h4 {
+        margin-top: 16px;
+        margin-bottom: 8px;
+        font-size: 16px;
+      }
+      ul {
+        margin: 8px 0 8px 20px;
+      }
+      li {
+        margin: 6px 0;
+      }
     </style>
   </head>
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width,initial-scale=1" />
-      <title>Privacy Policy — TuneTrack</title>
-      <link rel="stylesheet" href="./assets/css/style.css" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
-        rel="stylesheet"
-      />
-      <style>
-        .content {
-          padding: 18px 0;
-        }
-        a {
-          color: var(--neon-mint);
-        }
-        code {
-          background: rgba(0, 0, 0, 0.2);
-          padding: 2px 6px;
-          border-radius: 4px;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="site">
-        <div class="card header">
-          <div class="logo">
-            <img src="../assets/images/icon.png" alt="TuneTrack" />
-          </div>
-          <div>
-            <h1 class="title">TuneTrack — Privacy Policy</h1>
-            <p class="subtitle">Effective date: 2025-12-09</p>
-            <p class="small">
-              TuneTrack is a music party game that uses Spotify links — players
-              try to identify the song being played and guess its release year.
-            </p>
-          </div>
+  <body>
+    <div class="site">
+      <div class="card header">
+        <div class="logo">
+          <img src="./assets/icon.png" alt="TuneTrack" />
         </div>
-
-        <div class="card markdown">
-          <div class="content">
-            <h3>1. Who We Are</h3>
-            <p>
-              <strong>App name:</strong> TuneTrack<br /><strong
-                >Platform:</strong
-              >
-              Android (and later iOS)<br /><strong>Contact email:</strong>
-              <a href="mailto:gabee1987@gmail.com">gabee1987@gmail.com</a>
-            </p>
-
-            <h4>2.2. Spotify authentication and local storage</h4>
-            <p>When you connect TuneTrack to your Spotify account, the app obtains an OAuth access token from Spotify to enable playback. This token and any refresh token are stored locally on your device using secure storage mechanisms (Expo SecureStore). These tokens are not sent to or stored on any servers owned by the developer; they remain on your device to allow the app to interact with Spotify on your behalf.</p>
-
-            <h4>2.3. Camera</h4>
-            <p>The App requests the <code>CAMERA</code> permission. Camera use is limited to gameplay features such as scanning QR codes and live camera interactions. Camera access is used only while you are using the relevant features. We do not capture, transmit, or store raw camera images or video streams outside your device.</p>
-
-            <h4>2.4. Microphone / Audio</h4>
-            <p>TuneTrack does not request microphone access in production builds and does not record audio.</p>
-
-            <h4>2.5. Third-Party Inspiration and Intended Use</h4>
-            <p>TuneTrack was inspired by other music discovery/party apps. It is not affiliated with or endorsed by any other app or company. This project is developed for private, non-commercial use by the author and their close relatives/friends; there is no intention to monetize or distribute user data.</p>
-              We use this data only to provide the core gameplay and
-              music-related features in the App.
-            </p>
-            <p>
-              For more information about how Spotify processes your data, please
-              see
-              <a
-                href="https://www.spotify.com/legal/privacy-policy/"
-                target="_blank"
-                >Spotify’s Privacy Policy</a
-              >.
-            </p>
-
-            <h4>2.3. Camera</h4>
-            <p>The App requests the following Android permission:</p>
-            <ul>
-              <li><code>CAMERA</code></li>
-            </ul>
-            <p>
-              Camera is used for in-app features such as scanning QR codes and
-              interacting with game elements that require live camera input.
-            </p>
-            <ul>
-              <li>
-                Camera access is used only while you are using the relevant
-                features.
-              </li>
-              <li>
-                We do not store raw camera images or video streams on our
-                servers.
-              </li>
-            </ul>
-
-            <h4>Microphone / Audio</h4>
-            <p>
-              TuneTrack does not request microphone access in production builds
-              and does not record audio. Any references to audio recording or
-              microphone permission in development were removed from production
-              configuration.
-            </p>
-
-            <h4>Third-Party Inspiration and Intended Use</h4>
-            <p>
-              TuneTrack was inspired by other music discovery/party apps. It is
-              not affiliated with or endorsed by any other app or company. This
-              project is developed for private, non-commercial use by the author
-              and their close relatives/friends; there is no intention to
-              monetize or distribute user data.
-            </p>
-            <p>
-              If you have concerns about similarity to another app, please
-              contact us at the address below.
-            </p>
-
-            <h4>2.4. Device and Usage Information</h4>
-            <p>
-              When you use TuneTrack, we may automatically collect some
-              technical information, such as:
-            </p>
-            <ul>
-              <li>Device model, operating system, language, and region</li>
-              <li>App version</li>
-              <li>
-                Anonymous usage data (e.g. which screens are opened, basic
-                interaction patterns)
-              </li>
-              <li>Crash and performance data (e.g. error logs)</li>
-            </ul>
-            <p>
-              This information is typically collected via the mobile platform
-              (e.g. Google Play Services / Expo services) and is used to improve
-              stability and user experience.
-            </p>
-
-            <h4>2.5. Local Storage (On Your Device)</h4>
-            <p>
-              TuneTrack may store certain data locally on your device, for
-              example:
-            </p>
-            <ul>
-              <li>
-                Authentication tokens (e.g. Spotify access/refresh tokens) using
-                secure storage mechanisms
-              </li>
-              <li>Your in-app preferences and settings</li>
-              <li>Game state or progress data</li>
-            </ul>
-            <p>
-              This data is stored <strong>only on your device</strong> and is
-              not automatically shared with us or third parties, except as
-              needed to communicate with Spotify or other services for App
-              functionality.
-            </p>
-
-            <h3>3. How We Use Your Information</h3>
-            <p>We use the collected information for the following purposes:</p>
-            <ul>
-              <li>To provide and operate TuneTrack and its features</li>
-              <li>
-                To enable integration with Spotify and play music during the
-                game
-              </li>
-              <li>To authenticate you via Spotify and maintain your session</li>
-              <li>
-                To show and manage your game state, scores, and related content
-              </li>
-              <li>
-                To improve the App’s performance, stability, and user experience
-              </li>
-              <li>To debug issues and prevent abuse or misuse of the App</li>
-            </ul>
-            <p>We do <strong>not</strong> sell your personal data.</p>
-
-            <h3>4. Legal Bases for Processing (EU/EEA Users)</h3>
-            <p>
-              If you are located in the European Union / European Economic Area,
-              we process your personal data on the following legal bases:
-            </p>
-            <ul>
-              <li>
-                <strong>Performance of a contract:</strong> To provide the App
-                and its features, including Spotify integration.
-              </li>
-              <li>
-                <strong>Consent:</strong> When you grant Spotify permissions,
-                allow camera or microphone access, or agree to optional
-                analytics (where applicable).
-              </li>
-              <li>
-                <strong>Legitimate interests:</strong> To maintain and improve
-                the App, prevent abuse, and ensure security.
-              </li>
-            </ul>
-            <p>You can withdraw your consent at any time by:</p>
-            <ul>
-              <li>Disconnecting TuneTrack from your Spotify account,</li>
-              <li>
-                Revoking permissions in your device settings (e.g. camera,
-                microphone),
-              </li>
-              <li>Uninstalling the App.</li>
-            </ul>
-
-            <h3>5. How We Share Your Information</h3>
-            <p>
-              We do <strong>not</strong> sell or rent your personal data to
-              third parties. We may share data only in the following situations:
-            </p>
-
-            <h4>5.1. Spotify</h4>
-            <p>
-              When you connect the App to Spotify, we share requests and tokens
-              with Spotify in order to:
-            </p>
-            <ul>
-              <li>Authenticate your account</li>
-              <li>Access music playback and related metadata</li>
-              <li>
-                Perform actions you explicitly request within the App (e.g. play
-                tracks)
-              </li>
-            </ul>
-            <p>
-              Your relationship with Spotify is governed by Spotify’s terms and
-              privacy policy.
-            </p>
-
-            <h4>5.2. Service Providers</h4>
-            <p>
-              We may use third-party services to help us operate or improve the
-              App (for example, error reporting, crash analytics, or hosting).
-              These providers may process limited data on our behalf, under
-              contracts that require them to protect your information.
-            </p>
-
-            <h4>5.3. Legal Requirements</h4>
-            <p>
-              We may disclose information if we believe in good faith that such
-              action is necessary to:
-            </p>
-            <ul>
-              <li>Comply with a legal obligation or government request,</li>
-              <li>Protect and defend our rights or property,</li>
-              <li>
-                Prevent or investigate possible wrongdoing in connection with
-                the App,
-              </li>
-              <li>
-                Protect the personal safety of users of the App or the public.
-              </li>
-            </ul>
-
-            <h3>6. Data Retention</h3>
-            <p>
-              We retain data only for as long as necessary to fulfill the
-              purposes described in this Privacy Policy or as required by law.
-            </p>
-            <ul>
-              <li>
-                Locally stored data (e.g. tokens, preferences) remain on your
-                device until you clear them, disconnect your account, or
-                uninstall the App.
-              </li>
-              <li>
-                If we store any server-side data (e.g. logs or metrics), we keep
-                it only as long as needed for debugging, security, and
-                improvement of the App.
-              </li>
-            </ul>
-            <p>
-              If you disconnect your Spotify account or uninstall the App, we
-              will no longer receive new data from your account.
-            </p>
-
-            <h3>7. Data Security</h3>
-            <p>
-              We take reasonable technical and organizational measures to
-              protect your data against unauthorized access, loss, or misuse.
-              However, no method of transmission or storage is 100% secure, and
-              we cannot guarantee absolute security.
-            </p>
-            <p>
-              You are responsible for keeping your device secure and controlling
-              access to the App and your Spotify account.
-            </p>
-
-            <h3>8. Your Rights (EU/EEA and Similar Jurisdictions)</h3>
-            <p>
-              Depending on your location, you may have the following rights
-              regarding your personal data:
-            </p>
-            <ul>
-              <li>
-                Right of access – to request a copy of your personal data.
-              </li>
-              <li>
-                Right to rectification – to correct inaccurate or incomplete
-                data.
-              </li>
-              <li>
-                Right to erasure – to request deletion of your data where
-                applicable.
-              </li>
-              <li>
-                Right to restriction of processing – to limit how we use your
-                data.
-              </li>
-              <li>
-                Right to data portability – to receive your data in a commonly
-                used format.
-              </li>
-              <li>
-                Right to object – to object to certain types of processing.
-              </li>
-            </ul>
-            <p>
-              To exercise any of these rights, please contact us at:
-              <br /><strong>Email:</strong>
-              <a href="mailto:gabee1987@gmail.com">gabee1987@gmail.com</a>
-            </p>
-
-            <h3>9. Children’s Privacy</h3>
-            <p>
-              TuneTrack is
-              <strong>not intended for children under 13 years of age</strong>
-              (or a higher age if required by local law). We do not knowingly
-              collect personal data from children.
-            </p>
-            <p>
-              If you believe that a child has provided us with personal
-              information, please contact us and we will take steps to delete
-              such information.
-            </p>
-
-            <h3>10. Third-Party Links</h3>
-            <p>
-              The App may contain links to third-party websites or services (for
-              example, links to Spotify or other resources). We are not
-              responsible for the privacy practices of those third parties. We
-              encourage you to review their privacy policies.
-            </p>
-
-            <h3>11. Changes to This Privacy Policy</h3>
-            <p>
-              We may update this Privacy Policy from time to time. If we make
-              material changes, we will update the "Effective date" at the top
-              of this document.
-            </p>
-            <p>
-              We encourage you to review this Privacy Policy periodically for
-              any changes.
-            </p>
-
-            <h3>12. Contact Us</h3>
-            <p>
-              If you have any questions, concerns, or requests regarding this
-              Privacy Policy or our data practices, you can contact us at:<br /><strong
-                >Email:</strong
-              >
-              <a href="mailto:gabee1987@gmail.com">gabee1987@gmail.com</a>
-            </p>
-          </div>
+        <div>
+          <h1 class="title">TuneTrack — Privacy Policy</h1>
+          <p class="subtitle">Effective date: December 9, 2024</p>
+          <p class="small">
+            This Privacy Policy describes how TuneTrack ("we", "us", or "our")
+            handles information when you use the TuneTrack mobile application
+            (the "App").
+          </p>
         </div>
-
-        <div class="footer">Back to <a href="./index.html">home</a></div>
       </div>
-    </body>
-  </html>
+
+      <div class="card markdown">
+        <div class="content">
+          <h3>1. Who We Are</h3>
+          <p>
+            <strong>App name:</strong> TuneTrack<br />
+            <strong>Platform:</strong> Android (and later iOS)<br />
+            <strong>Contact email:</strong>
+            <a href="mailto:gabee1987@gmail.com">gabee1987@gmail.com</a>
+          </p>
+          <p>
+            If you have any questions about this Privacy Policy or our data
+            practices, you can contact us at the address above.
+          </p>
+
+          <h3>2. Information We Collect</h3>
+          <p>
+            TuneTrack does not collect personal information from users for the
+            purpose of transmission to, or storage by, the developer. The app
+            only requests the device camera permission (for QR scanning and
+            gameplay camera features). Spotify authentication is performed with
+            the user's own Spotify account; any Spotify tokens are stored
+            securely on the user's device only.
+          </p>
+
+          <h4>2.1. Spotify authentication and local storage</h4>
+          <ul>
+            <li>
+              When you connect TuneTrack to your Spotify account the app obtains
+              an OAuth access token from Spotify to enable playback. This token
+              and any refresh token are stored locally on your device using
+              secure storage mechanisms (Expo SecureStore).
+            </li>
+            <li>
+              These tokens are not sent to or stored on any servers owned by the
+              developer. They remain on your device to allow the app to interact
+              with Spotify on your behalf.
+            </li>
+            <li>
+              Spotify account use is subject to Spotify's terms and privacy
+              policy.
+            </li>
+          </ul>
+
+          <h4>2.2. Camera</h4>
+          <ul>
+            <li>The App requests the <code>CAMERA</code> permission.</li>
+            <li>
+              Camera use is strictly limited to gameplay features such as
+              scanning QR codes and live camera interactions. Camera access is
+              used only while you are using the relevant features.
+            </li>
+            <li>
+              We do not capture, transmit, or store raw camera images or video
+              streams outside your device.
+            </li>
+          </ul>
+          <p>
+            If you disable camera permission, camera-based features will not
+            function.
+          </p>
+
+          <h3>3. How We Use Information</h3>
+          <p>
+            We use information only to enable the app features on your device
+            (for example, to play music using your Spotify access token). The
+            developer does not collect or transmit your personal data to any
+            server.
+          </p>
+
+          <h3>4. Legal Bases for Processing (EU/EEA Users)</h3>
+          <p>
+            If you are located in the European Union / European Economic Area,
+            we process your personal data on the following legal bases:
+          </p>
+          <ul>
+            <li>
+              <strong>Performance of a contract:</strong> To provide the App and
+              its features, including Spotify integration.
+            </li>
+            <li>
+              <strong>Consent:</strong> When you grant Spotify permissions or
+              allow camera access.
+            </li>
+            <li>
+              <strong>Legitimate interests:</strong> To maintain and improve the
+              App, prevent abuse, and ensure security.
+            </li>
+          </ul>
+          <p>You can withdraw your consent at any time by:</p>
+          <ul>
+            <li>Disconnecting TuneTrack from your Spotify account,</li>
+            <li>Revoking permissions in your device settings (e.g. camera),</li>
+            <li>Uninstalling the App.</li>
+          </ul>
+
+          <h3>5. How We Share Your Information</h3>
+          <p>
+            We do <strong>not</strong> sell or rent your personal data to third
+            parties. We may share data only in the following situations:
+          </p>
+
+          <h4>5.1. Spotify</h4>
+          <p>
+            When you connect the App to Spotify, we share requests and tokens
+            with Spotify in order to:
+          </p>
+          <ul>
+            <li>Authenticate your account</li>
+            <li>Access music playback and related metadata</li>
+            <li>
+              Perform actions you explicitly request within the App (e.g. play
+              tracks)
+            </li>
+          </ul>
+          <p>
+            Your relationship with Spotify is governed by Spotify's terms and
+            privacy policy.
+          </p>
+
+          <h4>5.2. Legal Requirements</h4>
+          <p>
+            We may disclose information if we believe in good faith that such
+            action is necessary to:
+          </p>
+          <ul>
+            <li>Comply with a legal obligation or government request,</li>
+            <li>Protect and defend our rights or property,</li>
+            <li>
+              Prevent or investigate possible wrongdoing in connection with the
+              App,
+            </li>
+            <li>
+              Protect the personal safety of users of the App or the public.
+            </li>
+          </ul>
+
+          <h3>6. Data Retention</h3>
+          <p>
+            We retain data only for as long as necessary to fulfill the purposes
+            described in this Privacy Policy or as required by law.
+          </p>
+          <ul>
+            <li>
+              Locally stored data (e.g. tokens, preferences) remain on your
+              device until you clear them, disconnect your account, or uninstall
+              the App.
+            </li>
+            <li>
+              If we store any server-side data (e.g. logs or metrics), we keep
+              it only as long as needed for debugging, security, and improvement
+              of the App.
+            </li>
+          </ul>
+          <p>
+            If you disconnect your Spotify account or uninstall the App, we will
+            no longer receive new data from your account.
+          </p>
+
+          <h3>7. Data Security</h3>
+          <p>
+            We take reasonable technical and organizational measures to protect
+            your data against unauthorized access, loss, or misuse. However, no
+            method of transmission or storage is 100% secure, and we cannot
+            guarantee absolute security.
+          </p>
+          <p>
+            You are responsible for keeping your device secure and controlling
+            access to the App and your Spotify account.
+          </p>
+
+          <h3>8. Your Rights (EU/EEA and Similar Jurisdictions)</h3>
+          <p>
+            Depending on your location, you may have the following rights
+            regarding your personal data:
+          </p>
+          <ul>
+            <li>Right of access – to request a copy of your personal data.</li>
+            <li>
+              Right to rectification – to correct inaccurate or incomplete data.
+            </li>
+            <li>
+              Right to erasure – to request deletion of your data where
+              applicable.
+            </li>
+            <li>
+              Right to restriction of processing – to limit how we use your
+              data.
+            </li>
+            <li>
+              Right to data portability – to receive your data in a commonly
+              used format.
+            </li>
+            <li>Right to object – to object to certain types of processing.</li>
+          </ul>
+          <p>
+            To exercise any of these rights, please contact us at
+            <a href="mailto:gabee1987@gmail.com">gabee1987@gmail.com</a>.
+          </p>
+          <p>
+            You also have the right to lodge a complaint with your local data
+            protection authority.
+          </p>
+
+          <h3>9. Third-Party Links</h3>
+          <p>
+            The App may contain links to third-party websites or services (for
+            example, links to Spotify or other resources). We are not
+            responsible for the privacy practices of those third parties. We
+            encourage you to review their privacy policies.
+          </p>
+
+          <h3>10. Children's Privacy</h3>
+          <p>
+            TuneTrack itself does not collect personal data and therefore can be
+            used by children of any age. However, some features (Spotify
+            playback) rely on the user's Spotify account.
+          </p>
+          <ul>
+            <li>
+              Spotify accounts are governed by Spotify's terms and age
+              requirements. If a child is below the minimum age in their
+              country, they should not create or use a Spotify account without
+              parental consent.
+            </li>
+            <li>
+              Parents and guardians are responsible for supervising their
+              children's use of TuneTrack and for any Spotify account used with
+              the app. The developer does not request or store children's
+              personal data.
+            </li>
+          </ul>
+
+          <h3>11. Changes to This Privacy Policy</h3>
+          <p>
+            We may update this Privacy Policy from time to time. If we make
+            material changes, we will update the "Effective date" at the top of
+            this document.
+          </p>
+          <p>
+            We encourage you to review this Privacy Policy periodically for any
+            changes.
+          </p>
+
+          <h3>12. Contact Us</h3>
+          <p>
+            If you have any questions, concerns, or requests regarding this
+            Privacy Policy or our data practices, you can contact us at:
+          </p>
+          <p>
+            <strong>Email:</strong>
+            <a href="mailto:gabee1987@gmail.com">gabee1987@gmail.com</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="footer">Back to <a href="./index.html">home</a></div>
+    </div>
+  </body>
 </html>

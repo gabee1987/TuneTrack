@@ -21,7 +21,13 @@ body {
   margin: 0;
   font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial;
-  background: linear-gradient(180deg, var(--obsidian) 0%, var(--charcoal) 100%);
+  /* Fixed, full-page gradient. Use requested bottom color and prevent
+     the gradient from restarting when the page scrolls. */
+  background: linear-gradient(180deg, var(--obsidian) 0%, #292935 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center top;
   color: var(--text);
 }
 
