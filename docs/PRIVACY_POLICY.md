@@ -28,79 +28,24 @@ When you use TuneTrack, you may provide us with:
 
 - **Spotify login / account connection**  
   When you connect TuneTrack to your Spotify account, we receive an access token and certain information from Spotify, such as:
-  - Your Spotify account ID
-  - Basic profile information (e.g. display name)
-  - Information needed for music playback or track selection (e.g. currently playing track or playlists), depending on the permissions you grant.
 
-We do **not** receive your Spotify password.
+  ## 2. Information We Collect
 
-### 2.2. Information from Spotify
+  TuneTrack does not collect or transmit any personal user data to the developer or to any external servers. The app only requests the device camera permission for gameplay (QR scanning / camera features). Spotify authentication is performed via the user's own Spotify account and tokens are stored securely on the user's device only.
 
-TuneTrack uses the Spotify Web API to access music and related metadata. The exact data we receive depends on the permissions (scopes) you grant when logging in.
+  ### 2.1. Spotify authentication and local storage
 
-This may include:
+  - When you connect TuneTrack to your Spotify account, the app obtains an OAuth access token from Spotify to enable playback. This token and any refresh token are stored locally on your device using secure storage mechanisms (Expo SecureStore).
+  - These tokens are not sent to or stored on any servers owned by the developer. They remain on your device to allow the app to interact with Spotify on your behalf.
 
-- Basic profile information (e.g. display name, country, language)
-- Playback-related information (e.g. currently playing track, playback state)
-- Music metadata (e.g. track name, artist, album, cover image)
+  ### 2.2. Camera
 
-We use this data only to provide the core gameplay and music-related features in the App.
+  - The App requests the `CAMERA` permission.
+  - Camera use is limited to gameplay features such as scanning QR codes and live camera interactions.
+  - We do not capture, transmit or store raw camera images or video streams outside your device.
 
-For more information about how Spotify processes your data, please see Spotify’s own Privacy Policy.
+  If you disable camera permission, camera-based features will not function.
 
-### 2.3. Camera
-
-The App requests the following Android permission:
-
-- `CAMERA`
-
-Camera is used for in-app features such as scanning QR codes and interacting with game elements that require live camera input.
-
-- Camera access is used only while you are using the relevant features.
-- We do not store raw camera images or video streams on our servers.
-
-Microphone / Audio
-
-TuneTrack does not request microphone access in production builds and does not record audio. Any references to audio recording or microphone permission in development were removed from production configuration.
-
-If you disable camera permission, some camera-related features of the App may not function correctly.
-
-Third-Party Inspiration and Intended Use
-
-TuneTrack was inspired by other music discovery apps. It is not affiliated with or endorsed by any other app or company. This project is developed for private, non-commercial use by the author and their close relatives/friends; there is no intention to monetize or distribute user data.
-
-If you have concerns about similarity to another app, please contact us at the address below.
-
-### 2.4. Device and Usage Information
-
-When you use TuneTrack, we may automatically collect some technical information, such as:
-
-- Device model, operating system, language, and region
-- App version
-- Anonymous usage data (e.g. which screens are opened, basic interaction patterns)
-- Crash and performance data (e.g. error logs)
-
-This information is typically collected via the mobile platform (e.g. Google Play Services / Expo services) and is used to improve stability and user experience.
-
-### 2.5. Local Storage (On Your Device)
-
-TuneTrack may store certain data locally on your device, for example:
-
-- Authentication tokens (e.g. Spotify access/refresh tokens) using secure storage mechanisms
-- Your in-app preferences and settings
-- Game state or progress data
-
-This data is stored **only on your device** and is not automatically shared with us or third parties, except as needed to communicate with Spotify or other services for App functionality.
-
----
-
-## 3. How We Use Your Information
-
-We use the collected information for the following purposes:
-
-- To provide and operate TuneTrack and its features
-- To enable integration with Spotify and play music during the game
-- To authenticate you via Spotify and maintain your session
 - To show and manage your game state, scores, and related content
 - To improve the App’s performance, stability, and user experience
 - To debug issues and prevent abuse or misuse of the App
