@@ -42,7 +42,7 @@ function GameRulesScreen() {
             {t("game_rules_header")}
           </ThemedText>
 
-          {/* INTRO / BEVEZETŐ */}
+          {/* INTRO */}
           <RuleCard
             title={t("game_rules_intro_title")}
             content={[
@@ -51,7 +51,7 @@ function GameRulesScreen() {
             ]}
           />
 
-          {/* NEHÉZSÉGI SZINTEK */}
+          {/* DIFFICULTY LEVELS */}
           <RuleCard
             title={t("game_rules_difficulty_title")}
             content={[
@@ -63,7 +63,7 @@ function GameRulesScreen() {
             ]}
           />
 
-          {/* ORIGINAL JÁTÉKMENET */}
+          {/* ORIGINAL GAMEPLAY */}
           <RuleCard
             title={t("game_rules_original_title")}
             content={[
@@ -95,7 +95,7 @@ function GameRulesScreen() {
             ]}
           />
 
-          {/* KOOPERATÍV */}
+          {/* COOPERATIVE */}
           <RuleCard
             title={t("game_rules_cooperative_title")}
             content={[
